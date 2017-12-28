@@ -6,12 +6,17 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { TestPage } from '../pages/test/test';
+
 import { MapProvider } from '../providers/map/map';
+import { LandMapProvider } from '../providers/map/landMap';
+
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    TestPage
   ],
   imports: [
     BrowserModule,
@@ -20,13 +25,15 @@ import { MapProvider } from '../providers/map/map';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    TestPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    MapProvider
+    MapProvider,
+    LandMapProvider
   ]
 })
 export class AppModule {}

@@ -1,25 +1,21 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
-/**
- * Generated class for the TestPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { LandMapProvider } from '../../providers/map/landMap';
 
-@IonicPage()
 @Component({
-  selector: 'page-test',
-  templateUrl: 'test.html',
+    selector: 'page-test',
+    templateUrl: 'test.html',
 })
 export class TestPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+    @ViewChild('map') mapElement: ElementRef;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TestPage');
-  }
+    constructor(public landMap: LandMapProvider) {
+    }
+
+    ionViewDidLoad() {
+        this.landMap.initMap(this.mapElement);
+        this.landMap.addMarker();
+    }
 
 }
