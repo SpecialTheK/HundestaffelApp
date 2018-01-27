@@ -5,15 +5,16 @@ declare let google: any;
 @Injectable()
 export class MapProvider {
 
-    //map object
+    protected google: any;
     protected map: any;
 
     constructor() {
+        this.google = google;
         console.log("INIT: MapProvider");
     }
 
-    initMap(mapElement): void {
-        this.map = new google.maps.Map(mapElement.nativeElement, {
+    initMap(mapElement) {
+        this.map = new this.google.maps.Map(mapElement.nativeElement, {
             center: {lat: 52, lng: 8},
             zoom: 8
         });
