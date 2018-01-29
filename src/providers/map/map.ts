@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { Geolocation } from '@ionic-native/geolocation';
+
+import { ColoredCircle } from '../../models/coloredCircle';
 
 declare let google: any;
 
@@ -11,7 +12,7 @@ export class MapProvider {
     inter: any;
     coords: any = [];
 
-    circle: any;
+    circles: any = [];
 
     constructor(public location: Geolocation) {
         console.log("INIT: MapProvider");
@@ -72,15 +73,8 @@ export class MapProvider {
     */
     addColoredCircle(color) {
         if (this.coords.length >= 1){
-            this.circle = new google.maps.Circle({
-                strokeColor: color,
-                strokeOpacity: 0.8,
-                fillColor: color,
-                fillOpacity: 0.8,
-                center: this.getCurrentLocation(),
-                radius: 100
-            });
-            this.circle.setMap(this.map);
+            let circle = new ColoredCircle(google, this.map, this.circles.length, this.getCurrentLocation(), color, 0.8, 100);
+            this.circles.push(circle);
         }
     }
 
@@ -88,10 +82,20 @@ export class MapProvider {
     *
     */
     changeCircleLevelDisplay(level) {
-        this.circle.setOptions({
-            strokeOpacity: level,
-            fillOpacity: level
-        });
+        for (let c of this.circles){
+            if(c.opacity < level){
+                c.hide();
+            }else {
+                c.show();
+            }
+        }
+    }
+
+    /**
+    *
+    */
+    endSession() {
+        this.stopRecording();
     }
 
 }

@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, ViewController } from 'ionic-angular';
+import { IonicPage, ViewController, PopoverController } from 'ionic-angular';
 
 import { MapProvider } from '../../providers/map/map';
 
@@ -15,7 +15,7 @@ export class WaterMapPage {
 
     circleOpacity = 8;
 
-    constructor(public viewCtrl: ViewController, public map: MapProvider) {
+    constructor(public viewCtrl: ViewController, public popoverCtrl: PopoverController, public map: MapProvider) {
     }
 
     ionViewDidLoad() {
@@ -23,7 +23,6 @@ export class WaterMapPage {
     }
 
     showCurrentLocation() {
-        console.log("Test");
         this.map.recordCurrentLocation();
     }
 
@@ -33,7 +32,11 @@ export class WaterMapPage {
     }
 
     addCircle() {
-        this.map.addColoredCircle('#ff00ff');
+        //let popover = this.popoverCtrl.create(WaterMapPage);
+        //popover.present();
+
+        console.log("Added Circle")
+        this.map.addColoredCircle('#ff0000');
     }
 
     changeOpacity() {
