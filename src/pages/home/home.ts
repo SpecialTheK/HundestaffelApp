@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 
-import { LandMapPage } from '../land-map/land-map';
-import { WaterMapPage } from '../water-map/water-map';
-
 @IonicPage()
 @Component({
     selector: 'page-home',

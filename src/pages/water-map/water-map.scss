@@ -4,4 +4,10 @@ page-water-map {
         height: 100%;
     }
 
+    #func-container {
+        position: absolute;
+        right: 50%;
+        z-index: 5;
+    }
+
 }

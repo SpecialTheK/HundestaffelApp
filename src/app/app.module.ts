@@ -3,10 +3,9 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { MyApp } from './app.component';
-
-import { MapProvider } from '../providers/map/map';
 
 @NgModule({
     declarations: [
@@ -21,7 +20,7 @@ import { MapProvider } from '../providers/map/map';
         MyApp
     ],
     providers: [
-        MapProvider,
+        Geolocation,
         StatusBar,
         SplashScreen,
         {provide: ErrorHandler, useClass: IonicErrorHandler}

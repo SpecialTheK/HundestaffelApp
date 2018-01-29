@@ -16,7 +16,16 @@
 <ion-content>
 
     <!-- Container for the Controls -->
-    <div id="controls"></div>
+    <div id="func-container">
+        <p>
+            <button ion-button small (click)="showCurrentLocation()">Log Position</button>
+            <button ion-button small (click)="stopRecording()">Stop</button>
+            <button ion-button small (click)="addCircle()">Add Circle</button>
+        </p>
+        <p>
+            <ion-range [(ngModel)]="circleOpacity" max="10" min="0" step="1" (ionChange)="changeOpacity()"></ion-range>
+        </p>
+    </div>
 
     <!-- Container for the Map -->
     <div id="map" #map></div>
