@@ -22,6 +22,7 @@ export class MapProvider {
         this.location.getCurrentPosition().then((pos) => {
             this.map = new google.maps.Map(mapElement.nativeElement, {
                 center: {lat: pos.coords.latitude, lng: pos.coords.longitude},
+                disableDoubleClickZoom: true, 
                 zoom: 16
             });
         })
