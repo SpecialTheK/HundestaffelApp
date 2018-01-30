@@ -14,7 +14,7 @@
         <p>
             <button ion-button small (click)="showCurrentLocation()">Log Position</button>
             <button ion-button small (click)="stopRecording()">Stop</button>
-            <button ion-button small (click)="addCircle()">Add Circle</button>
+            <button ion-button small (click)="addCircle($event)">Add Circle</button>
         </p>
         <p>
             <ion-range [(ngModel)]="circleOpacity" max="10" min="0" step="1" (ionChange)="changeOpacity()"></ion-range>

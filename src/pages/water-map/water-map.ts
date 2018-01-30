@@ -31,12 +31,14 @@ export class WaterMapPage {
         //this.viewCtrl.dismiss();
     }
 
-    addCircle() {
-        //let popover = this.popoverCtrl.create(WaterMapPage);
-        //popover.present();
+    addCircle(ev) {
+        let popover = this.popoverCtrl.create('AddColoredCirclePage');
+        popover.present({
+            ev: ev
+        });
 
         console.log("Added Circle")
-        this.map.addColoredCircle('#ff0000');
+        //this.map.addColoredCircle('#ff0000');
     }
 
     changeOpacity() {

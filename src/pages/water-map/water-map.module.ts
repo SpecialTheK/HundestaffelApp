@@ -3,11 +3,11 @@ import { IonicPageModule } from 'ionic-angular';
 import { WaterMapPage } from './water-map';
 
 @NgModule({
-  declarations: [
-    WaterMapPage,
-  ],
-  imports: [
-    IonicPageModule.forChild(WaterMapPage),
-  ],
+    declarations: [
+        WaterMapPage,
+    ],
+    imports: [
+        IonicPageModule.forChild(WaterMapPage),
+    ],
 })
 export class WaterMapPageModule {}

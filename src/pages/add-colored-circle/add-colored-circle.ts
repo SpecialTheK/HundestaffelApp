@@ -1,18 +1,36 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage} from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-add-colored-circle',
-  templateUrl: 'add-colored-circle.html',
+    selector: 'page-add-colored-circle',
+    templateUrl: 'add-colored-circle.html',
 })
 export class AddColoredCirclePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+    circleColor: any;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddColoredCirclePage');
-  }
+    colors = {
+        'red': {
+            'bg': '#ff0000'
+        },
+        'green': {
+            'bg': '#00ff00'
+        },
+        'blue': {
+            'bg': '#0000ff'
+        }
+    };
+
+    constructor() {
+    }
+
+    ionViewDidLoad() {
+    }
+
+    selectColor(color){
+        this.circleColor = this.colors[color].bg;
+        console.log(this.circleColor);
+    }
 
 }
