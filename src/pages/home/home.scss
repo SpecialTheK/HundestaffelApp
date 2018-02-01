@@ -1,3 +1,29 @@
-page-home {
+@import "../../theme/variables.scss";
 
+page-home {
+	ion-content .scroll-content {
+		overflow-y: hidden;
+	}
+	
+	ion-card.card-ios, ion-card.card-md {
+		height: 27%;
+		margin-top: 10%;
+		position: relative;
+		
+		ion-card-title.card-title-ios, ion-card-title.card-title-md {
+			background-color: rgba(0, 0, 0, 0.7);
+			bottom: 0;
+			color: map-get($colors, light);
+			font-size: 2em;
+			left: 0;
+			margin: 0;
+			padding: 3px 0 3px 10px;
+			position: absolute;
+			right: 0;
+		}
+	}
+	
+	ion-card.land-hunt, ion-card.water-hunt{
+		background-color: #74C7F3;
+	}
 }

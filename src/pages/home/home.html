@@ -8,9 +8,22 @@
 
 
 <ion-content padding>
-
-    <button ion-button (click)="gotoLandMap()">Land Map</button>
-
-    <button ion-button (click)="gotoWaterMap()">Water Map</button>
-
+    <ion-card (click)="gotoLandMap()" class="land-hunt">
+	    <img src="assets/imgs/home-land.png">
+	    <ion-card-title>
+		    Start ashore hunt
+	    </ion-card-title>
+    </ion-card>
+	<ion-card (click)="gotoWaterMap()" class="water-hunt">
+		<img src="assets/imgs/home-water.png">
+		<ion-card-title>
+			Start water hunt
+		</ion-card-title>
+	</ion-card>
+	<ion-card (click)="gotoHistory()">
+		<img src="assets/imgs/home-history.png">
+		<ion-card-title>
+			Past hunts
+		</ion-card-title>
+	</ion-card>
 </ion-content>
