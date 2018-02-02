@@ -7,16 +7,14 @@ import {StatusBar} from '@ionic-native/status-bar';
 import {MyApp} from './app.component';
 
 import {MapProvider} from '../providers/map/map';
-import {MainMenuDirective} from "../directives/main-menu/main-menu";
 
 @NgModule({
 	declarations: [
-		MyApp
+		MyApp,
 	],
 	imports: [
 		BrowserModule,
-		MainMenuDirective,
-		IonicModule.forRoot(MyApp, {menuType: 'push',})
+		IonicModule.forRoot(MyApp)
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [

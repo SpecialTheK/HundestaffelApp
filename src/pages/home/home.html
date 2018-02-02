@@ -1,19 +1,18 @@
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>home</ion-title>
-  </ion-navbar>
-
+	<ion-navbar>
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>Home</ion-title>
+	</ion-navbar>
 </ion-header>
-
-
 <ion-content padding>
-    <ion-card (click)="gotoLandMap()" class="land-hunt">
-	    <img src="assets/imgs/home-land.png">
-	    <ion-card-title>
-		    Start ashore hunt
-	    </ion-card-title>
-    </ion-card>
+	<ion-card (click)="gotoLandMap()" class="land-hunt">
+		<img src="assets/imgs/home-land.png">
+		<ion-card-title>
+			Start ashore hunt
+		</ion-card-title>
+	</ion-card>
 	<ion-card (click)="gotoWaterMap()" class="water-hunt">
 		<img src="assets/imgs/home-water.png">
 		<ion-card-title>
