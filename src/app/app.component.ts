@@ -9,7 +9,7 @@ import {Home} from '../pages/pages';
 	templateUrl: 'app.html'
 })
 export class MyApp {
-	@ViewChild(NavController) navCtrl: NavController;
+	@ViewChild('mainMenu') navCtrl: NavController;
 	rootPage: any = Home;
 	
 	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
@@ -22,6 +22,11 @@ export class MyApp {
 	}
 	
 	openPage(name){
-		this.navCtrl.push(name);
+		
+		if(name == 'HomePage'){
+			this.navCtrl.popToRoot();
+		} else {
+			this.navCtrl.push(name);
+		}
 	}
 }
