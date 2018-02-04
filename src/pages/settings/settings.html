@@ -24,8 +24,8 @@
 			<ion-item>
 				<ion-label>{{ 'SETTINGS_UNIT' | translate }}</ion-label>
 				<ion-select [(ngModel)]="unit" (ionChange)="setUnit()">
-					<ion-option value="m">Metric</ion-option>
-					<ion-option value="i">Imperial</ion-option>
+					<ion-option value="m">{{ 'SETTINGS_METRIC' | translate }}</ion-option>
+					<ion-option value="i">{{ 'SETTINGS_IMPERIAL' | translate }}</ion-option>
 				</ion-select>
 			</ion-item>
 		</ion-item-group>

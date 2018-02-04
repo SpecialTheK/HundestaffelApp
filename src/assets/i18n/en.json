@@ -12,6 +12,8 @@
 	"SETTINGS"			            : "Settings",
 	"LANGUAGE"			            : "Language",
 	"SETTINGS_GENERAL"	            : "General settings",
+	"SETTINGS_IMPERIAL"             : "Imperial",
+	"SETTINGS_METRIC"               : "Metric",
 	"SETTINGS_NAME"                 : "Name for online trailing",
 	"SETTINGS_NAME_PLACEHOLDER"     : "Your name",
 	"SETTINGS_ONLINE"               : "Settings for online use",
