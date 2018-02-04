@@ -24,7 +24,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 		TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,
-				useFactory: (translateLoader),
+				useFactory: (createTranslateLoader),
 				deps: [HttpClient]
 			}
 		})
@@ -44,6 +44,6 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 export class AppModule {
 }
 
-export function translateLoader(http: HttpClient) {
+export function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
