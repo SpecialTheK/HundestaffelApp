@@ -14,21 +14,18 @@ export class MapProvider {
     map: any;
     recordInterval: any;
 
-    timeStartRecording: any = 0;
-    timeEndRecording: any = 0;
+    testTrailID: any = 0;
 
-    // Array of coords
-    coords: any = [];
-
-    // Array of placed colored circles
-    circles: any = [];
-
-    // Array of placed marker
-    marker: any = [];
-
-    // Array of placed triangles
-    triangles: any = [];
-
+    trailObj = {
+        trainer: "",
+        dogs: [],
+        startTime: 0,
+        endTime: 0,
+        path: [],
+        marker: [],
+        circles: [],
+        triangles: []
+    }
 
 
     constructor(public location: Geolocation, public storage: Storage) {
@@ -59,14 +56,13 @@ export class MapProvider {
     recordCurrentPosition() {
         this.recordInterval = setInterval((i) => {
             this.location.getCurrentPosition().then((pos) => {
-                this.coords.push({lat: pos.coords.latitude, lng: pos.coords.longitude});
+                this.trailObj.path.push({lat: pos.coords.latitude, lng: pos.coords.longitude});
 
-                if(this.timeStartRecording == 0){
-                    this.timeStartRecording = pos.timestamp;
+                if(this.trailObj.startTime == 0){
+                    this.trailObj.startTime = pos.timestamp;
                 } else {
-                    this.timeEndRecording = pos.timestamp;
+                    this.trailObj.endTime = pos.timestamp;
                 }
-
 
                 console.log(pos);
             })
@@ -85,16 +81,16 @@ export class MapProvider {
     * Returns the last recorded position
     */
     getCurrentPosition(): any {
-        return this.coords[this.coords.length - 1];
+        return this.trailObj.path[this.trailObj.path.length - 1];
     }
 
     /**
     * Adds a marker at your current position
     */
     addMarker() {
-        if (this.coords.length >= 1){
-            let marker = new Marker(google, this.map, 0);
-            this.marker.push(marker);
+        if (this.trailObj.path.length >= 1){
+            let marker = new Marker(google, this.map, this.trailObj.marker.length, this.getCurrentPosition(), "Test123");
+            this.trailObj.marker.push(marker.marker);
         }
     }
 
@@ -102,9 +98,9 @@ export class MapProvider {
     * Adds a colored circle at your current position
     */
     addColoredCircle(color) {
-        if (this.coords.length >= 1){
-            let circle = new ColoredCircle(google, this.map, this.circles.length, this.getCurrentPosition(), color, 0.8, 100);
-            this.circles.push(circle);
+        if (this.trailObj.path.length >= 1){
+            let circle = new ColoredCircle(google, this.map, this.trailObj.circles.length, this.getCurrentPosition(), color, 0.8, 100);
+            this.trailObj.circles.push(circle.circle);
         }
     }
 
@@ -113,9 +109,9 @@ export class MapProvider {
     * TODO: add a triangle at the position the user tapped on
     */
     addTriangle() {
-        if (this.coords.length >= 1){
-            let triangle = new Triangle(google, this.map, 0);
-            this.triangles.push(triangle);
+        if (this.trailObj.path.length >= 1){
+            let triangle = new Triangle(google, this.map, this.trailObj.triangles.length, this.getCurrentPosition());
+            this.trailObj.triangles.push(triangle.triangle);
         }
     }
 
@@ -123,39 +119,20 @@ export class MapProvider {
     * Changes the display level of the displayed circles
     */
     changeCircleLevelDisplay(level) {
-        for (let c of this.circles){
-            if(c.opacity < level){
-                c.hide();
-            }else {
-                c.show();
-            }
-        }
+        // TODO: Faaaak!
     }
 
     /**
     * Ends the current session of the map
     */
     endSession(): any {
-        let trail = {
-            trainer: "Jonas",
-            dog: "hund1",
-            path: this.coords,
-        }
-        let jTrail = JSON.stringify(trail);
+        let jTrail = JSON.stringify(this.trailObj);
 
-        this.storage.set(this.timeStartRecording, jTrail);
+        this.storage.set(this.testTrailID, jTrail);
 
         this.stopRecording();
 
-        this.printAllSessions();
-
-        return (this.timeEndRecording - this.timeStartRecording);
-    }
-
-    printAllSessions() {
-        this.storage.forEach(it => {
-            console.log(it);
-        })
+        return (this.trailObj.endTime - this.trailObj.startTime);
     }
 
 }

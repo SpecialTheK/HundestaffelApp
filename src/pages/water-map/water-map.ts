@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, ViewController, PopoverController } from 'ionic-angular';
+import { IonicPage, ModalController, NavParams } from 'ionic-angular';
 
 import { MapProvider } from '../../providers/map/map';
 
@@ -13,9 +13,11 @@ export class WaterMapPage {
 
     @ViewChild('map') mapElement: ElementRef;
 
-    circleOpacity = 8;
+    circleOpacity: any = 8;
 
-    constructor(public viewCtrl: ViewController, public popoverCtrl: PopoverController, public map: MapProvider) {
+    recordingTime: Date = new Date(0);
+
+    constructor(public modalCtrl: ModalController, public navParams: NavParams, public map: MapProvider) {
     }
 
     ionViewDidLoad() {
@@ -23,22 +25,35 @@ export class WaterMapPage {
     }
 
     showCurrentLocation() {
-        this.map.recordCurrentLocation();
+        this.map.recordCurrentPosition();
     }
 
     stopRecording() {
-        this.map.stopRecording();
-        //this.viewCtrl.dismiss();
+        this.recordingTime = new Date(this.map.endSession());
     }
 
-    addCircle(ev) {
-        let popover = this.popoverCtrl.create('AddColoredCirclePage');
-        popover.present({
-            ev: ev
-        });
-
-        console.log("Added Circle")
+    addCircle() {
+        //console.log("Added Circle");
         //this.map.addColoredCircle('#ff0000');
+
+        let cricleAdd = this.modalCtrl.create('AddColoredCirclePage', {map: this.map});
+        cricleAdd.present();
+    }
+
+    addMarker() {
+        //console.log("Added Marker");
+        //this.map.addMarker();
+
+        let markerAdd = this.modalCtrl.create('AddMarkerPage', {map: this.map});
+        markerAdd.present();
+    }
+
+    addTriangle() {
+        //console.log("Added Triangle");
+        //this.map.addTriangle();
+
+        let triangleAdd = this.modalCtrl.create('AddTrianglePage', {map: this.map});
+        triangleAdd.present();
     }
 
     changeOpacity() {

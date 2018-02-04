@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, ViewController } from 'ionic-angular';
+import { IonicPage, NavParams, ModalController } from 'ionic-angular';
 
 import { MapProvider } from '../../providers/map/map';
 
@@ -13,7 +13,7 @@ export class LandMapPage {
 
     @ViewChild('map') mapElement: ElementRef;
 
-    constructor(public viewCtrl: ViewController, public map: MapProvider) {
+    constructor(public navParams: NavParams, public modalCtrl: ModalController, public map: MapProvider) {
     }
 
     ionViewDidLoad() {
@@ -21,12 +21,19 @@ export class LandMapPage {
     }
 
     showCurrentLocation(){
-        this.map.recordCurrentLocation();
+        this.map.recordCurrentPosition();
     }
 
     stopRecording() {
-        this.map.stopRecording();
-        //this.viewCtrl.dismiss();
+        this.map.endSession();
+    }
+
+    addMarker() {
+        //console.log("Added Marker");
+        //this.map.addMarker();
+
+        let markerAdd = this.modalCtrl.create('AddMarkerPage', {map: this.map});
+        markerAdd.present();
     }
 
 }

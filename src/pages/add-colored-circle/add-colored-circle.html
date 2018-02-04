@@ -1,26 +1,17 @@
-<ion-list radio-group class="popover">
+<ion-header>
 
-    <ion-row class="row-btn">
-        <ion-col>
-            <button ion-button="dot" class="btn-red" (click)="selectColor('red')"></button>
-        </ion-col>
-        <ion-col>
-            <button ion-button="dot" class="btn-green" (click)="selectColor('green')"></button>
-        </ion-col>
-        <ion-col>
-            <button ion-button="dot" class="btn-blue" (click)="selectColor('blue')"></button>
-        </ion-col>
-    </ion-row>
-    <ion-row class="row-range">
-        <ion-col>
-            <ion-range></ion-range>
-        </ion-col>
-    </ion-row>
-    <ion-row class="row-confirm">
-        <ion-col>
-            <button ion-button >Confirm</button>
-        </ion-col>
-    </ion-row>
+  <ion-navbar>
+    <ion-title>add-marker</ion-title>
+  </ion-navbar>
 
+</ion-header>
 
-</ion-list>
+<ion-content padding>
+    <ion-list radio-group>
+        <ion-row>
+            <ion-col>
+                <button ion-button (click)="addCircle()" >Confirm</button>
+            </ion-col>
+        </ion-row>
+    </ion-list>
+</ion-content>

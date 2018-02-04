@@ -1,36 +1,3 @@
 page-add-colored-circle {
 
-    .row-btn,
-    .dot {
-        border-width: $hairlines-width;
-    }
-
-    .row-btn{
-        text-align: center;
-
-        .dot {
-            height: 30px;
-            width: 30px;
-            border-radius: 50%;
-            margin: 10px auto;
-            position: relative;
-        }
-    }
-
-    .btn-red {
-        background-color: #ff0000;
-    }
-
-    .btn-green {
-        background-color: #00ff00;
-    }
-
-    .btn-blue {
-        background-color: #0000ff;
-    }
-
-    .row-confirm {
-        text-align: center;
-    }
-
 }
