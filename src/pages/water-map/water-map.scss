@@ -1,7 +1,21 @@
 page-water-map {
 
+    ion-content {
+        overflow: hidden;
+    }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
     #map {
         height: 100%;
+    }
+
+    #func-container {
+        position: absolute;
+        left: 30%;
+        z-index: 5;
     }
 
 }
