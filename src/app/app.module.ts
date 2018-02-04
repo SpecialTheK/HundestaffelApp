@@ -20,7 +20,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 		BrowserModule,
 		HttpClientModule,
 		IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot(),
+        IonicStorageModule.forRoot(),
 		TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,
@@ -34,7 +34,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 		MyApp
 	],
 	providers: [
-    Geolocation,
+        Geolocation,
 		StatusBar,
 		SplashScreen,
 		AppPreferences,
