@@ -1,31 +1,31 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {ErrorHandler, NgModule} from '@angular/core';
-import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
-import {SplashScreen} from '@ionic-native/splash-screen';
-import {StatusBar} from '@ionic-native/status-bar';
+import { BrowserModule } from '@angular/platform-browser';
+import { ErrorHandler, NgModule } from '@angular/core';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
+import { Geolocation } from '@ionic-native/geolocation';
+import { IonicStorageModule } from '@ionic/storage';
 
 import {MyApp} from './app.component';
 
-import {MapProvider} from '../providers/map/map';
-
 @NgModule({
-	declarations: [
-		MyApp,
-	],
-	imports: [
-		BrowserModule,
-		IonicModule.forRoot(MyApp)
-	],
-	bootstrap: [IonicApp],
-	entryComponents: [
-		MyApp
-	],
-	providers: [
-		MapProvider,
-		StatusBar,
-		SplashScreen,
-		{provide: ErrorHandler, useClass: IonicErrorHandler}
-	]
-})
-export class AppModule {
-}
+    declarations: [
+        MyApp
+    ],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(MyApp),
+        IonicStorageModule.forRoot()
+    ],
+    bootstrap: [IonicApp],
+    entryComponents: [
+        MyApp
+    ],
+    providers: [
+        Geolocation,
+        StatusBar,
+        SplashScreen,
+        {provide: ErrorHandler, useClass: IonicErrorHandler}
+    ]
+    })
+export class AppModule {}
