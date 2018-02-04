@@ -12,6 +12,7 @@ export class HomePage {
     }
 
     ionViewDidLoad() {
+
     }
 
     gotoLandMap() {
@@ -20,6 +21,10 @@ export class HomePage {
 
     gotoWaterMap() {
         this.navCtrl.push('WaterMapPage');
+    }
+    
+    gotoHistory() {
+    	this.navCtrl.push('HistoryPage')
     }
 
 }

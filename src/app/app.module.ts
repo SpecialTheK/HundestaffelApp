@@ -6,7 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
 
-import { MyApp } from './app.component';
+import {MyApp} from './app.component';
 
 @NgModule({
     declarations: [
