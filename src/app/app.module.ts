@@ -11,6 +11,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {WebIntent} from "@ionic-native/web-intent";
 
 @NgModule({
 	declarations: [
@@ -38,7 +39,8 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 		StatusBar,
 		SplashScreen,
 		AppPreferences,
-		{provide: ErrorHandler, useClass: IonicErrorHandler}
+		{provide: ErrorHandler, useClass: IonicErrorHandler},
+		WebIntent
 	]
 })
 export class AppModule {
