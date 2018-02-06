@@ -6,6 +6,7 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {Home} from '../pages/pages';
 import {TranslateService} from "@ngx-translate/core";
 import {AppPreferences} from "@ionic-native/app-preferences";
+import {WebIntent} from "@ionic-native/web-intent";
 
 @Component({
 	templateUrl: 'app.html'
@@ -14,10 +15,21 @@ export class MyApp {
 	@ViewChild('mainMenu') navCtrl: NavController;
 	rootPage: any = Home;
 	
-	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService) {
+	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService, public webIntent: WebIntent) {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
+			
+			if(platform.is('android')) {
+				let intent = this.webIntent.getIntent().then((answer) => {
+					console.log('intent1.6 was verändert OK');
+					console.log(answer.action);
+					if(answer.extras != null)
+						console.log("BLA"+answer.extras["android.intent.extra.STREAM"]);
+				}, (reason) => {
+					console.log("File not imported: "+reason);
+				});
+			}
 			translate.setDefaultLang('en');
 			preferences.fetch('language').then((answer) => {
 				translate.use(answer);

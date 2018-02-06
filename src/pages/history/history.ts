@@ -17,7 +17,7 @@ import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 export class HistoryPage {
 	constructor(public navCtrl: NavController, public navParams: NavParams, public sharing: ShareTrailProvider) {
 	}
-	
+
 	share(id: number){
 		// TODO: remove
 		let data = [
@@ -25,10 +25,13 @@ export class HistoryPage {
 					trainer:    "Jonas",
 					dog:        "Hund 1",
 					path:       [{lat: 100, lng: 200}],
-					markers:     []
+					markers:     [],
+          isLandActivity: false,
+          isSharedActivity: false,
+          isTraining: false,
 				},
 			];
-		
+
 		this.sharing.share(data).catch((reason) => {
 			console.log("Could not share: "+ reason);
 		})
