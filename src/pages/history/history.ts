@@ -36,7 +36,10 @@ export class HistoryPage {
 					trainer:    "Jonas",
 					dog:        "Hund 1",
 					path:       [{lat: 100, lng: 200}],
-					markers:     []
+					markers:     [],
+          isLandActivity: false,
+          isSharedActivity: false,
+          isTraining: false,
 				},
 			];
 

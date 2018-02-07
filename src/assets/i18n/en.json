@@ -1,0 +1,21 @@
+{
+	"ABOUT"				            : "About this app",
+	"HISTORY"			            : "History",
+	"LAST_TRAILS"		            : "Last trails",
+	"ONLINE_TRAILING"	            : "Connect to trailing",
+	"MENU"				            : "Menu",
+
+	"HOMEPAGE"			            : "Homepage",
+	"TRAIL_LAND"		            : "Start land trailing",
+	"TRAIL_WATER"		            : "Start water trailing",
+
+	"SETTINGS"			            : "Settings",
+	"LANGUAGE"			            : "Language",
+	"SETTINGS_GENERAL"	            : "General settings",
+	"SETTINGS_IMPERIAL"             : "Imperial",
+	"SETTINGS_METRIC"               : "Metric",
+	"SETTINGS_NAME"                 : "Name for online trailing",
+	"SETTINGS_NAME_PLACEHOLDER"     : "Your name",
+	"SETTINGS_ONLINE"               : "Settings for online use",
+	"SETTINGS_UNIT"                 : "Unit of measurement"
+}

@@ -3,26 +3,26 @@
 		<button ion-button menuToggle>
 			<ion-icon name="menu"></ion-icon>
 		</button>
-		<ion-title>Home</ion-title>
+		<ion-title>{{ 'HOMEPAGE' | translate }}</ion-title>
 	</ion-navbar>
 </ion-header>
 <ion-content padding>
 	<ion-card (click)="gotoLandMap()" class="land-hunt">
 		<img src="assets/imgs/home-land.png">
 		<ion-card-title>
-			Start ashore hunt
+			{{ 'TRAIL_LAND' | translate }}
 		</ion-card-title>
 	</ion-card>
 	<ion-card (click)="gotoWaterMap()" class="water-hunt">
 		<img src="assets/imgs/home-water.png">
 		<ion-card-title>
-			Start water hunt
+			{{ 'TRAIL_WATER' | translate }}
 		</ion-card-title>
 	</ion-card>
 	<ion-card (click)="gotoHistory()">
 		<img src="assets/imgs/home-history.png">
 		<ion-card-title>
-			Past hunts
+			{{ 'HISTORY' | translate }}
 		</ion-card-title>
 	</ion-card>
 </ion-content>
