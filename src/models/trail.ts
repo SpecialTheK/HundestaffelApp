@@ -1,7 +1,7 @@
-import {Position} from '../models/position';
-import {Marker} from '../models/marker';
-import {ColoredCircle} from '../models/coloredCircle';
-import {Triangle} from '../models/triangle';
+import {Position} from './position';
+import {Marker} from './marker';
+import {ColoredCircle} from './coloredCircle';
+import {Triangle} from './triangle';
 
 export class Trail {
 

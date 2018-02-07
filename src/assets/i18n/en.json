@@ -9,6 +9,10 @@
 	"TRAIL_LAND"		            : "Start land trailing",
 	"TRAIL_WATER"		            : "Start water trailing",
 
+	"IMPORT"                        : "Import trail",
+	"IMPORT_NEW"                    : "Import as new trail",
+	"IMPORT_MERGE"                  : "Merge with existing trail",
+
 	"SETTINGS"			            : "Settings",
 	"LANGUAGE"			            : "Language",
 	"SETTINGS_GENERAL"	            : "General settings",
