@@ -3,6 +3,7 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpClient} from "@angular/common/http";
 import {Trail} from "../../models/trail";
 import {Observable} from "rxjs/Observable";
+import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage"
 
 /**
  * Generated class for the ImportPage page.
@@ -22,28 +23,27 @@ export class ImportPage {
 	validTrail: boolean = false;
 	source;
 	
-	constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public storage: TrailStorageProvider) {
 		this.source = this.navParams.get('source');
 	}
 	
 	ionViewDidEnter(){
 		this.getFileContents(this.source).subscribe((response) => {
-			/*for(let entry of response){
-				console.log(JSON.stringify("Entry: "+entry));
-				this.validTrail = this.isTrail(entry);
-			}*/
+			console.log("Response: "+response);
+			if(this.isTrail(response)){
+				this.storage.saveTrail(response, response.startTime);
+			}
 		});
 		console.log("Is valid trail: "+this.validTrail);
 	}
 	
-	private getFileContents(source: string): Observable<Trail[]>{
+	private getFileContents(source: string): Observable<Trail>{
 		console.log("File: "+source);
-		return this.http.get<Trail[]>(source);
+		return this.http.get<Trail>(source);
 	}
 	
-	private isTrail(object: any): object is Trail {
-		return (object.trainer !== undefined && object.dog !== undefined && object.path !== undefined && object.markers !== undefined &&
-			object.isLandActivity !== undefined && object.isSharedActivity !== undefined && object.isTraining !== undefined);
+	private isTrail(trail:any):boolean{
+		return true;
 	}
 	
 	importMerge(){
