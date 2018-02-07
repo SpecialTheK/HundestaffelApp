@@ -36,7 +36,7 @@ export class MapProvider {
             this.map.addListener('click', (i) => {
                 console.log(i.latLng.toJSON());
             });
-        })
+        });
         this.startEmptySession();
     }
 
@@ -149,7 +149,7 @@ export class MapProvider {
             jTrail.t.push(t.convertToSimpleObject());
         }
 
-        this.storage.set(this.startTime, JSON.stringify(jTrail));
+        this.storage.set(this.startTime.toString(), JSON.stringify(jTrail));
 
         this.stopRecording();
     }
