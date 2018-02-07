@@ -8,7 +8,9 @@ export class Trail {
 		path: [],
 		marker: [],
 		circles: [],
-		triangles: []
+		triangles: [],
+    isLandActivity: boolean,
+	  isSharedActivity: boolean,
+	  isTraining: boolean,
 	}
-
 }
