@@ -9,6 +9,10 @@
 	"TRAIL_LAND"		            : "Démarre poursuite à terre",
 	"TRAIL_WATER"		            : "Démarre poursuite sur l'eau",
 
+	"IMPORT"                        : "Importe poursuite",
+	"IMPORT_NEW"                    : "Importe nouveau poursuite",
+	"IMPORT_MERGE"                  : "Raccorde avec dernière poursuite",
+
 	"SETTINGS"			            : "Paramètres",
 	"LANGUAGE"			            : "Langue",
 	"SETTINGS_GENERAL"	            : "Paramétres généralement",

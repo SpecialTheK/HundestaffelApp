@@ -1,5 +1,8 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {HttpClient} from "@angular/common/http";
+import {Trail} from "../../models/trail";
+import {Observable} from "rxjs/Observable";
 
 /**
  * Generated class for the ImportPage page.
@@ -15,20 +18,38 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 })
 export class ImportPage {
 	
-	content: string = "";
+	content: Trail[];
+	validTrail: boolean = false;
+	source;
 	
-	constructor(public navCtrl: NavController, public navParams: NavParams) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
+		this.source = this.navParams.get('source');
 	}
 	
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad ImportPage');
-		let source = this.navParams.get('source');
-		try {
-			this.content = JSON.parse(source);
-		} catch (e) {
-			if (e instanceof SyntaxError){
-				console.log("Parsing file for import failed");
-			}
-		}
+	ionViewDidEnter(){
+		this.getFileContents(this.source).subscribe((response) => {
+			/*for(let entry of response){
+				console.log(JSON.stringify("Entry: "+entry));
+				this.validTrail = this.isTrail(entry);
+			}*/
+		});
+		console.log("Is valid trail: "+this.validTrail);
+	}
+	
+	private getFileContents(source: string): Observable<Trail[]>{
+		return this.http.get<Trail[]>(source);
+	}
+	
+	/*private isTrail(object: any): object is Trail {
+		return (object.trainer !== undefined && object.dog !== undefined && object.path !== undefined && object.markers !== undefined &&
+			object.isLandActivity !== undefined && object.isSharedActivity !== undefined && object.isTraining !== undefined);
+	}*/
+	
+	importMerge(){
+	
+	}
+	
+	importNew(){
+	
 	}
 }
