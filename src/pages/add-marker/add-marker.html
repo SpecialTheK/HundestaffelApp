@@ -1,15 +1,43 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>add-marker</ion-title>
+    <ion-title>Neuer Marker</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
-    <ion-row>
-        <ion-col>
-            <button ion-button (click)="addMarker()" >Confirm</button>
-        </ion-col>
-    </ion-row>
+    <ion-grid no-padding>
+        <ion-row>
+            <ion-col>
+                <ion-item>
+                    <ion-label>Info-Text</ion-label>
+                    <ion-select [(ngModel)]="markerText">
+                        <ion-option value="test1">test1</ion-option>
+                        <ion-option value="test2">test2</ion-option>
+                        <ion-option value="test3">test3</ion-option>
+                        <ion-option value="test4">test4</ion-option>
+                    </ion-select>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-item>
+                    <ion-label>Marker Symbol</ion-label>
+                    <ion-select [(ngModel)]="symbolID">
+                        <ion-option value=0>Standard</ion-option>
+                        <ion-option value=1>Ende</ion-option>
+                        <ion-option value=2>Achtung</ion-option>
+                        <ion-option value=3>test</ion-option>
+                    </ion-select>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row class="confirm-row">
+            <ion-col>
+                <button ion-button (click)="addMarker()">Confirm</button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

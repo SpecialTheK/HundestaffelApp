@@ -7,6 +7,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
 
 import {MyApp} from './app.component';
+import { TrailStorageProvider } from '../providers/trail-storage/trail-storage';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import {MyApp} from './app.component';
         Geolocation,
         StatusBar,
         SplashScreen,
-        {provide: ErrorHandler, useClass: IonicErrorHandler}
+        {provide: ErrorHandler, useClass: IonicErrorHandler},
+        TrailStorageProvider
     ]
     })
 export class AppModule {}
