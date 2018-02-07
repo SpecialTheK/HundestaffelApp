@@ -1,15 +1,14 @@
-export interface Trail{
-	trainer:    string;
-	dog:        string;
-	path:       Coordinates[];
-	markers:    Marker[]
-}
+export class Trail {
 
-export interface Coordinates{
-	lat: number;
-	lng: number;
-}
-
-export interface Marker{
+	trailObj = {
+		trainer: "",
+		dogs: [],
+		startTime: 0,
+		endTime: 0,
+		path: [],
+		marker: [],
+		circles: [],
+		triangles: []
+	}
 
 }
