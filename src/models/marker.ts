@@ -1,6 +1,4 @@
-/**
-*
-*/
+import {Position} from '../models/position';
 
 export class Marker {
 
@@ -15,27 +13,27 @@ export class Marker {
     map: any;
     map_marker: any;
 
-    marker: any = {
-        id: 0,
-        position: 0,
-        title: ""
-    }
+    id: number;
+    position: Position;
+    title: string;
+    symbolID: number;
 
-    constructor(google: any, map: any, id: any, position: any, title: any) {
+    constructor(google: any, map: any, id: number, position: Position, title: string, symbolID: number) {
         this.google = google;
         this.map = map;
 
-        this.marker.id = id;
-        this.marker.position = position;
-        this.marker.title = title;
+        this.id = id;
+        this.position = position;
+        this.title = title;
+        this.symbolID = symbolID;
 
         this.createMarker();
     }
 
     createMarker() {
         this.map_marker = new this.google.maps.Marker({
-            position: this.marker.position,
-            title: this.marker.title
+            position: this.position,
+            title: this.title
         });
 
         this.map_marker.setDraggable(false);
@@ -60,6 +58,15 @@ export class Marker {
 
     show() {
         this.map_marker.setMap(this.map);
+    }
+
+    convertToSimpleObject(): any {
+        return {
+            id: this.id,
+            position: this.position.convertToSimpleObject(),
+            title: this.title,
+            symbolID: this.symbolID
+        };
     }
 
 }

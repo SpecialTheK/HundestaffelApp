@@ -1,6 +1,4 @@
-/**
-*
-*/
+import {Position} from '../models/position';
 
 export class ColoredCircle {
 
@@ -8,37 +6,33 @@ export class ColoredCircle {
     map: any;
     map_circle: any;
 
-    circle: any = {
-        id: 0,
-        position: 0,
-        color: 0,
-        opacity: 0,
-        radius: 0
-    }
+    id: number;
+    position: Position;
+    color: string;
+    opacity: number;
+    radius: number;
 
-    //currentMode: any;
-
-    constructor(google: any, map: any, id:any, position:any, color: any, opacity: any, radius: any){
+    constructor(google: any, map: any, id: number, position: Position, color: string, opacity: number){
         this.google = google;
         this.map = map;
 
-        this.circle.id = id;
-        this.circle.position = position;
-        this.circle.color = color;
-        this.circle.opacity = opacity;
-        this.circle.radius = radius;
+        this.id = id;
+        this.position = position;
+        this.color = color;
+        this.opacity = opacity;
+        this.radius = 100;
 
         this.createCircle();
     }
 
     createCircle() {
         this.map_circle = new this.google.maps.Circle({
-            strokeColor: this.circle.color,
-            strokeOpacity: this.circle.opacity,
-            fillColor: this.circle.color,
-            fillOpacity: this.circle.opacity,
-            center: this.circle.position,
-            radius: this.circle.radius
+            strokeColor: this.color,
+            strokeOpacity: this.opacity,
+            fillColor: this.color,
+            fillOpacity: this.opacity,
+            center: this.position.convertToSimpleObject(),
+            radius: this.radius
         });
         this.map_circle.setEditable(false);
         this.map_circle.setDraggable(false);
@@ -69,6 +63,16 @@ export class ColoredCircle {
 
     show() {
         this.map_circle.setMap(this.map);
+    }
+
+    convertToSimpleObject(): any {
+        return {
+            id: this.id,
+            position: this.position.convertToSimpleObject(),
+            color: this.color,
+            opacity: this.opacity,
+            radius: this.radius
+        };
     }
 
 }

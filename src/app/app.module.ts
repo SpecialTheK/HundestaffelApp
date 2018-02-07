@@ -7,11 +7,13 @@ import {Geolocation} from "@ionic-native/geolocation";
 import { IonicStorageModule } from '@ionic/storage';
 
 import {MyApp} from './app.component';
+
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {WebIntent} from "@ionic-native/web-intent";
+import { TrailStorageProvider } from '../providers/trail-storage/trail-storage';
 
 @NgModule({
 	declarations: [
@@ -36,13 +38,14 @@ import {WebIntent} from "@ionic-native/web-intent";
 	],
 	providers: [
         Geolocation,
-		StatusBar,
-		SplashScreen,
-		AppPreferences,
-		{provide: ErrorHandler, useClass: IonicErrorHandler},
-		WebIntent
-	]
-})
+        StatusBar,
+        SplashScreen,
+        AppPreferences,
+        {provide: ErrorHandler, useClass: IonicErrorHandler},
+        TrailStorageProvider,
+        WebIntent
+    ]
+    })
 export class AppModule {
 }
 
