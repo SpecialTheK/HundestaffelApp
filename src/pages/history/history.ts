@@ -2,12 +2,9 @@ import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 
-/**
- * Generated class for the HistoryPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Storage } from '@ionic/storage';
+
+import { Trail } from '../../models/trail';
 
 @IonicPage()
 @Component({
@@ -15,9 +12,23 @@ import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 	templateUrl: 'history.html',
 })
 export class HistoryPage {
-	constructor(public navCtrl: NavController, public navParams: NavParams, public sharing: ShareTrailProvider) {
+
+	trails: any = [];
+
+	constructor(public navCtrl: NavController, public navParams: NavParams, public sharing: ShareTrailProvider, public storage: Storage) {
+		this.storage.forEach(i => {
+			let t = JSON.parse(i);
+			this.trails.push(t);
+		});
 	}
 
+	test(trail){
+		this.storage.get(trail.t[0].startTime).then(i => {
+			console.log(JSON.parse(i));
+		});
+	}
+
+	/*
 	share(id: number){
 		// TODO: remove
 		let data = [
@@ -36,4 +47,5 @@ export class HistoryPage {
 			console.log("Could not share: "+ reason);
 		})
 	}
+	*/
 }

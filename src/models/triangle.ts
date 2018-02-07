@@ -1,6 +1,4 @@
-/**
-*
-*/
+import {Position} from '../models/position';
 
 export class Triangle {
 
@@ -8,17 +6,21 @@ export class Triangle {
     map: any;
     map_triangle: any;
 
-    triangle: any = {
-        id: 0,
-        positions: 0,
-    }
+    id: number;
+    position: Position;
 
-    constructor(google: any, map: any, id: any, position: any) {
+    usePos: any;
+
+    constructor(google: any, map: any, id: number, position: Position) {
         this.google = google;
         this.map = map;
 
-        this.triangle.id = id;
-        this.triangle.position = [
+        this.id = id;
+        this.position = position;
+
+        // this is only for testing
+        // TODO: make this better... somehow
+        this.usePos = [
             {lat: position.lat,     lng: position.lng},
             {lat: position.lat+0.002, lng: position.lng},
             {lat: position.lat, lng: position.lng+0.002}
@@ -29,7 +31,7 @@ export class Triangle {
 
     createTriangle() {
         this.map_triangle = new this.google.maps.Polygon({
-            paths: this.triangle.position,
+            paths: this.usePos,
             strokeColor: '#FF00FF',
             strokeOpacity: 0.8,
             fillColor: '#FF99FF',
@@ -44,6 +46,13 @@ export class Triangle {
 
     show() {
         this.map_triangle.setMap(this.map);
+    }
+
+    convertToSimpleObject(): any {
+        return {
+            id: this.id,
+            position: this.position.convertToSimpleObject()
+        }
     }
 
 }

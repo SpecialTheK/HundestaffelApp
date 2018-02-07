@@ -8,15 +8,18 @@ import { IonicPage, ViewController, NavParams } from 'ionic-angular';
 })
 export class AddMarkerPage {
 
-  constructor(public navParams: NavParams, public viewCtrl: ViewController) {
-  }
+    markerText: string = 'test1';
+    symbolID: number = 0;
 
-  ionViewDidLoad() {
-  }
+    constructor(public navParams: NavParams, public viewCtrl: ViewController) {
+    }
 
-  addMarker() {
-      this.navParams.get('map').addMarker();
-      this.viewCtrl.dismiss();
-  }
+    ionViewDidLoad() {
+    }
+
+    addMarker() {
+        this.navParams.get('map').addMarker(this.markerText, this.symbolID);
+        this.viewCtrl.dismiss();
+    }
 
 }
