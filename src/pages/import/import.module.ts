@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {IonicPageModule} from 'ionic-angular';
 import {ImportPage} from './import';
 import {HttpClientModule} from "@angular/common/http";
+import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
 	declarations: [
@@ -9,7 +10,9 @@ import {HttpClientModule} from "@angular/common/http";
 	],
 	imports: [
 		IonicPageModule.forChild(ImportPage),
-		HttpClientModule
+		HttpClientModule,
+		IonicPageModule.forChild(ImportPage),
+		TranslateModule.forChild()
 	],
 })
 export class ImportPageModule {

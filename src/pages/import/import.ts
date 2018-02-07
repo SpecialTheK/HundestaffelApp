@@ -37,13 +37,14 @@ export class ImportPage {
 	}
 	
 	private getFileContents(source: string): Observable<Trail[]>{
+		console.log("File: "+source);
 		return this.http.get<Trail[]>(source);
 	}
 	
-	/*private isTrail(object: any): object is Trail {
+	private isTrail(object: any): object is Trail {
 		return (object.trainer !== undefined && object.dog !== undefined && object.path !== undefined && object.markers !== undefined &&
 			object.isLandActivity !== undefined && object.isSharedActivity !== undefined && object.isTraining !== undefined);
-	}*/
+	}
 	
 	importMerge(){
 	

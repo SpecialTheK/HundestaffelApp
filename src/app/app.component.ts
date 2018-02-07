@@ -19,9 +19,8 @@ export class MyApp {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
-			
 			if(platform.is('android')) {
-				console.log("Test 1.1");
+				console.log("Test 1.3");
 				this.webIntent.getIntent().then((answer) => {
 					if(answer.extras != null && answer.extras["android.intent.extra.STREAM"] != undefined){
 						this.navCtrl.push('ImportPage', {source: answer.extras["android.intent.extra.STREAM"]});
