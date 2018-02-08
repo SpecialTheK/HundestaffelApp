@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
-
-import { Storage } from '@ionic/storage';
-
 import { Trail } from '../../models/trail';
+import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
+import {Observable} from "rxjs/Observable";
 
 @IonicPage()
 @Component({
@@ -13,19 +12,23 @@ import { Trail } from '../../models/trail';
 })
 export class HistoryPage {
 
-	trails: any = [];
+	trails: Observable<Trail[]>;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public sharing: ShareTrailProvider, public storage: Storage) {
-		this.storage.forEach(i => {
-			let t = JSON.parse(i);
-			this.trails.push(t);
-		});
+	constructor(public navCtrl: NavController, public navParams: NavParams, public sharing: ShareTrailProvider, public storage: TrailStorageProvider) {
+		this.trails = this.storage.getTrailSets();
 	}
 
-	test(trail){
-		this.storage.get(trail.t[0].startTime).then(i => {
-			console.log(JSON.parse(i));
-		});
+	test(trail: Trail[]){
+		/*this.storage.getTrailSet(trail).then((answer) => {
+			console.log(answer);
+		});*/
+		console.log(JSON.stringify(trail));
+	}
+	
+	test2(key: any){
+		console.log(this.storage.getTrailSet(key).then((response) => {
+			console.log(JSON.stringify(response));
+		}))
 	}
 
 	/*

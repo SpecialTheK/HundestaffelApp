@@ -6,20 +6,16 @@
 -->
 <ion-header>
 
-    <ion-navbar>
-        <ion-title>history</ion-title>
-    </ion-navbar>
+	<ion-navbar>
+		<ion-title>history</ion-title>
+	</ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
-    <ion-list>
-
-        <button ion-item *ngFor="let trail of trails" (click)="test(trail)">{{trail.t[0].startTime}}</button>
-
-    </ion-list>
-
-
+	<ion-list>
+		<trail-card></trail-card>
+	</ion-list>
+	<button (click)="test(2)">dddddd</button>
 </ion-content>

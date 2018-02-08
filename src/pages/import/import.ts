@@ -3,7 +3,7 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpClient} from "@angular/common/http";
 import {Trail} from "../../models/trail";
 import {Observable} from "rxjs/Observable";
-import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage"
+import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 
 /**
  * Generated class for the ImportPage page.
@@ -19,8 +19,7 @@ import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage"
 })
 export class ImportPage {
 	
-	content: Trail[];
-	validTrail: boolean = false;
+	trail: Trail;
 	source;
 	
 	constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public storage: TrailStorageProvider) {
@@ -30,11 +29,12 @@ export class ImportPage {
 	ionViewDidEnter(){
 		this.getFileContents(this.source).subscribe((response) => {
 			console.log("Response: "+response);
-			if(this.isTrail(response)){
-				this.storage.saveTrail(response, response.startTime);
+			if(Trail.isTrailObject(response)){
+				this.trail = response;
+			} else {
+				console.log("No trail object!");
 			}
 		});
-		console.log("Is valid trail: "+this.validTrail);
 	}
 	
 	private getFileContents(source: string): Observable<Trail>{
@@ -42,15 +42,15 @@ export class ImportPage {
 		return this.http.get<Trail>(source);
 	}
 	
-	private isTrail(trail:any):boolean{
-		return true;
-	}
-	
 	importMerge(){
 	
 	}
 	
 	importNew(){
-	
+		this.storage.addNewTrailSet(this.trail).then((answer) => {
+			this.navCtrl.pop();
+		}).catch((error) => {
+			console.log("Could not import trail"+error);
+		});
 	}
 }
