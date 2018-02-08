@@ -4,7 +4,6 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import {Geolocation} from "@ionic-native/geolocation";
-import { IonicStorageModule } from '@ionic/storage';
 
 import {MyApp} from './app.component';
 
@@ -13,7 +12,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {WebIntent} from "@ionic-native/web-intent";
-import { TrailStorageProvider } from '../providers/trail-storage/trail-storage';
 
 @NgModule({
 	declarations: [
@@ -23,7 +21,6 @@ import { TrailStorageProvider } from '../providers/trail-storage/trail-storage';
 		BrowserModule,
 		HttpClientModule,
 		IonicModule.forRoot(MyApp),
-        IonicStorageModule.forRoot(),
 		TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,
@@ -42,7 +39,6 @@ import { TrailStorageProvider } from '../providers/trail-storage/trail-storage';
         SplashScreen,
         AppPreferences,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
-        TrailStorageProvider,
         WebIntent
     ]
     })

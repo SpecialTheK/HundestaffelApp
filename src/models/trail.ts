@@ -83,4 +83,11 @@ export class Trail {
 			triangles: tri
 		};
 	}
+	
+	static isTrailObject(object: any){
+		return (object.hasOwnProperty('trainer') && object.hasOwnProperty('dog') && object.hasOwnProperty('path') &&
+			object.hasOwnProperty('marker') && object.hasOwnProperty('circles') && object.hasOwnProperty('triangles') &&
+			object.hasOwnProperty('startTime') && object.hasOwnProperty('endTime') && object.hasOwnProperty('isLandActivity') &&
+			object.hasOwnProperty('isSharedActivity') && object.hasOwnProperty('isTraining'));
+	}
 }
