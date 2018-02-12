@@ -21,11 +21,11 @@ export class ImportPage {
 	
 	trail: Trail;
 	source;
-	
+
 	constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public storage: TrailStorageProvider) {
 		this.source = this.navParams.get('source');
 	}
-	
+
 	ionViewDidEnter(){
 		this.getFileContents(this.source).subscribe((response) => {
 			console.log("Response: "+response);
@@ -36,16 +36,16 @@ export class ImportPage {
 			}
 		});
 	}
-	
+
 	private getFileContents(source: string): Observable<Trail>{
 		console.log("File: "+source);
 		return this.http.get<Trail>(source);
 	}
-	
+
 	importMerge(){
-	
+
 	}
-	
+
 	importNew(){
 		this.storage.addNewTrailSet(this.trail).then((answer) => {
 			this.navCtrl.pop();
