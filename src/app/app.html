@@ -28,21 +28,9 @@
 						<ion-list-header>
 							{{ 'LAST_TRAILS' | translate }}
 						</ion-list-header>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 1
-						</button>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 2
-						</button>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 3
-						</button>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 4
-						</button>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 5
-						</button>
+						<div *ngIf="trails.length > 0">
+							<trail-card *ngFor="let trailSet of trails" [trail]="trailSet" (click)="openEntry(trailSet)"></trail-card>
+						</div>
 					</ion-item-group>
 				</ion-item-group>
 			</ion-buttons>

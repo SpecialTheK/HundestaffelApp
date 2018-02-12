@@ -1,13 +1,23 @@
 {
+	"FOR"                           : "for",
+	"MINUTES"                       : "minutes",
+	"TRAIL_LAND"		            : "land trailing",
+	"TRAIL_WATER"		            : "water trailing",
+	"TYPE"                          : "Type",
+	"WITH"                          : "with",
+
 	"ABOUT"				            : "About this app",
-	"HISTORY"			            : "History",
 	"LAST_TRAILS"		            : "Last trails",
 	"ONLINE_TRAILING"	            : "Connect to trailing",
 	"MENU"				            : "Menu",
 
+	"HISTORY"			            : "History",
+	"HISTORY_OPERATION"             : "Operation",
+	"HISTORY_STAGES"                : "stages",
+	"HISTORY_TRAINING"              : "Training",
+
 	"HOMEPAGE"			            : "Homepage",
-	"TRAIL_LAND"		            : "Start land trailing",
-	"TRAIL_WATER"		            : "Start water trailing",
+	"HOME_START"		            : "Start",
 
 	"IMPORT"                        : "Import trail",
 	"IMPORT_NEW"                    : "Import as new trail",

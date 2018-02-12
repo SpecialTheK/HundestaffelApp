@@ -1,0 +1,8 @@
+<ion-card [ngClass]="classes">
+	<ion-card-header>{{operationType}}: {{startTime}}</ion-card-header>
+	<ion-card-content>
+		<p>{{'TYPE' | translate}}: {{mapType}}</p>
+		<p>{{trails}} {{'HISTORY_STAGES' | translate}} {{'WITH' | translate}}:</p>
+		<p *ngFor="let dog of dogs">{{dog.name}} {{'FOR' | translate}} {{dog.duration}} {{'MINUTES' | translate}}</p>
+	</ion-card-content>
+</ion-card>
