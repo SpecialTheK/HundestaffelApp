@@ -13,10 +13,15 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {WebIntent} from "@ionic-native/web-intent";
+import {FilterComponent} from "../components/filter/filter";
+import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
+import {IonicStorageModule} from "@ionic/storage";
+import {TrailCardModule} from "../components/trail-card/trail-card.module";
 
 @NgModule({
 	declarations: [
 		MyApp,
+		FilterComponent
 	],
 	imports: [
 		BrowserModule,
@@ -29,11 +34,13 @@ import {WebIntent} from "@ionic-native/web-intent";
 				useFactory: (createTranslateLoader),
 				deps: [HttpClient]
 			}
-		})
+		}),
+		TrailCardModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
-		MyApp
+		MyApp,
+		FilterComponent
 	],
 	providers: [
         Geolocation,
@@ -41,7 +48,8 @@ import {WebIntent} from "@ionic-native/web-intent";
         SplashScreen,
         AppPreferences,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
-        WebIntent
+        WebIntent,
+		TrailStorageProvider
     ]
     })
 export class AppModule {

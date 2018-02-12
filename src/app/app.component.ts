@@ -7,6 +7,8 @@ import {Home} from '../pages/pages';
 import {TranslateService} from "@ngx-translate/core";
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {WebIntent} from "@ionic-native/web-intent";
+import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
+import {Trail} from "../models/trail";
 
 @Component({
 	templateUrl: 'app.html'
@@ -14,8 +16,9 @@ import {WebIntent} from "@ionic-native/web-intent";
 export class MyApp {
 	@ViewChild('mainMenu') navCtrl: NavController;
 	rootPage: any = Home;
+	trails: Trail[][] = [];
 	
-	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService, public webIntent: WebIntent) {
+	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService, public webIntent: WebIntent, public storage: TrailStorageProvider) {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
@@ -32,6 +35,9 @@ export class MyApp {
 			preferences.fetch('language').then((answer) => {
 				translate.use(answer);
 			});
+			this.storage.getLatestTrailSets(5).subscribe((value:Trail[]) => {
+				this.trails.push(value);
+			});
 			statusBar.styleDefault();
 			splashScreen.hide();
 		});
@@ -43,5 +49,9 @@ export class MyApp {
 		} else {
 			this.navCtrl.push(name);
 		}
+	}
+	
+	openEntry(trail: Trail){
+		this.navCtrl.push('HistoryEntryPage', {trailObject: trail});
 	}
 }
