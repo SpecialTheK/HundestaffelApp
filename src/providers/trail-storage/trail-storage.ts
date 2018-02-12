@@ -7,11 +7,6 @@ import {Observable} from "rxjs/Observable";
 export class TrailStorageProvider {
 	
 	constructor(public storage: Storage) {
-		this.storage.keys().then((keys) => {
-			for(let bla of keys){
-				console.log("Key: "+bla);
-			}
-		})
 	}
 	
 	/**
@@ -133,7 +128,7 @@ export class TrailStorageProvider {
 	 * @param {number} from Beginning of the selection. If left all trailSets from the beginning to limit are returned.
 	 * @param {number} limit Limit of the selection. If left 0, it returns all remaining trailSets.
 	 *
-	 * @returns {Observable<Trail[]>} Returns one trailSet in each push. Throws errors if the data couln't be retrieved from the storage.
+	 * @returns {Observable<Trail[]>} Returns one trailSet in each push. Throws errors if the data couldn't be retrieved from the storage.
 	 */
 	public getTrailSets(from:number = 0, limit:number = 0):Observable<Trail[]>{
 		return new Observable<Trail[]>((observer) => {
@@ -145,7 +140,6 @@ export class TrailStorageProvider {
 						observer.complete();
 					}
 					if(iterationNumber >= from && ((<number>iterationNumber)-from < limit || limit === 0)){
-						console.log("It: "+value);
 						observer.next(JSON.parse(value));
 					}
 				}).then((answer) => {
@@ -155,6 +149,38 @@ export class TrailStorageProvider {
 				});
 			}).catch((error) => {
 				observer.error("Internal storage error: "+error);
+			});
+		});
+	}
+	
+	/**
+	 * Get the last x trailSets from the storage. Not optimized for big amounts.
+	 *
+	 * @param {number} amount The amount of trailSets to fetch.
+	 *
+	 * @returns {Observable<Trail[]>} Returns one trailSet in each push. Throws an error if data couldn't be retrieved.
+	 */
+	public getLatestTrailSets(amount:number):Observable<Trail[]>{
+		return new Observable<Trail[]>((observer) => {
+			this.storage.ready().then((answer) => {
+				this.storage.keys().then((keys) => {
+					let reversedKeys = keys.reverse();
+					if(amount > reversedKeys.length){
+						amount = reversedKeys.length;
+					}
+					for(let i = 0; i < amount; i++){
+						this.getTrailSet(reversedKeys[i]).then((answer) => {
+							observer.next(JSON.parse(answer));
+							if(i == amount-1){ // Doesn't work outside of for loop
+								observer.complete();
+							}
+						}).catch((error) => {
+							observer.error("Couldn't fetch trailSet: "+error);
+						})
+					}
+				}).catch((error) => {
+					observer.error("Couldn't fetch keys: "+error);
+				});
 			});
 		});
 	}
