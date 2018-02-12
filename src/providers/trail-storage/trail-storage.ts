@@ -110,7 +110,7 @@ export class TrailStorageProvider {
 			this.storage.ready().then((answer) => {
 				this.storage.get(key).then((answer) => {
 					if(answer === null){
-						console.log("trailSet not found");
+						reject("trailSet not found");
 					}
 					resolve(answer);
 				}).catch((error) => {
