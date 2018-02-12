@@ -23,9 +23,9 @@ export class HistoryPage {
 	}
 
 	test(trail){
-		this.storage.get(trail.t[0].startTime).then(i => {
-			console.log(JSON.parse(i));
-		});
+
+		console.log(trail);
+
 	}
 
 	/*

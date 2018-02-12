@@ -27,40 +27,60 @@ export class MapProvider {
     }
 
     initMap(mapElement) {
-        this.location.getCurrentPosition().then((pos) => {
-            this.map = new google.maps.Map(mapElement.nativeElement, {
-                center: {lat: pos.coords.latitude, lng: pos.coords.longitude},
-                disableDoubleClickZoom: true,
-                zoom: 16
-            });
-            this.map.addListener('click', (i) => {
-                console.log(i.latLng.toJSON());
-            });
+        this.map = new google.maps.Map(mapElement.nativeElement, {
+            disableDoubleClickZoom: true,
+            zoom: 16
         });
-        this.startEmptySession();
+        this.map.addListener('click', (i) => {
+            console.log(i.latLng.toJSON());
+        });
+
+        this.location.getCurrentPosition().then((pos) => {
+            this.map.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
+        });
+        //this.startEmptySession();
     }
 
     /**
     * Starts a new session
     */
-    startEmptySession() {
-        this.currentTrail = new Trail('Jonas', 'Hund1', false, false, false);
-        this.recordCurrentPosition();
+    startSession(trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
+        this.currentTrail = new Trail(trainerName, dogName, isLand, isShared, isTrain);
+        //this.recordCurrentPosition();
     }
 
     /**
     * Starts a new session
     */
-    startExistingSession(trail: Trail) {
-
-        this.recordCurrentPosition();
+    startExistingSession(trailSet, trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
+        this.startSession(trainerName, dogName, isLand, isShared, isTrain);
+        for(let trail of trailSet.t){
+            this.loadTrail(trail);
+        }
     }
 
     /**
     * Starts a new session
     */
-    viewExistingSession(trail: Trail) {
+    viewExistingSession(trailSet) {
 
+    }
+
+    loadTrail(trail: Trail) {
+        this.currentTrail = new Trail(trail.trainer, trail.dog, trail.isLandActivity, trail.isSharedActivity, trail.isTraining);
+        for(let pat of trail.path){
+            this.currentTrail.addToPath(new Position(pat.lat, pat.lng));
+        }
+        for(let cir of trail.circles){
+            this.addColoredCircle(cir.color, cir.opacity);
+        }
+        for(let mar of trail.marker){
+            this.addMarker(mar.title, mar.symbolID);
+        }
+        for(let tri of trail.triangles){
+            this.addTriangle();
+        }
+        console.log(this.currentTrail.convertToSimpleObject());
     }
 
     /**
@@ -140,16 +160,7 @@ export class MapProvider {
         this.currentTrail.setStartTime(this.startTime);
         this.currentTrail.setEndTime(this.endTime);
 
-        let jTrail = {
-            t: []
-        };
-
-        this.trail.push(this.currentTrail);
-        for(let t of this.trail){
-            jTrail.t.push(t.convertToSimpleObject());
-        }
-
-        this.storage.set(this.startTime.toString(), JSON.stringify(jTrail));
+        this.storage.set(this.startTime.toString(), JSON.stringify(this.currentTrail.convertToSimpleObject()));
 
         this.stopRecording();
     }

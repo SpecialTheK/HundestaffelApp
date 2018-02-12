@@ -18,39 +18,39 @@ import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage"
 	templateUrl: 'import.html',
 })
 export class ImportPage {
-	
+
 	content: Trail[];
 	validTrail: boolean = false;
 	source;
-	
+
 	constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public storage: TrailStorageProvider) {
 		this.source = this.navParams.get('source');
 	}
-	
+
 	ionViewDidEnter(){
 		this.getFileContents(this.source).subscribe((response) => {
 			console.log("Response: "+response);
 			if(this.isTrail(response)){
-				this.storage.saveTrail(response, response.startTime);
+				//this.storage.saveTrail(response, response.startTime);
 			}
 		});
 		console.log("Is valid trail: "+this.validTrail);
 	}
-	
+
 	private getFileContents(source: string): Observable<Trail>{
 		console.log("File: "+source);
 		return this.http.get<Trail>(source);
 	}
-	
+
 	private isTrail(trail:any):boolean{
 		return true;
 	}
-	
+
 	importMerge(){
-	
+
 	}
-	
+
 	importNew(){
-	
+
 	}
 }

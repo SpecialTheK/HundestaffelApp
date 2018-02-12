@@ -48,10 +48,10 @@ export class ColoredCircle {
         });
         //TODO: add a change listener
         this.map_circle.addListener('center_changed', (i)=>{
-            console.log(i);
+            console.log(this.map_circle.getCenter());
         });
         this.map_circle.addListener('radius_changed', (i)=>{
-            console.log(i);
+            console.log(this.map_circle.getRadius());
         });
 
         this.show();

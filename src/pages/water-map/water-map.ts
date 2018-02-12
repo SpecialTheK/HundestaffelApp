@@ -18,6 +18,11 @@ export class WaterMapPage {
 
     ionViewDidLoad() {
         this.map.initMap(this.mapElement);
+        if(this.navParams.get('trailSet') == null){
+            this.map.startSession('Jonas', 'Hund2', false, false, false);
+        } else {
+            this.map.startExistingSession(this.navParams.get('trailSet'), 'Jonas', 'Hund2', false, false, false);
+        }
     }
 
     showCurrentLocation() {
@@ -43,7 +48,7 @@ export class WaterMapPage {
     }
 
     changeOpacity() {
-        
+
     }
 
 }
