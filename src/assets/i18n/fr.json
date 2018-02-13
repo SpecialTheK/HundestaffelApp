@@ -26,10 +26,7 @@
 	"SETTINGS"			            : "Paramètres",
 	"LANGUAGE"			            : "Langue",
 	"SETTINGS_GENERAL"	            : "Paramétres généralement",
-	"SETTINGS_IMPERIAL"             : "Impériales",
-	"SETTINGS_METRIC"               : "Métrique",
 	"SETTINGS_NAME"                 : "Nom pour poursuite online",
 	"SETTINGS_NAME_PLACEHOLDER"     : "Nom",
-	"SETTINGS_ONLINE"               : "Paramètres pour poursuites online",
-	"SETTINGS_UNIT"                 : "Unité de mesure"
+	"SETTINGS_ONLINE"               : "Paramètres pour poursuites online"
 }
