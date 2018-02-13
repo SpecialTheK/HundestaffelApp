@@ -48,7 +48,9 @@ export class Marker {
             }
         });
         this.map_marker.addListener('position_changed', (i)=>{
-            console.log(i);
+            console.log(this.map_marker.getPosition().toJSON());
+            this.position.lat = this.map_marker.getPosition().toJSON().lat;
+            this.position.lng = this.map_marker.getPosition().toJSON().lng;
         })
 
         this.show();

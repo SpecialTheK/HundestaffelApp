@@ -25,18 +25,14 @@ export class HistoryPage {
 			this.originalTrails.push(value);
 		});
 	}
-  
-	test(trail){
-
-		console.log(trail);
 
 	openFilters(myEvent) {
 		let popover = this.popoverCtrl.create(FilterComponent, {showTrainings: this.showTrainings, showOperations: this.showOperations, showWaterTrails: this.showWaterTrails, showLandTrails: this.showLandTrails});
 		popover.present({
 			ev: myEvent
 		});
-		
-		
+
+
 		// TODO: Performanter
 		popover.onDidDismiss((data) => {
 			if(data){
@@ -64,7 +60,7 @@ export class HistoryPage {
 			}
 		});
 	}
-	
+
 	openEntry(trail: Trail){
 		this.navCtrl.push('HistoryEntryPage', {trailObject: trail});
 	}

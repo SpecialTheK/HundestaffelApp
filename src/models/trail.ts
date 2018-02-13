@@ -5,11 +5,17 @@ import {Triangle} from './triangle';
 
 export class Trail {
 
+	google: any;
+	map: any;
+
 	startTime: number;
 	endTime: number;
 	isLandActivity: boolean;
 	isSharedActivity: boolean;
 	isTraining: boolean;
+
+	id: number;
+	isHidden: boolean = false;
 
 	trainer: string;
 	dog: string;
@@ -18,12 +24,52 @@ export class Trail {
 	circles: ColoredCircle[] = [];
 	triangles: Triangle[] = [];
 
-	constructor(trainer: string, dog: string, isLandActivity: boolean, isSharedActivity: boolean, isTraining: boolean) {
+	constructor(id: number, trainer: string, dog: string, isLandActivity: boolean, isSharedActivity: boolean, isTraining: boolean) {
+		this.id = id;
 		this.trainer = trainer;
 		this.dog = dog;
 		this.isLandActivity = isLandActivity;
 		this.isSharedActivity = isSharedActivity;
 		this.isTraining = isTraining;
+	}
+
+	/**
+	* Sets the params google and map for use inside of a map context
+	*
+	* @param google Object for creating a displayable map components.
+	* @param map Used for adding the created components to the map.
+	*/
+	init(google: any, map: any){
+		this.google = google;
+		this.map = map;
+	}
+
+	/**
+	* Imports a given trail with all its properties
+	*
+	* @param {Trail} trail The Trail object that gets imported.
+	*/
+	importTrail(trail: Trail){
+		//TODO:	Schau ob man diese Werte(trainer, dog, usw. ) wirklich setzten will/muss
+		this.trainer = trail.trainer;
+		this.dog = trail.dog;
+		this.isLandActivity = trail.isLandActivity;
+		this.isSharedActivity = trail.isSharedActivity;
+		this.isTraining = trail.isTraining;
+		this.id = trail.id;
+
+		for(let pat of trail.path){
+			this.addToPath(pat.lat, pat.lng);
+		}
+		for(let cir of trail.circles){
+			this.addToCircles(cir.color, cir.opacity);
+		}
+		for(let mar of trail.marker){
+			this.addToMarker(mar.title, mar.symbolID);
+		}
+		for(let tri of trail.triangles){
+			this.addToTriangles();
+		}
 	}
 
 	setStartTime(startTime: number){
@@ -34,20 +80,48 @@ export class Trail {
 		this.endTime = endTime;
 	}
 
-	addToPath(pos: Position){
-		this.path.push(pos);
+	addToPath(lat: number, lng: number){
+		this.path.push(new Position(lat, lng));
 	}
 
-	addToMarker(marker: Marker){
-		this.marker.push(marker);
+	getLastPos(): Position{
+		return this.path[this.path.length - 1];
 	}
 
-	addToCircles(circle: ColoredCircle){
-		this.circles.push(circle);
+	addToMarker(title: string, markerSymbol: number){
+		this.marker.push(new Marker(this.google, this.map, this.marker.length, this.getLastPos(), title, markerSymbol));
 	}
 
-	addToTriangles(triangle: Triangle){
-		this.triangles.push(triangle);
+	addToCircles(color: string, opacity: number){
+		this.circles.push(new ColoredCircle(this.google, this.map, this.circles.length, this.getLastPos(), color, opacity));
+	}
+
+	addToTriangles(){
+		this.triangles.push(new Triangle(this.google, this.map, this.triangles.length, this.getLastPos()));
+	}
+
+	hide() {
+		for(let mar of this.marker){
+			mar.hide();
+		}
+		for(let cir of this.circles){
+			cir.hide();
+		}
+		for(let tri of this.triangles){
+			tri.hide();
+		}
+	}
+
+	show() {
+		for(let mar of this.marker){
+			mar.show();
+		}
+		for(let cir of this.circles){
+			cir.show();
+		}
+		for(let tri of this.triangles){
+			tri.show();
+		}
 	}
 
 	convertToSimpleObject(): any{
@@ -70,6 +144,7 @@ export class Trail {
 		}
 
 		return {
+			id: this.id,
 			startTime: this.startTime,
 			endTime: this.endTime,
 			isLandActivity: this.isLandActivity,
@@ -83,7 +158,7 @@ export class Trail {
 			triangles: tri
 		};
 	}
-	
+
 	static isTrailObject(object: any){
 		return (object.hasOwnProperty('trainer') && object.hasOwnProperty('dog') && object.hasOwnProperty('path') &&
 			object.hasOwnProperty('marker') && object.hasOwnProperty('circles') && object.hasOwnProperty('triangles') &&
