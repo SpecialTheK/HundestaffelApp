@@ -1,9 +1,15 @@
 <ion-header>
 
 	<ion-navbar>
-		<ion-title>{{'SEARCH_OF' | translate}}</ion-title>
-		<ion-buttons right><button ion-button icon-only (click)="share()"><ion-icon name="share"></ion-icon></button></ion-buttons>
+		<ion-title>{{'SEARCH_OF' | translate}} {{trailSet[0].startTime}}</ion-title>
+		<ion-buttons right>
+			<button ion-button icon-only (click)="exportAsJSON()"><ion-icon name="share"></ion-icon></button>
+		</ion-buttons>
+	</ion-navbar>
 </ion-header>
 <ion-content padding>
-	<button ion-button>{{'EXPORT_PDF' |translate }}</button>
+	<p>{{'TYPE' | translate}}: {{mapType}}, {{operationType}}</p>
+	<p>{{trails}} {{'HISTORY_STAGES' | translate}} {{'WITH' | translate}}:</p>
+	<p *ngFor="let dog of dogs">{{dog.name}} {{'FOR' | translate}} {{dog.duration}} {{'MINUTES' | translate}}</p>
+	<p><button ion-button (click)="exportAsPdf()">{{'EXPORT_PDF' |translate }}</button></p>
 </ion-content>
