@@ -46,7 +46,7 @@ export class MapProvider {
     */
     startSession(trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
         this.currentTrail = new Trail(trainerName, dogName, isLand, isShared, isTrain);
-        //this.recordCurrentPosition();
+        this.recordCurrentPosition();
     }
 
     /**

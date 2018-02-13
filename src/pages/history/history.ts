@@ -25,11 +25,7 @@ export class HistoryPage {
 			this.originalTrails.push(value);
 		});
 	}
-  
-	test(trail){
-
-		console.log(trail);
-
+	
 	openFilters(myEvent) {
 		let popover = this.popoverCtrl.create(FilterComponent, {showTrainings: this.showTrainings, showOperations: this.showOperations, showWaterTrails: this.showWaterTrails, showLandTrails: this.showLandTrails});
 		popover.present({
