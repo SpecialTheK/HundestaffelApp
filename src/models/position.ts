@@ -9,6 +9,7 @@ export class Position {
     }
 
     convertToSimpleObject(): any{
+        console.log("Test LUL");
         return {
             lat: this.lat,
             lng: this.lng

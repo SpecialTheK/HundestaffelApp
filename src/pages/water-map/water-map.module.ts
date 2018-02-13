@@ -7,7 +7,7 @@ import { WaterMapPage } from './water-map';
         WaterMapPage,
     ],
     imports: [
-        IonicPageModule.forChild(WaterMapPage),
+        IonicPageModule.forChild(WaterMapPage)
     ],
 })
 export class WaterMapPageModule {}

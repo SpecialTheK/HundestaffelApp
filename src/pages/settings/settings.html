@@ -21,13 +21,6 @@
 					<ion-option value="fr">Français</ion-option>
 				</ion-select>
 			</ion-item>
-			<ion-item>
-				<ion-label>{{ 'SETTINGS_UNIT' | translate }}</ion-label>
-				<ion-select [(ngModel)]="unit" (ionChange)="setUnit()">
-					<ion-option value="m">{{ 'SETTINGS_METRIC' | translate }}</ion-option>
-					<ion-option value="i">{{ 'SETTINGS_IMPERIAL' | translate }}</ion-option>
-				</ion-select>
-			</ion-item>
 		</ion-item-group>
 		<ion-item-group>
 			<ion-list-header>{{ 'SETTINGS_ONLINE' | translate }}</ion-list-header>

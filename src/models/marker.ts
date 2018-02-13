@@ -27,6 +27,8 @@ export class Marker {
         this.title = title;
         this.symbolID = symbolID;
 
+        console.log(map);
+
         this.createMarker();
     }
 
