@@ -1,9 +1,9 @@
 <ion-menu [content]="mainMenu">
 	<ion-header>
 		<ion-toolbar>
-			<ion-title>Menu</ion-title>
+			<ion-title>{{ 'MENU' | translate }}</ion-title>
 			<ion-buttons end>
-				<button ion-button icon-only (click)="openPage('SettingsPage')">
+				<button ion-button menuClose icon-only (click)="openPage('SettingsPage')">
 					<ion-icon name="settings"></ion-icon>
 				</button>
 			</ion-buttons>
@@ -15,34 +15,22 @@
 				<ion-item-group>
 					<ion-item-group>
 						<button menuClose ion-item (click)="openPage('HomePage')">
-							<ion-icon item-start name="home"></ion-icon>Home
+							<ion-icon item-start name="home"></ion-icon>{{ 'HOMEPAGE' | translate }}
 						</button>
 						<button ion-item menuClose>
-							<ion-icon item-start name="cloud-upload"></ion-icon>Connect to hunt
+							<ion-icon item-start name="cloud-upload"></ion-icon>{{ 'ONLINE_TRAILING' | translate }}
 						</button>
 						<button menuClose ion-item (click)="openPage('HistoryPage')">
-							<ion-icon item-start name="pulse"></ion-icon>History
+							<ion-icon item-start name="pulse"></ion-icon>{{ 'HISTORY' | translate }}
 						</button>
 					</ion-item-group>
 					<ion-item-group>
 						<ion-list-header>
-							Last 5 hunts
+							{{ 'LAST_TRAILS' | translate }}
 						</ion-list-header>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 1
-						</button>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 2
-						</button>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 3
-						</button>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 4
-						</button>
-						<button menuClose ion-item>
-							<ion-icon item-start></ion-icon>Hunt 5
-						</button>
+						<div *ngIf="trails.length > 0">
+							<trail-card *ngFor="let trailSet of trails" [trail]="trailSet" (click)="openEntry(trailSet)"></trail-card>
+						</div>
 					</ion-item-group>
 				</ion-item-group>
 			</ion-buttons>
@@ -51,7 +39,7 @@
 	<ion-footer>
 		<ion-list no-margin>
 			<button detail-none menuClose ion-item item-end (click)="openPage('HelpPage')">
-				<ion-icon item-start name="help-circle"></ion-icon>About
+				<ion-icon item-start name="help-circle"></ion-icon>{{ 'ABOUT' | translate }}
 			</button>
 		</ion-list>
 	</ion-footer>

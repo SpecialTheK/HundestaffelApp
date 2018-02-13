@@ -1,0 +1,16 @@
+trail-card {
+	ion-card.land-activity{
+		border: 1px solid rgba(0,150,0,1);
+		box-shadow: 0 0 4px 2px rgba(0,150,0,1);
+	}
+	
+	ion-card.water-activity{
+		border: 1px solid rgba(0,100,200,1);
+		box-shadow: 0 0 4px 2px rgba(0,100,200,1);
+	}
+	
+	ion-card.operation{
+		border: 1px solid rgba(200,0,0,1) !important;
+		box-shadow: 0 0 4px 2px rgba(200,0,0,1) !important;
+	}
+}

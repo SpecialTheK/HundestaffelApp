@@ -1,0 +1,32 @@
+{
+	"FOR"                           : "pour",
+	"MINUTES"                       : "minutes",
+	"TRAIL_LAND"		            : "poursuite à terre",
+	"TRAIL_WATER"		            : "poursuite sur l'eau",
+	"TYPE"                          : "Type",
+	"WITH"                          : "avec",
+
+	"ABOUT"				            : "Aide",
+	"LAST_TRAILS"		            : "Dernière poursuites",
+	"ONLINE_TRAILING"	            : "Connecte avec une poursuite",
+	"MENU"				            : "Menu",
+
+	"HISTORY"			            : "Tracé",
+	"HISTORY_OPERATION"             : "Itervention",
+	"HISTORY_STAGES"                : "étapes",
+	"HISTORY_TRAINING"              : "Training",
+
+	"HOMEPAGE"			            : "Page d'accueil",
+	"TRAIL_START"		            : "Démarre",
+
+	"IMPORT"                        : "Importe poursuite",
+	"IMPORT_NEW"                    : "Importe nouveau poursuite",
+	"IMPORT_MERGE"                  : "Raccorde avec dernière poursuite",
+
+	"SETTINGS"			            : "Paramètres",
+	"LANGUAGE"			            : "Langue",
+	"SETTINGS_GENERAL"	            : "Paramétres généralement",
+	"SETTINGS_NAME"                 : "Nom pour poursuite online",
+	"SETTINGS_NAME_PLACEHOLDER"     : "Nom",
+	"SETTINGS_ONLINE"               : "Paramètres pour poursuites online"
+}

@@ -1,18 +1,14 @@
-<!--
-  Generated template for the HistoryPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>history</ion-title>
-  </ion-navbar>
-
+	<ion-navbar>
+		<ion-title>{{'HISTORY' | translate}}</ion-title>
+	</ion-navbar>
 </ion-header>
-
-
 <ion-content padding>
-
+	<div *ngIf="trails.length > 0">
+		<trail-card *ngFor="let trailSet of trails" [trail]="trailSet" (click)="openEntry(trailSet)"></trail-card>
+	</div>
+	<div text-center *ngIf="trails.length <= 0">{{'HISTORY_NO_ENTRIES' | translate}}</div>
+	<ion-fab bottom right>
+		<button ion-fab icon-only (click)="openFilters($event)"><ion-icon name="ios-funnel"></ion-icon></button>
+	</ion-fab>
 </ion-content>
