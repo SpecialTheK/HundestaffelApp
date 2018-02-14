@@ -4,11 +4,5 @@
 	</ion-navbar>
 </ion-header>
 <ion-content padding>
-	<div *ngIf="trails.length > 0">
-		<trail-card *ngFor="let trailSet of trails" [trail]="trailSet" (click)="openEntry(trailSet)"></trail-card>
-	</div>
-	<div text-center *ngIf="trails.length <= 0">{{'HISTORY_NO_ENTRIES' | translate}}</div>
-	<ion-fab bottom right>
-		<button ion-fab icon-only (click)="openFilters($event)"><ion-icon name="ios-funnel"></ion-icon></button>
-	</ion-fab>
+	<trail-list [showFilters]="true" (cardSelected)="cardClicked($event)"></trail-list>
 </ion-content>

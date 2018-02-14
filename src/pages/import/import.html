@@ -4,10 +4,10 @@
 	</ion-navbar>
 </ion-header>
 <ion-content padding>
-	<button ion-button>
+	<button ion-button (click)="importNew()">
 		{{ 'IMPORT_NEW' | translate }}
 	</button>
-	<button ion-button>
+	<button ion-button (click)="importMerge()">
 		{{ 'IMPORT_MERGE' | translate }}
 	</button>
 </ion-content>
