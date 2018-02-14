@@ -26,10 +26,7 @@
 	"SETTINGS"			            : "Einstellungen",
 	"LANGUAGE"			            : "Sprache",
 	"SETTINGS_GENERAL"	            : "Allgemeine Einstellungen",
-	"SETTINGS_IMPERIAL"             : "US-amerikanisches Maßsystem",
-	"SETTINGS_METRIC"               : "Metrisches Maßsystem",
 	"SETTINGS_NAME"                 : "Name bei Onlinesuche",
 	"SETTINGS_NAME_PLACEHOLDER"     : "Dein Name",
-	"SETTINGS_ONLINE"               : "Einstellungen für Onlinesuchen",
-	"SETTINGS_UNIT"                 : "Maßeinheit"
+	"SETTINGS_ONLINE"               : "Einstellungen für Onlinesuchen"
 }

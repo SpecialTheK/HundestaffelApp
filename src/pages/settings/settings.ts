@@ -18,7 +18,6 @@ import {TranslateService} from "@ngx-translate/core";
 export class SettingsPage {
 	
 	public language: string = "en";
-	public unit: string = "m";
 	public username: string = "";
 	
 	constructor(public navCtrl: NavController, public navParams: NavParams, public preferences: AppPreferences, public translateService: TranslateService) {
@@ -29,7 +28,6 @@ export class SettingsPage {
 	 */
 	ionViewDidLoad() {
 		this.getLanguage();
-		this.getUnit();
 		this.getUsername();
 	}
 	
@@ -39,15 +37,6 @@ export class SettingsPage {
 	getLanguage(){
 		this.preferences.fetch('language').then((answer) => {
 			this.language = answer;
-		});
-	}
-	
-	/**
-	 * Get the preferred unit of measurement from the app preferences
-	 */
-	getUnit(){
-		this.preferences.fetch('unitOfMeasurement').then((answer) => {
-			this.unit = answer;
 		});
 	}
 	
@@ -69,15 +58,6 @@ export class SettingsPage {
 		}).catch((reason) => {
 			console.log('language not changed');
 			this.getLanguage();
-		});
-	}
-	
-	/**
-	 * Save the updated unit of measurement in the preferences
-	 */
-	setUnit() {
-		this.preferences.store('unitOfMeasurement', this.unit).catch((reason) => {
-			this.getUnit();
 		});
 	}
 	

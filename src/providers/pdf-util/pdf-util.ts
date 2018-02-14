@@ -1,20 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Platform} from "ionic-angular";
 import {File} from "@ionic-native/file";
+import {Trail} from "../../models/trail";
+import {SocialSharing} from "@ionic-native/social-sharing";
 
-/*
-  Generated class for the PdfUtilProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class PdfUtilProvider {
 	
 	pdfDirectory = this.fileSystem.dataDirectory;
-	directoryExisting: Promise<string>;
 	
-	constructor(public platform: Platform, public fileSystem: File) {
+	constructor(public platform: Platform, public fileSystem: File, public sharing: SocialSharing) {
 		if (this.platform.is('ios')) {
 			this.pdfDirectory = this.fileSystem.documentsDirectory
 		}
@@ -31,6 +26,21 @@ export class PdfUtilProvider {
 					reject("PDF directory not created: "+JSON.stringify(reason));
 				});
 			});
+		});
+	}
+	
+	createPdf(trailSet: Trail[]):Promise<string>{
+		return new Promise((resolve, reject) => {
+			this.initDirectory().then((answer) => {
+				
+				this.sharing.share(null, null, this.fileSystem.cacheDirectory+"shared/test.json", null).then((answer) => {
+					resolve("Successfully shared");
+				}).catch((reason) => {
+					reject(reason);
+				});
+			}).catch((error) => {
+				reject(error);
+			})
 		});
 	}
 	

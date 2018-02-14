@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Trail} from "../../models/trail";
+import {TranslateService} from "@ngx-translate/core";
+import {SocialSharing} from "@ionic-native/social-sharing";
+import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
+import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 
 /**
  * Generated class for the HistoryEntryPage page.
@@ -10,16 +15,50 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-history-entry',
-  templateUrl: 'history-entry.html',
+	selector: 'page-history-entry',
+	templateUrl: 'history-entry.html',
 })
 export class HistoryEntryPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad HistoryEntryPage');
-  }
-
+	trailSet: Trail[];
+	mapType = "";
+	operationType = "";
+	trails: number;
+	dogs: [{}];
+	
+	constructor(public navCtrl: NavController, public navParams: NavParams, public translate: TranslateService, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
+		this.trailSet = this.navParams.get('trail');
+	}
+	
+	ionViewWillLoad(){
+		if(this.trailSet[0].isTraining){
+			this.translate.get('HISTORY_TRAINING').subscribe(value => {
+				this.operationType = value;
+			});
+		} else {
+			this.translate.get('HISTORY_OPERATION').subscribe(value => {
+				this.operationType = value;
+			});
+		}
+		if(this.trailSet[0].isLandActivity){
+			this.translate.get('TRAIL_LAND').subscribe(value => {
+				this.mapType = value;
+			});
+		} else {
+			this.translate.get('TRAIL_WATER').subscribe(value => {
+				this.mapType = value;
+			});
+		}
+		this.trails = this.trailSet.length;
+		this.trailSet.forEach((value: Trail, index:number) => {
+			this.dogs.push({name: value.dog, duration: (value.endTime-value.startTime)});
+		});
+	}
+	
+	exportAsJSON(){
+		this.share.share(this.trailSet);
+	}
+	
+	exportAsPdf(){
+		this.pdf.createPdf(this.trailSet);
+	}
 }
