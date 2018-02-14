@@ -5,6 +5,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 import {SocialSharing} from "@ionic-native/social-sharing";
+import {File} from "@ionic-native/file";
 
 @NgModule({
 	declarations: [
@@ -12,10 +13,9 @@ import {SocialSharing} from "@ionic-native/social-sharing";
 	],
 	imports: [
 		IonicPageModule.forChild(HistoryEntryPage),
-		TranslateModule.forChild(),
-		SocialSharing
+		TranslateModule.forChild()
 	],
-	providers: [ShareTrailProvider, PdfUtilProvider]
+	providers: [ShareTrailProvider, File, SocialSharing, PdfUtilProvider]
 })
 export class HistoryEntryPageModule {
 }

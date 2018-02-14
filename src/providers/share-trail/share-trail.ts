@@ -3,12 +3,6 @@ import {File} from "@ionic-native/file";
 import {SocialSharing} from "@ionic-native/social-sharing";
 import {Trail} from "../../models/trail";
 
-/*
-  Generated class for the ShareTrailProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class ShareTrailProvider {
 	
