@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
-import { Storage } from '@ionic/storage';
+import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
 
 import { Position } from '../../models/position';
 import { ColoredCircle } from '../../models/coloredCircle';
@@ -19,10 +19,10 @@ export class MapProvider {
     startTime: number = 0;
     endTime: number = 0;
 
-    trail: Trail[] = [];
+    trailArray: Trail[] = [];
     currentTrail: Trail;
 
-    constructor(public location: Geolocation, public storage: Storage) {
+    constructor(public location: Geolocation, public storage: TrailStorageProvider) {
         console.log("INIT: MapProvider");
     }
 
@@ -34,7 +34,6 @@ export class MapProvider {
         this.map.addListener('click', (i) => {
             console.log(i.latLng.toJSON());
         });
-
         this.location.getCurrentPosition().then((pos) => {
             this.map.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
         });
@@ -45,41 +44,35 @@ export class MapProvider {
     * Starts a new session
     */
     startSession(trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
-        this.currentTrail = new Trail(trainerName, dogName, isLand, isShared, isTrain);
+        this.currentTrail = new Trail(this.trailArray.length, trainerName, dogName, isLand, isShared, isTrain);
+        this.currentTrail.init(google, this.map);
         this.recordCurrentPosition();
     }
 
     /**
     * Starts a new session
     */
-    startExistingSession(trailSet, trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
+    startExistingSession(trailSetKey: string, trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
         this.startSession(trainerName, dogName, isLand, isShared, isTrain);
-        for(let trail of trailSet.t){
-            this.loadTrail(trail);
-        }
+        let temp = this.storage.getTrailSet(trailSetKey);
+        console.log(temp);
+        //this.loadTrail();
     }
 
     /**
-    * Starts a new session
+        Just some testing shit
     */
-    viewExistingSession(trailSet) {
-
+    addToTrailArray(){
+        this.trailArray.push(this.currentTrail);
+        this.currentTrail = new Trail(this.trailArray.length, "trainerName", "dogName", false, false, false);
+        console.log(this.trailArray);
     }
 
     loadTrail(trail: Trail) {
-        this.currentTrail = new Trail(trail.trainer, trail.dog, trail.isLandActivity, trail.isSharedActivity, trail.isTraining);
-        for(let pat of trail.path){
-            this.currentTrail.addToPath(new Position(pat.lat, pat.lng));
-        }
-        for(let cir of trail.circles){
-            this.addColoredCircle(cir.color, cir.opacity);
-        }
-        for(let mar of trail.marker){
-            this.addMarker(mar.title, mar.symbolID);
-        }
-        for(let tri of trail.triangles){
-            this.addTriangle();
-        }
+        this.currentTrail = new Trail(this.trailArray.length, trail.trainer, trail.dog, trail.isLandActivity, trail.isSharedActivity, trail.isTraining);
+        this.currentTrail.init(google, this.map);
+        this.currentTrail.importTrail(trail);
+
         console.log(this.currentTrail.convertToSimpleObject());
     }
 
@@ -89,7 +82,7 @@ export class MapProvider {
     recordCurrentPosition() {
         this.recordInterval = setInterval((i) => {
             this.location.getCurrentPosition().then((pos) => {
-                this.currentTrail.addToPath(new Position(pos.coords.latitude, pos.coords.longitude));
+                this.currentTrail.addToPath(pos.coords.latitude, pos.coords.longitude);
                 if(this.startTime === 0){
                     this.startTime = pos.timestamp;
                 }else {
@@ -104,7 +97,6 @@ export class MapProvider {
     * Stops the recording of the current position
     */
     stopRecording() {
-        //console.log(this.timeEndRecording - this.timeStartRecording);
         clearInterval(this.recordInterval);
     }
 
@@ -112,26 +104,24 @@ export class MapProvider {
     * Returns the last recorded position
     */
     getCurrentPosition(): Position {
-        return this.currentTrail.path[this.currentTrail.path.length - 1];
+        return this.currentTrail.getLastPos();
     }
 
     /**
     * Adds a marker at your current position
     */
-    addMarker(markerText, symbolID) {
+    addMarker(markerText: string, symbolID: number) {
         if(this.currentTrail.path.length >= 1){
-            let marker = new Marker(google, this.map, this.currentTrail.marker.length, this.getCurrentPosition(), markerText, symbolID);
-            this.currentTrail.addToMarker(marker);
+            this.currentTrail.addToMarker(markerText, symbolID);
         }
     }
 
     /**
     * Adds a colored circle at your current position
     */
-    addColoredCircle(color, opacity) {
+    addColoredCircle(color: string, opacity: number) {
         if(this.currentTrail.path.length >= 1){
-            let circle = new ColoredCircle(google, this.map, this.currentTrail.circles.length, this.getCurrentPosition(), color, opacity);
-            this.currentTrail.addToCircles(circle);
+            this.currentTrail.addToCircles(color, opacity);
         }
     }
 
@@ -141,8 +131,7 @@ export class MapProvider {
     */
     addTriangle() {
         if(this.currentTrail.path.length >= 1){
-            let triangle = new Triangle(google, this.map, this.currentTrail.triangles.length, this.getCurrentPosition());
-            this.currentTrail.addToTriangles(triangle);
+            this.currentTrail.addToTriangles();
         }
     }
 
@@ -160,7 +149,9 @@ export class MapProvider {
         this.currentTrail.setStartTime(this.startTime);
         this.currentTrail.setEndTime(this.endTime);
 
-        this.storage.set(this.startTime.toString(), JSON.stringify(this.currentTrail.convertToSimpleObject()));
+        console.log(this.currentTrail.startTime.toString());
+
+        this.storage.addNewTrailSet(this.currentTrail);
 
         this.stopRecording();
     }
