@@ -16,14 +16,14 @@ export class Triangle {
         this.map = map;
 
         this.id = id;
-        this.position = position;
+        this.position = new Position(position.lat, position.lng);
 
         // this is only for testing
         // TODO: make this better... somehow
         this.usePos = [
-            {lat: position.lat,     lng: position.lng},
-            {lat: position.lat+0.002, lng: position.lng},
-            {lat: position.lat, lng: position.lng+0.002}
+            {lat: this.position.lat,     lng: this.position.lng},
+            {lat: this.position.lat+0.002, lng: this.position.lng},
+            {lat: this.position.lat, lng: this.position.lng+0.002}
         ];
 
         this.createTriangle();

@@ -23,11 +23,9 @@ export class Marker {
         this.map = map;
 
         this.id = id;
-        this.position = position;
+        this.position = new Position(position.lat, position.lng);
         this.title = title;
         this.symbolID = symbolID;
-
-        console.log(map);
 
         this.createMarker();
     }
@@ -48,7 +46,10 @@ export class Marker {
             }
         });
         this.map_marker.addListener('position_changed', (i)=>{
-            console.log(i);
+            //console.log(this.map_marker.getPosition().toJSON());
+            this.position.lat = this.map_marker.getPosition().toJSON().lat;
+            this.position.lng = this.map_marker.getPosition().toJSON().lng;
+            console.log(this.position);
         })
 
         this.show();
