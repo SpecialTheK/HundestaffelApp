@@ -7,16 +7,10 @@ import {MapProvider} from "../../providers/map/map";
 import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 
-/**
- * Generated class for the HistoryEntryPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
 	selector: 'page-history-entry',
+	providers: [MapProvider],
 	templateUrl: 'history-entry.html',
 })
 export class HistoryEntryPage {
@@ -29,8 +23,8 @@ export class HistoryEntryPage {
 	trails: number;
 	dogs: [{}];
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public translate: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
-		this.trailSet = this.navParams.get('trail');
+	constructor(public navCtrl: NavController, navParams: NavParams, public translate: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
+		this.trailSet = navParams.get('trail');
 	}
 
 	ionViewWillLoad(){
