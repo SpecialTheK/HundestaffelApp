@@ -5,10 +5,10 @@ import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class TrailStorageProvider {
-	
+
 	constructor(public storage: Storage) {
 	}
-	
+
 	/**
 	 * Add a new trailSet with the passed trail.
 	 *
@@ -19,6 +19,7 @@ export class TrailStorageProvider {
 	 */
 	public addNewTrailSet(trail: Trail):Promise<string>{
 		return new Promise((resolve, reject) => {
+			console.log(JSON.stringify(trail.convertToSimpleObject()));
 			this.getTrailSet(trail.startTime.toString()).then((answer) => {
 				reject("TrailSet already existing, aborting... "+answer);
 			}).catch((error) => {
@@ -36,7 +37,7 @@ export class TrailStorageProvider {
 			});
 		});
 	}
-	
+
 	/**
 	 * Adds a trail to an existing trailSet.
 	 *
@@ -70,7 +71,7 @@ export class TrailStorageProvider {
 			});
 		});
 	}
-	
+
 	/**
 	 * Remove a trailSet from the storage.
 	 *
@@ -96,7 +97,7 @@ export class TrailStorageProvider {
 			});
 		});
 	}
-	
+
 	/**
 	 * Get a single trailSet from the storage.
 	 *
@@ -121,7 +122,7 @@ export class TrailStorageProvider {
 			});
 		});
 	}
-	
+
 	/**
 	 * Fetch multiple trailSets from the storage.
 	 *
@@ -152,7 +153,7 @@ export class TrailStorageProvider {
 			});
 		});
 	}
-	
+
 	/**
 	 * Get the last x trailSets from the storage. Not optimized for big amounts.
 	 *
@@ -184,7 +185,7 @@ export class TrailStorageProvider {
 			});
 		});
 	}
-	
+
 	/**
 	 * Update the schema of the existing entries in the storage. WARNING: INTESIVE OPERATION, CANNOT BE UNDONE!
 	 *

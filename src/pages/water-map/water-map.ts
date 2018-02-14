@@ -25,8 +25,16 @@ export class WaterMapPage {
         }
     }
 
-    showCurrentLocation() {
-        this.map.recordCurrentPosition();
+    addTrailToArray() {
+        this.map.addToTrailArray();
+    }
+
+    toggleTail(index){
+        if(this.map.trailArray[index].isHidden){
+            this.map.trailArray[index].show();
+        }else {
+            this.map.trailArray[index].hide();
+        }
     }
 
     stopRecording() {

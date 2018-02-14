@@ -11,16 +11,23 @@
 
     <!-- Container for the Controls -->
     <div id="func-container">
-        <ion-fab>
-            <button ion-fab>Options</button>
-            <ion-fab-list side='right'>
-                <button ion-fab (click)="showCurrentLocation()">Log Position</button>
-                <button ion-fab (click)="stopRecording()">Stop</button>
-                <button ion-fab (click)="addCircle()">Add Circle</button>
-                <button ion-fab (click)="addMarker()">Add Marker</button>
-                <button ion-fab (click)="addTriangle()">Add Triangle</button>
-            </ion-fab-list>
-        </ion-fab>
+        <p>
+            <ion-fab>
+                <button ion-fab>Options</button>
+                <ion-fab-list side='right'>
+                    <button ion-fab (click)="addTrailToArray()">Add Trail</button>
+                    <button ion-fab (click)="stopRecording()">Stop</button>
+                    <button ion-fab (click)="addCircle()">Add Circle</button>
+                    <button ion-fab (click)="addMarker()">Add Marker</button>
+                    <button ion-fab (click)="addTriangle()">Add Triangle</button>
+                </ion-fab-list>
+            </ion-fab>
+        </p>
+        <p>
+            <ion-list>
+                <ion-item *ngFor="let trail of map.trailArray" (click)="toggleTrail(trail.id)">{{trail}} Hallo</ion-item>
+            </ion-list>
+        </p>
     </div>
 
     <!-- Container for the Map -->
