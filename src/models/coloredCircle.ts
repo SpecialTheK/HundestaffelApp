@@ -17,7 +17,7 @@ export class ColoredCircle {
         this.map = map;
 
         this.id = id;
-        this.position = position;
+        this.position = new Position(position.lat, position.lng);
         this.color = color;
         this.opacity = opacity;
         this.radius = 100;

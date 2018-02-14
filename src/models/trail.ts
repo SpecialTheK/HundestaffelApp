@@ -62,13 +62,13 @@ export class Trail {
 			this.addToPath(pat.lat, pat.lng);
 		}
 		for(let cir of trail.circles){
-			this.addToCircles(cir.color, cir.opacity);
+			this.addToCircles(cir.color, cir.opacity, cir.position);
 		}
 		for(let mar of trail.marker){
-			this.addToMarker(mar.title, mar.symbolID);
+			this.addToMarker(mar.title, mar.symbolID, mar.position);
 		}
 		for(let tri of trail.triangles){
-			this.addToTriangles();
+			this.addToTriangles(tri.position);
 		}
 	}
 
@@ -88,16 +88,16 @@ export class Trail {
 		return this.path[this.path.length - 1];
 	}
 
-	addToMarker(title: string, markerSymbol: number){
-		this.marker.push(new Marker(this.google, this.map, this.marker.length, this.getLastPos(), title, markerSymbol));
+	addToMarker(title: string, markerSymbol: number, position: Position = this.getLastPos()){
+		this.marker.push(new Marker(this.google, this.map, this.marker.length, position, title, markerSymbol));
 	}
 
-	addToCircles(color: string, opacity: number){
-		this.circles.push(new ColoredCircle(this.google, this.map, this.circles.length, this.getLastPos(), color, opacity));
+	addToCircles(color: string, opacity: number, position: Position = this.getLastPos()){
+		this.circles.push(new ColoredCircle(this.google, this.map, this.circles.length, position, color, opacity));
 	}
 
-	addToTriangles(){
-		this.triangles.push(new Triangle(this.google, this.map, this.triangles.length, this.getLastPos()));
+	addToTriangles(position: Position = this.getLastPos()){
+		this.triangles.push(new Triangle(this.google, this.map, this.triangles.length, position));
 	}
 
 	hide() {
@@ -161,26 +161,26 @@ export class Trail {
 
 	static convertToTrailObject(object: any):Trail{
 		if(this.isTrailObject(object)){
-			let newTrail = new Trail(object.trainer, object.dog, object.isLandActivity, object.isSharedActivity, object.isTraining);
+			let newTrail = new Trail(object.id, object.trainer, object.dog, object.isLandActivity, object.isSharedActivity, object.isTraining);
 			newTrail.startTime = object.startTime;
 			newTrail.endTime = object.endTime;
-			
+
 			for(let p of object.path){
 				newTrail.path.push(new Position(p.lat, p.lng));
 			}
-			
+
 			for(let m of object.marker){
 				let newMarker = new Marker(m.google, m.map, m.id, new Position(m.position.lat, m.position.lng), m.title, m.symbolID);
 				newMarker.map_marker = m.map_marker;
 				newTrail.marker.push(newMarker);
 			}
-			
+
 			for(let c of object.circles){
 				let newCircle = new ColoredCircle(c.google, c.map, c.id, new Position(c.position.lat, c.position.lng), c.color, c.opacity);
 				newCircle.radius = c.radius;
 				newTrail.circles.push(newCircle);
 			}
-			
+
 			for(let t of object.triangles){
 				let newTriangle = new Triangle(t.google, t.map, t.id, new Position(t.position.lat, t.position.lng));
 				newTriangle.map_triangle = t.map_triangle;
