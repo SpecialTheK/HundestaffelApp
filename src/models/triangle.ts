@@ -21,9 +21,9 @@ export class Triangle {
         // this is only for testing
         // TODO: make this better... somehow
         this.usePos = [
-            {lat: this.position.lat,     lng: this.position.lng},
-            {lat: this.position.lat+0.002, lng: this.position.lng},
-            {lat: this.position.lat, lng: this.position.lng+0.002}
+            {lat: this.position.lat,        lng: this.position.lng      },
+            {lat: this.position.lat-0.002,  lng: this.position.lng-0.002},
+            {lat: this.position.lat-0.002,  lng: this.position.lng+0.002}
         ];
 
         this.createTriangle();
@@ -37,6 +37,17 @@ export class Triangle {
             fillColor: '#FF99FF',
             fillOpacity: 0.5
         });
+
+        this.map_triangle.addListener('dblclick', (i) => {
+            if(this.map_triangle.getEditable() == false){
+                this.map_triangle.setEditable(true);
+                this.map_triangle.setDraggable(true);
+            }else {
+                this.map_triangle.setEditable(false);
+                this.map_triangle.setDraggable(false);
+            }
+        });
+
         this.show();
     }
 
