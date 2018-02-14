@@ -159,38 +159,6 @@ export class Trail {
 		};
 	}
 
-	static convertToTrailObject(object: any):Trail{
-		if(this.isTrailObject(object)){
-			let newTrail = new Trail(object.id, object.trainer, object.dog, object.isLandActivity, object.isSharedActivity, object.isTraining);
-			newTrail.startTime = object.startTime;
-			newTrail.endTime = object.endTime;
-
-			for(let p of object.path){
-				newTrail.path.push(new Position(p.lat, p.lng));
-			}
-
-			for(let m of object.marker){
-				let newMarker = new Marker(m.google, m.map, m.id, new Position(m.position.lat, m.position.lng), m.title, m.symbolID);
-				newMarker.map_marker = m.map_marker;
-				newTrail.marker.push(newMarker);
-			}
-
-			for(let c of object.circles){
-				let newCircle = new ColoredCircle(c.google, c.map, c.id, new Position(c.position.lat, c.position.lng), c.color, c.opacity);
-				newCircle.radius = c.radius;
-				newTrail.circles.push(newCircle);
-			}
-
-			for(let t of object.triangles){
-				let newTriangle = new Triangle(t.google, t.map, t.id, new Position(t.position.lat, t.position.lng));
-				newTriangle.map_triangle = t.map_triangle;
-				newTrail.triangles.push(newTriangle);
-			}
-			return newTrail;
-		}
-		return null;
-	}
-
 	static isTrailObject(object: any){
 		return (object.hasOwnProperty('trainer') && object.hasOwnProperty('dog') && object.hasOwnProperty('path') &&
 			object.hasOwnProperty('marker') && object.hasOwnProperty('circles') && object.hasOwnProperty('triangles') &&

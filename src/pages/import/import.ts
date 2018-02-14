@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import {HttpClient} from "@angular/common/http";
 import {Trail} from "../../models/trail";
 import {Observable} from "rxjs/Observable";
@@ -22,7 +22,7 @@ export class ImportPage {
 	trail: Trail;
 	source;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, public storage: TrailStorageProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController,public http: HttpClient, public storage: TrailStorageProvider) {
 		this.source = this.navParams.get('source');
 	}
 
@@ -43,14 +43,15 @@ export class ImportPage {
 	}
 
 	importMerge(){
-
+		let selectModal = this.modalCtrl.create('TrailListComponent');
+		selectModal.present();
 	}
 
 	importNew(){
 		this.storage.addNewTrailSet(this.trail).then((answer) => {
 			this.navCtrl.pop();
 		}).catch((error) => {
-			console.log("Could not import trail"+error);
+			console.log("Could not import trail: "+error);
 		});
 	}
 }

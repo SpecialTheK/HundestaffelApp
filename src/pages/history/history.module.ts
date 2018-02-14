@@ -3,8 +3,8 @@ import {IonicPageModule} from 'ionic-angular';
 import {HistoryPage} from './history';
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 import {IonicStorageModule} from "@ionic/storage";
-import {TrailCardModule} from "../../components/trail-card/trail-card.module";
 import {TranslateModule} from "@ngx-translate/core";
+import {ComponentsModule} from "../../components/components.module";
 
 @NgModule({
 	declarations: [
@@ -14,7 +14,7 @@ import {TranslateModule} from "@ngx-translate/core";
 		IonicPageModule.forChild(HistoryPage),
 		IonicStorageModule.forRoot(),
 		TranslateModule.forChild(),
-		TrailCardModule
+		ComponentsModule
 	],
 	providers: [TrailStorageProvider]
 })
