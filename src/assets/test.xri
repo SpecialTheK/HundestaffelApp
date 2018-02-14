@@ -1,0 +1,17 @@
+
+[
+    {
+	"id": 1234,
+        "startTime": 12456789,
+        "endTime": 123456789,
+        "isLandActivity": true,
+        "isTraining": true,
+        "isSharedActivity": false,
+        "trainer": "Jonas",
+        "dog": "Hund1",
+        "path": [],
+        "marker": [],
+        "circles": [],
+        "triangles": []
+    }
+]
