@@ -2,6 +2,7 @@ import {Position} from './position';
 import {Marker} from './marker';
 import {ColoredCircle} from './coloredCircle';
 import {Triangle} from './triangle';
+import {isArray} from "ionic-angular/util/util";
 
 export class Trail {
 
@@ -57,6 +58,8 @@ export class Trail {
 		this.isSharedActivity = trail.isSharedActivity;
 		this.isTraining = trail.isTraining;
 		this.id = trail.id;
+		this.startTime = trail.startTime;
+		this.endTime = trail.endTime;
 
 		for(let pat of trail.path){
 			this.addToPath(pat.lat, pat.lng);
@@ -159,10 +162,49 @@ export class Trail {
 		};
 	}
 
-	static isTrailObject(object: any){
-		return (object.hasOwnProperty('trainer') && object.hasOwnProperty('dog') && object.hasOwnProperty('path') &&
-			object.hasOwnProperty('marker') && object.hasOwnProperty('circles') && object.hasOwnProperty('triangles') &&
-			object.hasOwnProperty('startTime') && object.hasOwnProperty('endTime') && object.hasOwnProperty('isLandActivity') &&
-			object.hasOwnProperty('isSharedActivity') && object.hasOwnProperty('isTraining'));
+	static isTrailObject(object: any) {
+		let returnValue = true;
+		if(!isArray(object)){
+			object = [object];
+		}
+		object.forEach((entry) => {
+			if(!entry.hasOwnProperty('id')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('startTime')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('endTime')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('isLandActivity')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('isSharedActivity')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('isTraining')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('trainer')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('dog')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('path')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('marker')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('circles')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('triangles')){
+				returnValue = false;
+			}
+		});
+		return returnValue;
 	}
 }

@@ -7,7 +7,6 @@
 	<button ion-button (click)="importNew()">
 		{{ 'IMPORT_NEW' | translate }}
 	</button>
-	<button ion-button (click)="importMerge()">
-		{{ 'IMPORT_MERGE' | translate }}
-	</button>
+	<h1>{{'IMPORT_MERGE_WITH' | translate}}</h1>
+	<trail-list [showFilters]="true" (cardSelected)="mergeWith($event)"></trail-list>
 </ion-content>
