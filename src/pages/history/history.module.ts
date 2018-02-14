@@ -4,7 +4,7 @@ import {HistoryPage} from './history';
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 import {IonicStorageModule} from "@ionic/storage";
 import {TranslateModule} from "@ngx-translate/core";
-import {TrailListModule} from "../../components/trail-list/trail-list.module";
+import {ComponentsModule} from "../../components/components.module";
 
 @NgModule({
 	declarations: [
@@ -14,7 +14,7 @@ import {TrailListModule} from "../../components/trail-list/trail-list.module";
 		IonicPageModule.forChild(HistoryPage),
 		IonicStorageModule.forRoot(),
 		TranslateModule.forChild(),
-		TrailListModule
+		ComponentsModule
 	],
 	providers: [TrailStorageProvider]
 })

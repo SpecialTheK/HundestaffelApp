@@ -43,7 +43,7 @@ export class ImportPage {
 	}
 
 	importMerge(){
-		let selectModal = this.modalCtrl.create('ListTrailComponent');
+		let selectModal = this.modalCtrl.create('TrailListComponent');
 		selectModal.present();
 	}
 
