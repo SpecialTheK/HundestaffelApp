@@ -103,6 +103,16 @@ export class Trail {
 		this.triangles.push(new Triangle(this.google, this.map, this.triangles.length, position));
 	}
 
+	hideCircleOn(level: number){
+		for(let cir of this.circles){
+			if(cir.opacity < level){
+				cir.hide();
+			}else {
+				cir.show();
+			}
+		}
+	}
+
 	hide() {
 		for(let mar of this.marker){
 			mar.hide();

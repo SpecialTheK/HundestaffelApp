@@ -2,13 +2,7 @@ import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {TranslateService} from "@ngx-translate/core";
-
-/**
- * Generated class for the SettingsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import {Storage} from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -16,13 +10,13 @@ import {TranslateService} from "@ngx-translate/core";
 	templateUrl: 'settings.html',
 })
 export class SettingsPage {
-	
+
 	public language: string = "en";
 	public username: string = "";
-	
-	constructor(public navCtrl: NavController, public navParams: NavParams, public preferences: AppPreferences, public translateService: TranslateService) {
+
+	constructor(public navCtrl: NavController, public navParams: NavParams, public preferences: AppPreferences, public translateService: TranslateService, public storage: Storage) {
 	}
-	
+
 	/**
 	 * Load the preferences and update the input fields
 	 */
@@ -30,7 +24,16 @@ export class SettingsPage {
 		this.getLanguage();
 		this.getUsername();
 	}
-	
+
+	/**
+	* Just for testing and such
+	* TODO: remove this methode
+	*/
+	clearStorage(){
+		this.storage.clear();
+		console.log("STORAGE: CLEARED");
+	}
+
 	/**
 	 * Get the preferred language from the app preferences
 	 */
@@ -39,7 +42,7 @@ export class SettingsPage {
 			this.language = answer;
 		});
 	}
-	
+
 	/**
 	 * Get the username from the app preferences
 	 */
@@ -48,7 +51,7 @@ export class SettingsPage {
 			this.username = answer;
 		});
 	}
-	
+
 	/**
 	 * Save the updated language in the preferences
 	 */
@@ -60,7 +63,7 @@ export class SettingsPage {
 			this.getLanguage();
 		});
 	}
-	
+
 	/**
 	 * Save the updated username in the preferences
 	 */

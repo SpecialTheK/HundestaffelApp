@@ -52,11 +52,7 @@ export class HistoryEntryPage {
 		});
 
 		this.map.initMap(this.mapElement);
-		//TODO: hier sollte die viewExistingSession-Methode genutzt werden. Muss allerdings noch implementiert werden!
-		for(let t of this.trailSet){
-			this.map.loadTrail(t);
-		}
-
+		this.map.viewExistingSession(this.trailSet);
 	}
 
 	exportAsJSON(){

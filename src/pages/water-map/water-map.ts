@@ -21,12 +21,8 @@ export class WaterMapPage {
         if(this.navParams.get('trailSet') == null){
             this.map.startSession('Jonas', 'Hund2', false, false, false);
         } else {
-            this.map.startExistingSession(this.navParams.get('trailSet'), 'Jonas', 'Hund2', false, false, false);
+            this.map.startExistingSession('Jonas', 'Hund2', false, false, false);
         }
-    }
-
-    addTrailToArray() {
-        this.map.addToTrailArray();
     }
 
     toggleTail(index){

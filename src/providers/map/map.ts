@@ -65,7 +65,7 @@ export class MapProvider {
     *
     *   TODO: Ist es besser den trailSet key oder das gesamte Set zu übergeben?
     */
-    startExistingSession(trailSetKey: string, trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
+    startExistingSession(trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
         this.hasMultipleTrails = true;
         let temp = this.navParams.get('trailSet');
         for(let trail of temp){
@@ -74,13 +74,11 @@ export class MapProvider {
         this.startSession(trainerName, dogName, isLand, isShared, isTrain);
     }
 
-    /**
-        Just some testing shit
-    */
-    addToTrailArray(){
-        this.trailArray.push(this.currentTrail);
-        this.currentTrail = new Trail(this.trailArray.length, "trainerName", "dogName", false, false, false);
-        console.log(this.trailArray);
+    viewExistingSession(trailSet){
+        this.map.setClickableIcons(false);
+        for(let trail of trailSet){
+            this.loadTrail(trail);
+        }
     }
 
     loadTrail(trail: Trail) {
@@ -98,6 +96,7 @@ export class MapProvider {
     * Starts recording the current position on a set interval of 2 seconds
     */
     recordCurrentPosition() {
+        /*
         this.recordInterval = setInterval((i) => {
             this.location.getCurrentPosition().then((pos) => {
                 this.currentTrail.addToPath(pos.coords.latitude, pos.coords.longitude);
@@ -109,6 +108,11 @@ export class MapProvider {
                 console.log(pos);
             })
         }, 2000);
+        */
+        this.location.watchPosition().subscribe(data =>{
+            console.log("GEOPOSITION: " + JSON.stringify(data));
+            this.currentTrail.addToPath(data.coords.latitude, data.coords.longitude);
+        });
     }
 
     /**
