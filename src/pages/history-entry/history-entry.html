@@ -10,6 +10,9 @@
 <ion-content padding>
 	<p>{{'TYPE' | translate}}: {{mapType}}, {{operationType}}</p>
 	<p>{{trails}} {{'HISTORY_STAGES' | translate}} {{'WITH' | translate}}:</p>
+
+	<div id="map" #map></div>
+
 	<p *ngFor="let dog of dogs">{{dog.name}} {{'FOR' | translate}} {{dog.duration}} {{'MINUTES' | translate}}</p>
 	<p><button ion-button (click)="exportAsPdf()">{{'EXPORT_PDF' |translate }}</button></p>
 </ion-content>

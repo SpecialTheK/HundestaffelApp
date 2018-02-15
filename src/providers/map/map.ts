@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
+import { TrailStorageProvider } from '../trail-storage/trail-storage';
 
 import { Position } from '../../models/position';
 import { Trail } from '../../models/trail';

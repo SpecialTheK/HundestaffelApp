@@ -2,6 +2,7 @@ import {Position} from './position';
 import {Marker} from './marker';
 import {ColoredCircle} from './coloredCircle';
 import {Triangle} from './triangle';
+import {isArray} from "ionic-angular/util/util";
 
 export class Trail {
 
@@ -57,6 +58,8 @@ export class Trail {
 		this.isSharedActivity = trail.isSharedActivity;
 		this.isTraining = trail.isTraining;
 		this.id = trail.id;
+		this.startTime = trail.startTime;
+		this.endTime = trail.endTime;
 
 		for(let pat of trail.path){
 			this.addToPath(pat.lat, pat.lng);
@@ -159,42 +162,49 @@ export class Trail {
 		};
 	}
 
-	static convertToTrailObject(object: any):Trail{
-		if(this.isTrailObject(object)){
-			let newTrail = new Trail(object.id, object.trainer, object.dog, object.isLandActivity, object.isSharedActivity, object.isTraining);
-			newTrail.startTime = object.startTime;
-			newTrail.endTime = object.endTime;
-
-			for(let p of object.path){
-				newTrail.path.push(new Position(p.lat, p.lng));
-			}
-
-			for(let m of object.marker){
-				let newMarker = new Marker(m.google, m.map, m.id, new Position(m.position.lat, m.position.lng), m.title, m.symbolID);
-				newMarker.map_marker = m.map_marker;
-				newTrail.marker.push(newMarker);
-			}
-
-			for(let c of object.circles){
-				let newCircle = new ColoredCircle(c.google, c.map, c.id, new Position(c.position.lat, c.position.lng), c.color, c.opacity);
-				newCircle.radius = c.radius;
-				newTrail.circles.push(newCircle);
-			}
-
-			for(let t of object.triangles){
-				let newTriangle = new Triangle(t.google, t.map, t.id, new Position(t.position.lat, t.position.lng));
-				newTriangle.map_triangle = t.map_triangle;
-				newTrail.triangles.push(newTriangle);
-			}
-			return newTrail;
+	static isTrailObject(object: any) {
+		let returnValue = true;
+		if(!isArray(object)){
+			object = [object];
 		}
-		return null;
-	}
-
-	static isTrailObject(object: any){
-		return (object.hasOwnProperty('trainer') && object.hasOwnProperty('dog') && object.hasOwnProperty('path') &&
-			object.hasOwnProperty('marker') && object.hasOwnProperty('circles') && object.hasOwnProperty('triangles') &&
-			object.hasOwnProperty('startTime') && object.hasOwnProperty('endTime') && object.hasOwnProperty('isLandActivity') &&
-			object.hasOwnProperty('isSharedActivity') && object.hasOwnProperty('isTraining'));
+		object.forEach((entry) => {
+			if(!entry.hasOwnProperty('id')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('startTime')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('endTime')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('isLandActivity')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('isSharedActivity')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('isTraining')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('trainer')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('dog')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('path')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('marker')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('circles')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('triangles')){
+				returnValue = false;
+			}
+		});
+		return returnValue;
 	}
 }

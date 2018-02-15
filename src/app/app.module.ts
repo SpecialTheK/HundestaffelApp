@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule} from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -12,15 +12,13 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {WebIntent} from "@ionic-native/web-intent";
-import {FilterComponent} from "../components/filter/filter";
 import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
 import {IonicStorageModule} from "@ionic/storage";
-import {TrailCardModule} from "../components/trail-card/trail-card.module";
+import {ComponentsModule} from "../components/components.module";
 
 @NgModule({
 	declarations: [
-		MyApp,
-		FilterComponent
+		MyApp
 	],
 	imports: [
 		BrowserModule,
@@ -34,12 +32,11 @@ import {TrailCardModule} from "../components/trail-card/trail-card.module";
 				deps: [HttpClient]
 			}
 		}),
-		TrailCardModule
+		ComponentsModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
-		MyApp,
-		FilterComponent
+		MyApp
 	],
 	providers: [
         Geolocation,
@@ -49,7 +46,8 @@ import {TrailCardModule} from "../components/trail-card/trail-card.module";
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         WebIntent,
 		TrailStorageProvider
-    ]
+    ],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
 export class AppModule {
 }
