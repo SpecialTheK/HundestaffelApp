@@ -52,7 +52,7 @@ export class MyApp {
 		}
 	}
 	
-	openEntry(trail: Trail){
+	openEntry(trail: Trail[]){
 		this.navCtrl.push('HistoryEntryPage', {trailObject: trail});
 	}
 }

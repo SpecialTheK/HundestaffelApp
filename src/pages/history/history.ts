@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController} from 'ionic-angular';
-import {Trail} from "../../models/trail";
 
 @IonicPage()
 @Component({
@@ -11,7 +10,7 @@ export class HistoryPage {
 	constructor(public navCtrl: NavController) {
 	}
 	
-	cardClicked(trail: Trail){
-		this.navCtrl.push('HistoryEntryPage', {trailObject: trail});
+	cardClicked(trail){
+		this.navCtrl.push('HistoryEntryPage', trail);
 	}
 }

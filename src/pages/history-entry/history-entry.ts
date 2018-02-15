@@ -60,7 +60,7 @@ export class HistoryEntryPage {
 	}
 
 	exportAsJSON(){
-		this.share.share(this.trailSet);
+		this.share.shareTrail(this.trailSet);
 	}
 
 	exportAsPdf(){
