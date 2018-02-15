@@ -68,7 +68,7 @@ export class TrailListComponent {
 		});
 	}
 	
-	cardClicked(trail: Trail){
-		this.cardSelected.emit({trail});
+	cardClicked(trail: Trail[]){
+		this.cardSelected.emit({trailObject: trail});
 	}
 }
