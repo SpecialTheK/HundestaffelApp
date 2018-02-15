@@ -46,7 +46,7 @@ export class ColoredCircle {
                 this.map_circle.setDraggable(false);
             }
         });
-        //TODO: add a change listener
+
         this.map_circle.addListener('center_changed', (i)=>{
             console.log(this.map_circle.getCenter().toJSON());
             this.position.lat = this.map_circle.getCenter().toJSON().lat;

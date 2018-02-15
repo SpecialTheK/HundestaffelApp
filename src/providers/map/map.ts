@@ -13,6 +13,8 @@ export class MapProvider {
 
     map: any;
     recordInterval: any;
+    hasMultipleTrails: boolean;
+    istriangleAddMode: boolean;
 
     startTime: number = 0;
     endTime: number = 0;
@@ -35,6 +37,14 @@ export class MapProvider {
         });
         this.map.addListener('click', (i) => {
             console.log(i.latLng.toJSON());
+
+            if(this.istriangleAddMode){
+                let pos = new Position(i.latLng.toJSON().lat, i.latLng.toJSON().lng);
+                console.log(pos);
+                this.currentTrail.addToTriangles(pos);
+                this.istriangleAddMode = false;
+            }
+
         });
         this.location.getCurrentPosition().then((pos) => {
             this.map.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
@@ -56,6 +66,7 @@ export class MapProvider {
     *   TODO: Ist es besser den trailSet key oder das gesamte Set zu übergeben?
     */
     startExistingSession(trailSetKey: string, trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
+        this.hasMultipleTrails = true;
         let temp = this.navParams.get('trailSet');
         for(let trail of temp){
             this.loadTrail(trail);
@@ -138,7 +149,11 @@ export class MapProvider {
     */
     addTriangle() {
         if(this.currentTrail.path.length >= 1){
-            this.currentTrail.addToTriangles();
+            if(this.istriangleAddMode){
+                this.istriangleAddMode = false;
+            }else {
+                this.istriangleAddMode = true;
+            }
         }
     }
 
@@ -151,16 +166,16 @@ export class MapProvider {
 
     /**
     * Ends the current session of the map
-    *
-    * TODO: Save the entire trail (currentTrail + trailArray)
     */
     endSession(): any {
         this.currentTrail.setStartTime(this.startTime);
         this.currentTrail.setEndTime(this.endTime);
 
-        console.log(this.currentTrail.startTime.toString());
-
-        this.storage.addNewTrailSet(this.currentTrail);
+        if(this.hasMultipleTrails){
+            this.storage.addTrailToSet(this.trailArray[0].startTime.toString(), this.currentTrail);
+        } else {
+            this.storage.addNewTrailSet(this.currentTrail);
+        }
 
         this.stopRecording();
     }
