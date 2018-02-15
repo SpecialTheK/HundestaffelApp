@@ -55,13 +55,11 @@ export class HistoryEntryPage {
 		this.map.viewExistingSession(this.trailSet);
 	}
 
-	exportAsJSON(){
-		this.share.shareTrail(this.trailSet).catch((error) => {
-			console.log(JSON.stringify(error));
-		});
+	shareAsJSON(){
+		this.share.shareTrail(this.trailSet);
 	}
 
-	exportAsPdf(){
+	shareAsPdf(){
 		this.pdf.sharePdf(this.trailSet).catch((error) => {
 			console.log(JSON.stringify(error));
 		});
