@@ -21,10 +21,10 @@ export class HistoryEntryPage {
 	mapType = "";
 	operationType = "";
 	trails: number;
-	dogs: [{}];
+	dogs: Array<Object> = [];
 
 	constructor(public navCtrl: NavController, navParams: NavParams, public translate: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
-		this.trailSet = navParams.get('trail');
+		this.trailSet = navParams.get('trailObject');
 	}
 
 	ionViewWillLoad(){
@@ -64,6 +64,6 @@ export class HistoryEntryPage {
 	}
 
 	exportAsPdf(){
-		this.pdf.createPdf(this.trailSet);
+		this.pdf.sharePdf(this.trailSet);
 	}
 }
