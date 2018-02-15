@@ -6,7 +6,11 @@ import {Trail} from "../../models/trail";
 @Injectable()
 export class ShareTrailProvider {
 	
+	filePath: string = "";
+	fileName: string = "";
+	
 	constructor(public fileSystem: File, public sharing: SocialSharing) {
+		this.filePath = this.fileSystem.cacheDirectory+'shared/';
 	}
 	
 	private initDirectory():Promise<string>{
@@ -23,12 +27,13 @@ export class ShareTrailProvider {
 		});
 	}
 	
-	private shareTrail(trail: Trail[]):Promise<string> {
+	private createFile(trail: Trail[]):Promise<string> {
 		return new Promise((resolve, reject) => {
-			this.fileSystem.checkFile(this.fileSystem.cacheDirectory, "shared/test.json").then((reason) => {
+			this.fileName = 'trail_'+trail[0].startTime+'.xri';
+			this.fileSystem.checkFile(this.filePath, this.fileName).then((reason) => {
 				resolve("File already existing");
 			}).catch((reason) => {
-				this.fileSystem.writeFile(this.fileSystem.cacheDirectory, "shared/test.json", JSON.stringify(trail)).then((reason) => {
+				this.fileSystem.writeFile(this.filePath, this.fileName, JSON.stringify(trail)).then((reason) => {
 					resolve("File created");
 				}).catch((reason) => {
 					reject("File not created: "+JSON.stringify(reason));
@@ -37,11 +42,11 @@ export class ShareTrailProvider {
 		});
 	}
 	
-	share(trail: Trail[]):Promise<string>{
+	shareTrail(trail: Trail[]):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.initDirectory().then((reason) => {
-				this.shareTrail(trail).then((answer) => {
-					this.sharing.share(null, null, this.fileSystem.cacheDirectory+"shared/test.json", null).then((answer) => {
+				this.createFile(trail).then((answer) => {
+					this.sharing.share(null, null, this.filePath+this.fileName, null).then((answer) => {
 						resolve("Successfully shared");
 					}).catch((reason) => {
 						reject(reason);

@@ -29,7 +29,7 @@
 							{{ 'LAST_TRAILS' | translate }}
 						</ion-list-header>
 						<div *ngIf="trails.length > 0">
-							<trail-card *ngFor="let trailSet of trails" [trail]="trailSet" (click)="openEntry(trailSet)"></trail-card>
+							<trail-card menuClose *ngFor="let trailSet of trails" [trail]="trailSet" (click)="openEntry(trailSet)"></trail-card>
 						</div>
 					</ion-item-group>
 				</ion-item-group>
