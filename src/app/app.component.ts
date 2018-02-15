@@ -31,7 +31,7 @@ export class MyApp {
 					console.log("File not imported: "+reason);
 				});
 			}
-			
+			console.log("Bla2");
 			translate.setDefaultLang('en');
 			preferences.fetch('language').then((answer) => {
 				translate.use(answer);

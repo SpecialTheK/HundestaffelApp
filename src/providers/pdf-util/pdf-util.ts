@@ -4,6 +4,10 @@ import {File} from "@ionic-native/file";
 import {Trail} from "../../models/trail";
 import {SocialSharing} from "@ionic-native/social-sharing";
 
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.vfs;
+
 @Injectable()
 export class PdfUtilProvider {
 	

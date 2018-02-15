@@ -56,10 +56,14 @@ export class HistoryEntryPage {
 	}
 
 	exportAsJSON(){
-		this.share.shareTrail(this.trailSet);
+		this.share.shareTrail(this.trailSet).catch((error) => {
+			console.log(JSON.stringify(error));
+		});
 	}
 
 	exportAsPdf(){
-		this.pdf.sharePdf(this.trailSet);
+		this.pdf.sharePdf(this.trailSet).catch((error) => {
+			console.log(JSON.stringify(error));
+		});
 	}
 }
