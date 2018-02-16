@@ -85,7 +85,7 @@ export class HistoryEntryPage {
 		});*/
 		html2canvas(this.mapElement.nativeElement).then((canvas) => {
 			let map = canvas.toDataURL("img/png");
-			console.log("ä"+map+"ä");
+			console.log(map);
 		});
 	}
 	
