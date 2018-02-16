@@ -1,8 +1,11 @@
 {
+	"DURATION"                      : "Dauer",
 	"FOR"                           : "für",
 	"MINUTES"                       : "Minuten",
+	"SEARCH_OF"                     : "Suche vom",
 	"TRAIL_LAND"		            : "Landsuche",
 	"TRAIL_WATER"		            : "Wassersuche",
+	"TRAINER"                       : "Trainer",
 	"TYPE"                          : "Typ",
 	"WITH"                          : "mit",
 

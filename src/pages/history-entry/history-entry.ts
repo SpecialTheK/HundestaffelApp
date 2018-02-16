@@ -8,6 +8,8 @@ import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 
+
+import html2canvas from "html2canvas/dist/html2canvas"
 @IonicPage()
 @Component({
 	selector: 'page-history-entry',
@@ -78,8 +80,12 @@ export class HistoryEntryPage {
 	}
 
 	shareAsPdf(){
-		this.pdf.sharePdf(this.trailSet).catch((error) => {
+		/*this.pdf.sharePdf(this.trailSet).catch((error) => {
 			console.log(JSON.stringify(error));
+		});*/
+		html2canvas(this.mapElement.nativeElement).then((canvas) => {
+			let map = canvas.toDataURL("img/png");
+			console.log("ä"+map+"ä");
 		});
 	}
 	
