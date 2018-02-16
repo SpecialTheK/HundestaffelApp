@@ -1,11 +1,12 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Trail} from "../../models/trail";
 import {TranslateService} from "@ngx-translate/core";
 import {SocialSharing} from "@ionic-native/social-sharing";
 import {MapProvider} from "../../providers/map/map";
 import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
+import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 
 @IonicPage()
 @Component({
@@ -22,9 +23,26 @@ export class HistoryEntryPage {
 	operationType = "";
 	trails: number;
 	dogs: Array<Object> = [];
+	
+	translate_delete = "";
+	translate_delete_short = "";
+	translate_delete_message = "";
+	translate_abort = "";
 
-	constructor(public navCtrl: NavController, navParams: NavParams, public translate: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
+	constructor(public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translate: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
 		this.trailSet = navParams.get('trailObject');
+		this.translate.get('DELETE_TRAILSET').subscribe((answer) => {
+			this.translate_delete = answer;
+		});
+		this.translate.get('DELETE').subscribe((answer) => {
+			this.translate_delete_short = answer;
+		});
+		this.translate.get('DELETE_MESSAGE').subscribe((answer) => {
+			this.translate_delete_message = answer;
+		});
+		this.translate.get('ABORT').subscribe((answer) => {
+			this.translate_abort = answer;
+		});
 	}
 
 	ionViewWillLoad(){
@@ -47,7 +65,7 @@ export class HistoryEntryPage {
 			});
 		}
 		this.trails = this.trailSet.length;
-		this.trailSet.forEach((value: Trail, index:number) => {
+		this.trailSet.forEach((value: Trail) => {
 			this.dogs.push({name: value.dog, duration: (value.endTime-value.startTime)});
 		});
 
@@ -63,5 +81,30 @@ export class HistoryEntryPage {
 		this.pdf.sharePdf(this.trailSet).catch((error) => {
 			console.log(JSON.stringify(error));
 		});
+	}
+	
+	deleteTrailSet(){
+		let alert = this.alertCtrl.create({
+			title: this.translate_delete,
+			subTitle: this.translate_delete_message,
+			buttons: [
+				{
+					text: this.translate_abort,
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				},
+				{
+					text: this.translate_delete_short,
+					handler: () => {
+						this.trailStorage.removeTrailSet(this.trailSet[0].startTime.toString()).then((answer) => {
+							this.navCtrl.pop();
+						})
+					}
+				}
+			]
+		});
+		alert.present();
 	}
 }
