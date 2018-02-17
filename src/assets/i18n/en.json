@@ -18,6 +18,7 @@
 	"HOMEPAGE"                              : "Homepage",
 
 	"IMPORT"                                : "Import trail",
+	"IMPORT_CREATING_PDF"                   : "Generating PDF...",
 	"IMPORT_FAILED"                         : "Importing failed",
 	"IMPORT_FAILED_MESSAGE"                 : "The trail couldn't be imported: ",
 	"IMPORT_MERGE"                          : "Link to existing trail",

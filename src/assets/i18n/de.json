@@ -18,6 +18,7 @@
 	"HOMEPAGE"                              : "Startseite",
 
 	"IMPORT"                                : "Suche importieren",
+	"IMPORT_CREATING_PDF"                   : "Erstelle PDF...",
 	"IMPORT_FAILED"                         : "Importieren fehlgeschlagen",
 	"IMPORT_FAILED_MESSAGE"                 : "Die Suche konnte nicht importiert werden: ",
 	"IMPORT_MERGE"                          : "Mit Suche verknüpfen",

@@ -18,6 +18,7 @@
 	"HOMEPAGE"                              : "page d'accueil",
 
 	"IMPORT"                                : "Importe tracé",
+	"IMPORT_CREATING_PDF"                   : "Produire PDF...",
 	"IMPORT_FAILED"                         : "faute pendant importer",
 	"IMPORT_FAILED_MESSAGE"                 : "Impossible d'importer la tracé: ",
 	"IMPORT_MERGE"                          : "Adhère avec tracé",

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Platform} from "ionic-angular";
+import {LoadingController, Platform} from "ionic-angular";
 import {File} from "@ionic-native/file";
 import {Trail} from "../../models/trail";
 import {SocialSharing} from "@ionic-native/social-sharing";
@@ -17,7 +17,7 @@ export class PdfUtilProvider {
 	appName: string = "IonicApp";
 	translate: Array<string> = [];
 	
-	constructor(public platform: Platform, public fileSystem: File, public sharing: SocialSharing, public translateService: TranslateService) {
+	constructor(public platform: Platform, public fileSystem: File, public sharing: SocialSharing, public translateService: TranslateService, public loadingCtrl: LoadingController) {
 		if(this.platform.is('ios')) {
 			this.pdfDirectory = this.fileSystem.documentsDirectory;
 		}
@@ -28,7 +28,7 @@ export class PdfUtilProvider {
 	}
 	
 	private translateVariables(){
-		let translateTerms = Array("TRAIL_FROM", "TRAIL_DURATION", "FOR", "TRAIL_TYPE", "TRAIL_LAND", "TRAIL_WATER", "TRAIL_OPERATION", "TRAIL_TRAINING", "TRAIL_TRAINER_NAME", "WITH");
+		let translateTerms = Array("TRAIL_FROM", "TRAIL_DURATION", "FOR", "TRAIL_TYPE", "TRAIL_LAND", "TRAIL_WATER", "TRAIL_OPERATION", "TRAIL_TRAINING", "TRAIL_TRAINER_NAME", "WITH", "IMPORT_CREATING_PDF");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translate[term.toLowerCase()] = answer;
@@ -109,15 +109,21 @@ export class PdfUtilProvider {
 	}
 	
 	sharePdf(trailSet: Trail[], map):Promise<string>{
+		let loading = this.loadingCtrl.create({
+			content: this.translate["import_creating_pdf"]
+		});
+		loading.present();
 		return new Promise((resolve, reject) => {
 			this.initDirectory().then((answer) => {
 				this.createPdf(trailSet, map).then((answer) => {
+					loading.dismiss();
 					this.sharing.share(null, null, this.pdfDirectory+this.fileName, null).then((answer) => {
 						resolve("Successfully shared");
 					}).catch((reason) => {
 						reject(reason);
 					});
 				}).catch((reason) => {
+					loading.dismiss();
 					reject(reason);
 				});
 			}).catch((error) => {
