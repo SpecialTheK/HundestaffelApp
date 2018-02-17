@@ -70,7 +70,7 @@ export class TrailListComponent {
 	showLandTrails: boolean = true;
 	
 	constructor(public navCtrl: NavController, public storage: TrailStorageProvider, public translate: TranslateService, public popoverCtrl: PopoverController) {
-		this.storage.getTrailSets().subscribe((value:Trail[]) => {
+		this.storage.getLatestTrailSets().subscribe((value:Trail[]) => {
 			this.trails.push(value);
 			this.originalTrails.push(value);
 		});

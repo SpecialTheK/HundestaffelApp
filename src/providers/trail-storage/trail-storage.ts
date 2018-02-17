@@ -176,12 +176,12 @@ export class TrailStorageProvider {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	public getLatestTrailSets(amount:number):Observable<Trail[]>{
+	public getLatestTrailSets(amount:number = 0):Observable<Trail[]>{
 		return new Observable<Trail[]>((observer) => {
 			this.storage.ready().then((answer) => {
 				this.storage.keys().then((keys) => {
 					let reversedKeys = keys.reverse();
-					if(amount > reversedKeys.length){
+					if(amount > reversedKeys.length || amount == 0){
 						amount = reversedKeys.length;
 					}
 					for(let i = 0; i < amount; i++){
