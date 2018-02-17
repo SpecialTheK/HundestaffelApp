@@ -1,5 +1,11 @@
 import {Position} from './position';
 
+/**
+ * Class defining the marker objects.
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 export class Marker {
 
     // List of marker symbols
@@ -14,9 +20,27 @@ export class Marker {
     map_marker: any;
 
     id: number;
-    position: Position;
+	
+	/**
+	 * Position of the marker on the map.
+	 *
+	 * @since 1.0.0
+	 */
+	position: Position;
+	
+	/**
+	 * Title of the marker
+	 *
+	 * @since 1.0.0
+	 */
     title: string;
-    symbolID: number;
+	
+	/**
+	 * Id of the symbol of the marker
+	 *
+	 * @since 1.0.0
+	 */
+	symbolID: number;
 
     constructor(google: any, map: any, id: number, position: Position, title: string, symbolID: number) {
         this.google = google;
@@ -29,8 +53,14 @@ export class Marker {
 
         this.createMarker();
     }
-
-    createMarker() {
+	
+	/**
+	 * Method to create the marker in the middle of the map.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	createMarker() {
         this.map_marker = new this.google.maps.Marker({
             position: this.position,
             title: this.title
@@ -54,16 +84,35 @@ export class Marker {
 
         this.show();
     }
-
-    hide() {
+	
+	/**
+	 * Method to hide the marker.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	hide() {
         this.map_marker.setMap(null);
     }
-
-    show() {
+	
+	/**
+	 * Method to show the marker.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	show() {
         this.map_marker.setMap(this.map);
     }
-
-    convertToSimpleObject(): any {
+	
+	/**
+	 * Method to convert the marker into a normal object to save it via JSON.stringify()
+	 *
+	 * @returns {any}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	convertToSimpleObject(): any {
         return {
             id: this.id,
             position: this.position.convertToSimpleObject(),
@@ -71,5 +120,4 @@ export class Marker {
             symbolID: this.symbolID
         };
     }
-
 }

@@ -1,16 +1,45 @@
 import {Position} from './position';
 
+/**
+ * Class defining the circle objects
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 export class ColoredCircle {
 
     google: any;
     map: any;
     map_circle: any;
-
     id: number;
-    position: Position;
-    color: string;
-    opacity: number;
-    radius: number;
+	
+	/**
+     * Position of the circle on the map.
+     *
+     * @since 1.0.0
+	 */
+	position: Position;
+	
+	/**
+     * Color of the circle.
+     *
+     * @since 1.0.0
+	 */
+	color: string;
+	
+	/**
+     * Opacity of the circle.
+     *
+     * @since 1.0.0
+	 */
+	opacity: number;
+	
+	/**
+     * Radius of the circle.
+     *
+     * @since 1.0.0
+	 */
+	radius: number;
 
     constructor(google: any, map: any, id: number, position: Position, color: string, opacity: number){
         this.google = google;
@@ -24,8 +53,14 @@ export class ColoredCircle {
 
         this.createCircle();
     }
-
-    createCircle() {
+	
+	/**
+     * Method to create a new cicle in the center of the map.
+     *
+     * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	createCircle() {
         this.map_circle = new this.google.maps.Circle({
             strokeColor: this.color,
             strokeOpacity: this.opacity,
@@ -59,16 +94,35 @@ export class ColoredCircle {
 
         this.show();
     }
-
-    hide() {
+	
+	/**
+     * Method to hide the circle.
+     *
+     * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	hide() {
         this.map_circle.setMap(null);
     }
-
-    show() {
+	
+	/**
+     * Method to show the circle.
+     *
+     * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	show() {
         this.map_circle.setMap(this.map);
     }
-
-    convertToSimpleObject(): any {
+	
+	/**
+     * Method to concert the circle into a normal object without methods to save it via JSON.stringify();
+     *
+	 * @returns {any}
+     * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	convertToSimpleObject(): any {
         return {
             id: this.id,
             position: this.position.convertToSimpleObject(),

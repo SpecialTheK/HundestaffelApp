@@ -5,6 +5,10 @@ import {FilterComponent} from "./filter/filter";
 import {CommonModule} from "@angular/common";
 import {TranslateModule} from "@ngx-translate/core";
 import {IonicModule} from "ionic-angular";
+
+/**
+ * Module containing all components for lazyLoading purposes.
+ */
 @NgModule({
 	declarations: [
 		TrailListComponent,

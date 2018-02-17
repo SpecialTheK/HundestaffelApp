@@ -1,5 +1,11 @@
 import {Position} from './position';
 
+/**
+ * Class defining the triangle objects.
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 export class Triangle {
 
     google: any;
@@ -7,7 +13,13 @@ export class Triangle {
     map_triangle: any;
 
     id: number;
-    position: Position;
+	
+	/**
+	 * Position of the triangle.
+	 *
+	 * @since 1.0.0
+	 */
+	position: Position;
 
     usePos: any;
 
@@ -28,8 +40,14 @@ export class Triangle {
 
         this.createTriangle();
     }
-
-    createTriangle() {
+	
+	/**
+	 * Method to create a new triangle in the center of the map.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	createTriangle() {
         this.map_triangle = new this.google.maps.Polygon({
             paths: this.usePos,
             strokeColor: '#FF00FF',
@@ -50,16 +68,35 @@ export class Triangle {
 
         this.show();
     }
-
-    hide() {
+	
+	/**
+	 * Method to hide this triangle.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	hide() {
         this.map_triangle.setMap(null);
     }
-
-    show() {
+	
+	/**
+	 * Method to show this triangle.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	show() {
         this.map_triangle.setMap(this.map);
     }
-
-    convertToSimpleObject(): any {
+	
+	/**
+	 * Method to convert the triangle into a normal object in order to save it via JSON.stringify().
+	 *
+	 * @returns {any}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	convertToSimpleObject(): any {
         return {
             id: this.id,
             position: this.position.convertToSimpleObject()
