@@ -14,6 +14,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class PdfUtilProvider {
 	pdfDirectory;
 	fileName:string = "";
+	appName: string = "IonicApp";
 	translate: Array<string> = [];
 	
 	constructor(public platform: Platform, public fileSystem: File, public sharing: SocialSharing, public translateService: TranslateService) {
@@ -27,7 +28,7 @@ export class PdfUtilProvider {
 	}
 	
 	private translateVariables(){
-		let translateTerms = Array("SEARCH_OF", "DURATION", "FOR", "TYPE", "TRAIL_LAND", "TRAIL_WATER", "HISTORY_OPERATION", "HISTORY_TRAINING", "TRAINER", "WITH");
+		let translateTerms = Array("TRAIL_FROM", "TRAIL_DURATION", "FOR", "TRAIL_TYPE", "TRAIL_LAND", "TRAIL_WATER", "TRAIL_OPERATION", "TRAIL_TRAINING", "TRAIL_TRAINER_NAME", "WITH");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translate[term.toLowerCase()] = answer;
@@ -37,10 +38,10 @@ export class PdfUtilProvider {
 	
 	private initDirectory():Promise<string>{
 		return new Promise((resolve, reject) => {
-			this.fileSystem.checkDir(this.pdfDirectory, 'IonicApp').then((reason) => {
+			this.fileSystem.checkDir(this.pdfDirectory, this.appName).then((reason) => {
 				resolve("PDF directory existing");
 			}).catch((error) => {
-				this.fileSystem.createDir(this.pdfDirectory, 'IonicApp', false).then((message) => {
+				this.fileSystem.createDir(this.pdfDirectory, this.appName, false).then((message) => {
 					resolve("PDF directory created");
 				}).catch((reason) => {
 					reject("PDF directory not created: "+JSON.stringify(reason));
@@ -52,7 +53,7 @@ export class PdfUtilProvider {
 	private createPdf(trailSet: Trail[], map):Promise<string>{
 		return new Promise<string>((resolve, reject) => {
 			this.fileName = 'trail_'+trailSet[0].startTime+'.pdf';
-			this.fileSystem.checkFile(this.pdfDirectory+'IonicApp/', this.fileName).then((reason) => {
+			this.fileSystem.checkFile(this.pdfDirectory+this.appName+'/', this.fileName).then((reason) => {
 				resolve("File already existing");
 			}).catch((reason) => {
 				this.generateContent(trailSet, map).then((content) => {
@@ -61,7 +62,7 @@ export class PdfUtilProvider {
 						let utf8 = new Uint8Array(buffer);
 						let binaryArray = utf8.buffer;
 						let blob = new Blob([binaryArray], {type: 'application/pdf'});
-						this.fileSystem.writeFile(this.pdfDirectory+'IonicApp/', this.fileName, blob).then((reason) => {
+						this.fileSystem.writeFile(this.pdfDirectory+this.appName+'/', this.fileName, blob).then((reason) => {
 							resolve("File created");
 						}).catch((reason) => {
 							reject("File not created: "+JSON.stringify(reason));
@@ -82,20 +83,20 @@ export class PdfUtilProvider {
 				logging: true
 			}).then((canvas) => {
 				let totalTime:number = (trailSet[trailSet.length-1].endTime)-(trailSet[0].startTime);
-				let training = (trailSet[0].isTraining) ? this.translate["history_training"] : this.translate["history_operation"];
+				let training = (trailSet[0].isTraining) ? this.translate["trail_training"] : this.translate["trail_operation"];
 				let activity = (trailSet[0].isLandActivity) ? this.translate["trail_land"] : this.translate["trail_water"];
 				let map = canvas.toDataURL("img/png");
 				let dogs = [];
 				trailSet.forEach((value) => {
-					dogs.push({text: this.translate["trainer"] +' '+value.trainer+' '+this.translate["with"]+' '+value.dog+' '+
+					dogs.push({text: this.translate["trail_trainer_name"] +' '+value.trainer+' '+this.translate["with"]+' '+value.dog+' '+
 						this.translate["for"]+' '+(value.endTime-value.startTime), color: 'red'});
 				});
 				
 				resolve({
 					content: [
-						{text: this.translate["search_of"]+' '+trailSet[0].startTime, fontSize: 18, alignment: 'center'},
-						{text: '\n'+this.translate["duration"]+' '+totalTime, fontSize: 13, alignment: 'center'},
-						{text: '\n\n\n\n'+this.translate["type"]+ ' '+training+", "+activity+'\n\n', fontSize: 13},
+						{text: this.translate["trail_from"]+' '+trailSet[0].startTime, fontSize: 18, alignment: 'center'},
+						{text: '\n'+this.translate["trail_duration"]+' '+totalTime, fontSize: 13, alignment: 'center'},
+						{text: '\n\n\n\n'+this.translate["trail_type"]+ ' '+training+", "+activity+'\n\n', fontSize: 13},
 						{image: map, width: 400, alignment: 'center'},
 						'\n\n\n',
 						{stack: dogs}

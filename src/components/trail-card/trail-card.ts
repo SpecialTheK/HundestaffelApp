@@ -40,12 +40,12 @@ export class TrailCardComponent {
 	setClasses(){
 		if(this.trail[0].isTraining){
 			this.classes = this.classes + ' training';
-			this.translate.get('HISTORY_TRAINING').subscribe(value => {
+			this.translate.get('TRAIL_TRAINING').subscribe(value => {
 				this.operationType = value;
 			});
 		} else {
 			this.classes = this.classes + ' operation';
-			this.translate.get('HISTORY_OPERATION').subscribe(value => {
+			this.translate.get('TRAIL_OPERATION').subscribe(value => {
 				this.operationType = value;
 			});
 		}

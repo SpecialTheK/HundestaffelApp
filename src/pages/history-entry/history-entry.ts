@@ -8,8 +8,6 @@ import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 
-
-import html2canvas from "html2canvas/dist/html2canvas"
 @IonicPage()
 @Component({
 	selector: 'page-history-entry',
@@ -25,46 +23,32 @@ export class HistoryEntryPage {
 	operationType = "";
 	trails: number;
 	dogs: Array<Object> = [];
-	
-	translate_delete = "";
-	translate_delete_short = "";
-	translate_delete_message = "";
-	translate_abort = "";
+	translatedTerms: Array<string> = [];
 
-	constructor(public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translate: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
+	constructor(public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
 		this.trailSet = navParams.get('trailObject');
-		this.translate.get('DELETE_TRAILSET').subscribe((answer) => {
-			this.translate_delete = answer;
-		});
-		this.translate.get('DELETE').subscribe((answer) => {
-			this.translate_delete_short = answer;
-		});
-		this.translate.get('DELETE_MESSAGE').subscribe((answer) => {
-			this.translate_delete_message = answer;
-		});
-		this.translate.get('ABORT').subscribe((answer) => {
-			this.translate_abort = answer;
-		});
+		this.translateVariables();
+	}
+	
+	private translateVariables(){
+		let translateTerms = Array("TRAIL_DELETE", "DELETE", "TRAIL_DELETE_MESSAGE", "ABORT", "TRAIL_TRAINING", "TRAIL_OPERATION", "TRAIL_LAND", "TRAIL_WATER");
+		for(let term of translateTerms){
+			this.translateService.get(term).subscribe((answer) => {
+				this.translatedTerms[term.toLowerCase()] = answer;
+			});
+		}
 	}
 
 	ionViewWillLoad(){
 		if(this.trailSet[0].isTraining){
-			this.translate.get('HISTORY_TRAINING').subscribe(value => {
-				this.operationType = value;
-			});
+			this.operationType = this.translatedTerms["trail_training"];
 		} else {
-			this.translate.get('HISTORY_OPERATION').subscribe(value => {
-				this.operationType = value;
-			});
+			this.operationType = this.translatedTerms["trail_operation"];
 		}
 		if(this.trailSet[0].isLandActivity){
-			this.translate.get('TRAIL_LAND').subscribe(value => {
-				this.mapType = value;
-			});
+			this.mapType = this.translatedTerms["trail_land"];
 		} else {
-			this.translate.get('TRAIL_WATER').subscribe(value => {
-				this.mapType = value;
-			});
+			this.mapType = this.translatedTerms["trail_water"];
 		}
 		this.trails = this.trailSet.length;
 		this.trailSet.forEach((value: Trail) => {
@@ -87,18 +71,18 @@ export class HistoryEntryPage {
 	
 	deleteTrailSet(){
 		let alert = this.alertCtrl.create({
-			title: this.translate_delete,
-			subTitle: this.translate_delete_message,
+			title: this.translatedTerms["trail_delete"],
+			subTitle: this.translatedTerms["trail_delete_message"],
 			buttons: [
 				{
-					text: this.translate_abort,
+					text: this.translatedTerms["abort"],
 					role: 'cancel',
 					handler: () => {
 						console.log('Cancel clicked');
 					}
 				},
 				{
-					text: this.translate_delete_short,
+					text: this.translatedTerms["delete"],
 					handler: () => {
 						this.trailStorage.removeTrailSet(this.trailSet[0].startTime.toString()).then((answer) => {
 							this.navCtrl.pop();

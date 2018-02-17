@@ -1,6 +1,6 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>{{'SEARCH_OF' | translate}} {{trailSet[0].startTime}}</ion-title>
+		<ion-title>{{'TRAIL_FROM' | translate}} {{trailSet[0].startTime}}</ion-title>
 		<ion-buttons right>
 			<button ion-button icon-only (click)="deleteTrailSet()"><ion-icon name="trash"></ion-icon></button>
 			<button ion-button icon-only (click)="shareAsJSON()"><ion-icon name="share"></ion-icon></button>
@@ -8,9 +8,9 @@
 	</ion-navbar>
 </ion-header>
 <ion-content padding>
-	<p>{{'TYPE' | translate}}: {{mapType}}, {{operationType}}</p>
+	<p>{{'TRAIL_TYPE' | translate}}: {{mapType}}, {{operationType}}</p>
 	<div id="map" #map></div>
-	<p>{{trails}} {{'HISTORY_STAGES' | translate}} {{'WITH' | translate}}:</p>
+	<p>{{trails}} {{'TRAIL_STAGES' | translate}} {{'WITH' | translate}}:</p>
 	<p *ngFor="let dog of dogs">{{dog.name}} {{'FOR' | translate}} {{dog.duration}} {{'MINUTES' | translate}}</p>
-	<p><button ion-button (click)="shareAsPdf()">{{'EXPORT_PDF' |translate }}</button></p>
+	<p><button ion-button (click)="shareAsPdf()">{{'TRAIL_EXPORT_PDF' |translate }}</button></p>
 </ion-content>

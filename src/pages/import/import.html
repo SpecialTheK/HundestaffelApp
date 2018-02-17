@@ -1,12 +1,12 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>importPage</ion-title>
+		<ion-title>{{'IMPORT' | translate}}</ion-title>
 	</ion-navbar>
 </ion-header>
 <ion-content padding>
 	<button ion-button (click)="importNew()">
 		{{ 'IMPORT_NEW' | translate }}
 	</button>
-	<h1>{{'IMPORT_MERGE_WITH' | translate}}</h1>
+	<h1>{{'IMPORT_MERGE' | translate}}</h1>
 	<trail-list [showFilters]="true" (cardSelected)="mergeWith($event)"></trail-list>
 </ion-content>

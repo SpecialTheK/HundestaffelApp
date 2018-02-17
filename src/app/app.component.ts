@@ -32,9 +32,11 @@ export class MyApp {
 				});
 			}
 			translate.setDefaultLang('en');
-			preferences.fetch('language').then((answer) => {
-				translate.use(answer);
-			});
+			if(platform.is('cordova')){
+				preferences.fetch('language').then((answer) => {
+					translate.use(answer);
+				});
+			}
 			this.storage.getLatestTrailSets(5).subscribe((value:Trail[]) => {
 				this.trails.push(value);
 			});

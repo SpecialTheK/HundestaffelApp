@@ -14,33 +14,20 @@ export class ImportPage {
 	
 	private trailSet: Trail[] = [];
 	private source;
-	private translate_import_ok: string;
-	private translate_import_ok_message: string;
-	private translate_import_failed: string;
-	private translate_import_failed_message: string;
-	private translate_button_ok: string;
-	private translate_no_trail: string;
+	private translatedTerms: Array<string> = [];
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,public http: HttpClient, public storage: TrailStorageProvider, public translate:TranslateService) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,public http: HttpClient, public storage: TrailStorageProvider, public translateService: TranslateService) {
 		this.source = this.navParams.get('source');
-		this.translate.get('IMPORT_OK').subscribe((value) => {
-			this.translate_import_ok = value;
-		});
-		this.translate.get('IMPORT_FAILED').subscribe((value) => {
-			this.translate_import_failed = value;
-		});
-		this.translate.get('IMPORT_OK_MESSAGE').subscribe((value) => {
-			this.translate_import_ok_message = value;
-		});
-		this.translate.get('IMPORT_FAILED_MESSAGE').subscribe((value) => {
-			this.translate_import_failed_message = value;
-		});
-		this.translate.get('OK').subscribe((value) => {
-			this.translate_button_ok = value;
-		});
-		this.translate.get('IMPORT_NO_TRAILOBJECT').subscribe((value) => {
-			this.translate_no_trail = value;
-		});
+		this.translateVariables();
+	}
+	
+	private translateVariables(){
+		let translateTerms = Array("IMPORT_OK", "IMPORT_FAILED", "IMPORT_OK_MESSAGE", "IMPORT_FAILED_MESSAGE", "OK", "IMPORT_NO_TRAIL");
+		for(let term of translateTerms){
+			this.translateService.get(term).subscribe((answer) => {
+				this.translatedTerms[term.toLowerCase()] = answer;
+			});
+		}
 	}
 
 	ionViewDidLoad(){
@@ -52,9 +39,9 @@ export class ImportPage {
 			});
 		}).catch((error) => {
 			let alert = this.alertCtrl.create({
-				title: this.translate_import_failed,
-				subTitle: this.translate_import_failed_message+'\n'+error,
-				buttons: [this.translate_button_ok]
+				title: this.translatedTerms["import_failed"],
+				subTitle: this.translatedTerms["import_failed_message"]+'<br>'+error,
+				buttons: [this.translatedTerms["ok"]]
 			});
 			alert.present();
 			this.navCtrl.pop();
@@ -68,7 +55,7 @@ export class ImportPage {
 				if(Trail.isTrailObject(value)){
 					resolve(value);
 				} else {
-					reject(this.translate_no_trail);
+					reject(this.translatedTerms["import_no_trail"]);
 				}
 			}, (error) => {
 				reject(JSON.stringify(error));
@@ -87,18 +74,18 @@ export class ImportPage {
 					++counter;
 					if(counter == this.trailSet.length){
 						let alert = this.alertCtrl.create({
-							title: this.translate_import_ok,
-							subTitle: this.translate_import_ok_message,
-							buttons: [this.translate_button_ok]
+							title: this.translatedTerms["import_ok"],
+							subTitle: this.translatedTerms["import_ok_message"],
+							buttons: [this.translatedTerms["ok"]]
 						});
 						alert.present();
 						this.navCtrl.pop();
 					}
 				}).catch((error) => {
 					let alert = this.alertCtrl.create({
-						title: this.translate_import_failed,
-						subTitle: this.translate_import_failed_message+'<br>'+error,
-						buttons: [this.translate_button_ok]
+						title: this.translatedTerms["import_failed"],
+						subTitle: this.translatedTerms["import_failed_message"]+'<br>'+error,
+						buttons: [this.translatedTerms["ok"]]
 					});
 					alert.present();
 					this.navCtrl.pop();
@@ -108,18 +95,18 @@ export class ImportPage {
 					++counter;
 					if(counter == this.trailSet.length){
 						let alert = this.alertCtrl.create({
-							title: this.translate_import_ok,
-							subTitle: this.translate_import_ok_message,
-							buttons: [this.translate_button_ok]
+							title: this.translatedTerms["import_ok"],
+							subTitle: this.translatedTerms["import_ok_message"],
+							buttons: [this.translatedTerms["ok"]]
 						});
 						alert.present();
 						this.navCtrl.pop();
 					}
 				}).catch((error) => {
 					let alert = this.alertCtrl.create({
-						title: this.translate_import_failed,
-						subTitle: this.translate_import_failed_message+'<br>'+error,
-						buttons: [this.translate_button_ok]
+						title: this.translatedTerms["import_failed"],
+						subTitle: this.translatedTerms["import_failed_message"]+'<br>'+error,
+						buttons: [this.translatedTerms["ok"]]
 					});
 					alert.present();
 					this.navCtrl.pop();
@@ -135,18 +122,18 @@ export class ImportPage {
 				++counter;
 				if(counter == this.trailSet.length){
 					let alert = this.alertCtrl.create({
-						title: this.translate_import_ok,
-						subTitle: this.translate_import_ok_message,
-						buttons: [this.translate_button_ok]
+						title: this.translatedTerms["import_ok"],
+						subTitle: this.translatedTerms["import_ok_message"],
+						buttons: [this.translatedTerms["ok"]]
 					});
 					alert.present();
 					this.navCtrl.pop();
 				}
 			}).catch((error) => {
 				let alert = this.alertCtrl.create({
-					title: this.translate_import_failed,
-					subTitle: this.translate_import_failed_message + '<br>' + error,
-					buttons: [this.translate_button_ok]
+					title: this.translatedTerms["import_failed"],
+					subTitle: this.translatedTerms["import_failed_message"]+'<br>'+error,
+					buttons: [this.translatedTerms["ok"]]
 				});
 				alert.present();
 				this.navCtrl.pop();
