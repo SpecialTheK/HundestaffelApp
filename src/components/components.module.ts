@@ -21,6 +21,7 @@ import {IonicModule} from "ionic-angular";
 		TrailCardComponent,
 		FilterComponent
 	],
-	schemas: [CUSTOM_ELEMENTS_SCHEMA]
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	entryComponents: [FilterComponent]
 })
 export class ComponentsModule {}
