@@ -4,21 +4,43 @@ import {AppPreferences} from "@ionic-native/app-preferences";
 import {TranslateService} from "@ngx-translate/core";
 import {Storage} from '@ionic/storage';
 
+/**
+ * Settings page to let the user set his language and settings for online trailing.
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 @IonicPage()
 @Component({
 	selector: 'page-settings',
 	templateUrl: 'settings.html',
 })
 export class SettingsPage {
-
+	
+	/**
+	 * Language to use in the app.
+	 *
+	 * @type {string}
+	 * @since 1.0.0
+	 */
 	public language: string = "en";
+	
+	/**
+	 * Username to use in online trailing.
+	 *
+	 * @type {string}
+	 * @since 1.0.0
+	 */
 	public username: string = "";
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public preferences: AppPreferences, public translateService: TranslateService, public storage: Storage) {
 	}
 
 	/**
-	 * Load the preferences and update the input fields
+	 * Load the preferences and update the input fields.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	ionViewDidLoad() {
 		this.getLanguage();
@@ -28,6 +50,9 @@ export class SettingsPage {
 	/**
 	* Just for testing and such
 	* TODO: remove this methode
+	*
+	* @since 1.0.0
+	* @version 1.0.0
 	*/
 	clearStorage(){
 		this.storage.clear();
@@ -35,7 +60,10 @@ export class SettingsPage {
 	}
 
 	/**
-	 * Get the preferred language from the app preferences
+	 * Get the preferred language from the app preferences.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	getLanguage(){
 		this.preferences.fetch('language').then((answer) => {
@@ -44,7 +72,10 @@ export class SettingsPage {
 	}
 
 	/**
-	 * Get the username from the app preferences
+	 * Get the username from the app preferences.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	getUsername(){
 		this.preferences.fetch('username').then((answer) => {
@@ -53,7 +84,10 @@ export class SettingsPage {
 	}
 
 	/**
-	 * Save the updated language in the preferences
+	 * Save the updated language in the preferences.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	setLanguage(){
 		this.preferences.store('language', this.language).then((answer) => {
@@ -65,7 +99,10 @@ export class SettingsPage {
 	}
 
 	/**
-	 * Save the updated username in the preferences
+	 * Save the updated username in the preferences.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	setUsername(){
 		this.preferences.store('username', this.username).catch((reason) => {

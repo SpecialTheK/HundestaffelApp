@@ -8,25 +8,88 @@ import { Trail } from '../../models/trail';
 
 declare let google: any;
 
+/**
+ * Provider that handles displaying the map.
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 @Injectable()
 export class MapProvider {
 
     map: any;
-    recordInterval: any;
+	
+	/**
+	 * Interval which is used while recording the position of the device.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	recordInterval: any;
+	
+	/**
+	 * Defines whether the trailSet has multiple trails.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
     hasMultipleTrails: boolean;
-    istriangleAddMode: boolean;
-
+	
+	/**
+	 * Defines whether a triangle is being modified.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	istriangleAddMode: boolean;
+	
+	/**
+	 * Time at which the recording stated.
+	 *
+	 * @type {number}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
     startTime: number = 0;
-    endTime: number = 0;
-
+	
+	/**
+	 * Time at which the recording was stopped.
+	 *
+	 * @type {number}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	endTime: number = 0;
+	
+	/**
+	 * Array containing all trails of the trailSet.
+	 *
+	 * @type {any[]}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
     trailArray: Trail[] = [];
-    currentTrail: Trail;
+	
+	/**
+	 * The current trail that is written to.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	currentTrail: Trail;
 
     constructor(public navParams: NavParams, public location: Geolocation, public storage: TrailStorageProvider) {
         console.log("INIT: MapProvider");
     }
-
-    initMap(mapElement) {
+	
+	/**
+	 * Called to initialize and display the map.
+	 *
+	 * @param mapElement
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	initMap(mapElement) {
         this.map = new google.maps.Map(mapElement.nativeElement, {
             disableDoubleClickZoom: true,
             disableDefaultUI: true,
@@ -53,6 +116,9 @@ export class MapProvider {
 
     /**
     * Starts a new session
+    *
+    * @since 1.0.0
+    * @version 1.0.0
     */
     startSession(trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
         this.currentTrail = new Trail(this.trailArray.length, trainerName, dogName, isLand, isShared, isTrain);
@@ -64,6 +130,8 @@ export class MapProvider {
     * Starts a new session
     *
     *   TODO: Ist es besser den trailSet key oder das gesamte Set zu übergeben?
+    *   @since 1.0.0
+    * @version 1.0.0
     */
     startExistingSession(trainerName: string, dogName: string, isLand: boolean, isShared: boolean, isTrain: boolean) {
         this.hasMultipleTrails = true;
@@ -73,15 +141,29 @@ export class MapProvider {
         }
         this.startSession(trainerName, dogName, isLand, isShared, isTrain);
     }
-
-    viewExistingSession(trailSet){
+	
+	/**
+	 * Method called to display an existing trail.
+	 * @param trailSet
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	viewExistingSession(trailSet){
         this.map.setClickableIcons(false);
         for(let trail of trailSet){
             this.loadTrail(trail);
         }
     }
-
-    loadTrail(trail: Trail) {
+	
+	/**
+	 * Method called to display an existing trail.
+	 * @param {Trail} trail
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	loadTrail(trail: Trail) {
         let exTrail = new Trail(this.trailArray.length, trail.trainer, trail.dog, trail.isLandActivity, trail.isSharedActivity, trail.isTraining);
         exTrail.init(google, this.map);
         exTrail.importTrail(trail);
@@ -94,6 +176,9 @@ export class MapProvider {
 
     /**
     * Starts recording the current position on a set interval of 2 seconds
+    *
+    * @since 1.0.0
+    * @version 1.0.0
     */
     recordCurrentPosition() {
         /*
@@ -116,21 +201,30 @@ export class MapProvider {
     }
 
     /**
-    * Stops the recording of the current position
+     * Stops the recording of the current position
+     *
+     * @since 1.0.0
+     * @version 1.0.0
     */
     stopRecording() {
         clearInterval(this.recordInterval);
     }
 
     /**
-    * Returns the last recorded position
+     * Returns the last recorded position
+     *
+     * @since 1.0.0
+     * @version 1.0.0
     */
     getCurrentPosition(): Position {
         return this.currentTrail.getLastPos();
     }
 
     /**
-    * Adds a marker at your current position
+     * Adds a marker at your current position
+     *
+     * @since 1.0.0
+     * @version 1.0.0
     */
     addMarker(markerText: string, symbolID: number) {
         if(this.currentTrail.path.length >= 1){
@@ -139,7 +233,10 @@ export class MapProvider {
     }
 
     /**
-    * Adds a colored circle at your current position
+     * Adds a colored circle at your current position
+     *
+     * @since 1.0.0
+     * @version 1.0.0
     */
     addColoredCircle(color: string, opacity: number) {
         if(this.currentTrail.path.length >= 1){
@@ -148,8 +245,11 @@ export class MapProvider {
     }
 
     /**
-    * Adds a triangle at your current position
-    * TODO: add a triangle at the position the user tapped on
+     * Adds a triangle at your current position
+     * TODO: add a triangle at the position the user tapped on
+     *
+     * @since 1.0.0
+     * @version 1.0.0
     */
     addTriangle() {
         if(this.currentTrail.path.length >= 1){
@@ -162,14 +262,20 @@ export class MapProvider {
     }
 
     /**
-    * Changes the display level of the displayed circles
+     * Changes the display level of the displayed circles
+     *
+     * @since 1.0.0
+     * @version 1.0.0
     */
     changeCircleLevelDisplay(level) {
         // TODO: Faaaak!
     }
 
     /**
-    * Ends the current session of the map
+     * Ends the current session of the map
+     *
+     * @since 1.0.0
+     * @version 1.0.0
     */
     endSession(): any {
         this.currentTrail.setStartTime(this.startTime);
@@ -183,5 +289,4 @@ export class MapProvider {
 
         this.stopRecording();
     }
-
 }
