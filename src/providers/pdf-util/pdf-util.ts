@@ -1,4 +1,4 @@
-import {Injectable, ViewChild} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Platform} from "ionic-angular";
 import {File} from "@ionic-native/file";
 import {Trail} from "../../models/trail";
@@ -12,8 +12,6 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable()
 export class PdfUtilProvider {
-	@ViewChild('map') mapElement;
-	
 	pdfDirectory;
 	fileName:string = "";
 	translate: Array<string> = [];
@@ -51,13 +49,13 @@ export class PdfUtilProvider {
 		});
 	}
 	
-	private createPdf(trailSet: Trail[]):Promise<string>{
+	private createPdf(trailSet: Trail[], map):Promise<string>{
 		return new Promise<string>((resolve, reject) => {
 			this.fileName = 'trail_'+trailSet[0].startTime+'.pdf';
 			this.fileSystem.checkFile(this.pdfDirectory+'IonicApp/', this.fileName).then((reason) => {
 				resolve("File already existing");
 			}).catch((reason) => {
-				this.generateContent(trailSet).then((content) => {
+				this.generateContent(trailSet, map).then((content) => {
 					let pdf = pdfMake.createPdf(content);
 					pdf.getBuffer((buffer) => {
 						let utf8 = new Uint8Array(buffer);
@@ -76,24 +74,30 @@ export class PdfUtilProvider {
 		});
 	}
 	
-	private generateContent(trailSet: Trail[]):Promise<Object>{
+	private generateContent(trailSet: Trail[], mapElement):Promise<Object>{
 		return new Promise<Object>((resolve, reject) => {
-			html2canvas(this.mapElement.nativeElement).then((canvas) => {
+			html2canvas(mapElement.nativeElement, {
+				allowTaint: false,
+				useCORS: true,
+				logging: true
+			}).then((canvas) => {
 				let totalTime:number = (trailSet[trailSet.length-1].endTime)-(trailSet[0].startTime);
 				let training = (trailSet[0].isTraining) ? this.translate["history_training"] : this.translate["history_operation"];
 				let activity = (trailSet[0].isLandActivity) ? this.translate["trail_land"] : this.translate["trail_water"];
 				let map = canvas.toDataURL("img/png");
 				let dogs = [];
 				trailSet.forEach((value) => {
-					dogs.push(this.translate["trainer"] +' '+value.trainer+' '+this.translate["with"]+' '+value.dog+' '+
-						this.translate["for"]+' '+(value.endTime-value.startTime));
+					dogs.push({text: this.translate["trainer"] +' '+value.trainer+' '+this.translate["with"]+' '+value.dog+' '+
+						this.translate["for"]+' '+(value.endTime-value.startTime), color: 'red'});
 				});
 				
 				resolve({
 					content: [
 						{text: this.translate["search_of"]+' '+trailSet[0].startTime, fontSize: 18, alignment: 'center'},
-						{text: '\n'+this.translate["duration"]+' '+totalTime, alignment: 'center'},
-						{text: '\n\n\n\n'+this.translate["type"]+ ' '+training+", "+activity},
+						{text: '\n'+this.translate["duration"]+' '+totalTime, fontSize: 13, alignment: 'center'},
+						{text: '\n\n\n\n'+this.translate["type"]+ ' '+training+", "+activity+'\n\n', fontSize: 13},
+						{image: map, width: 400, alignment: 'center'},
+						'\n\n\n',
 						{stack: dogs}
 					]
 				});
@@ -103,10 +107,10 @@ export class PdfUtilProvider {
 		});
 	}
 	
-	sharePdf(trailSet: Trail[]):Promise<string>{
+	sharePdf(trailSet: Trail[], map):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.initDirectory().then((answer) => {
-				this.createPdf(trailSet).then((answer) => {
+				this.createPdf(trailSet, map).then((answer) => {
 					this.sharing.share(null, null, this.pdfDirectory+this.fileName, null).then((answer) => {
 						resolve("Successfully shared");
 					}).catch((reason) => {

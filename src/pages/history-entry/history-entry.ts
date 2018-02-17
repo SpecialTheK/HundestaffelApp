@@ -80,12 +80,8 @@ export class HistoryEntryPage {
 	}
 
 	shareAsPdf(){
-		/*this.pdf.sharePdf(this.trailSet).catch((error) => {
-			console.log(JSON.stringify(error));
-		});*/
-		html2canvas(this.mapElement.nativeElement).then((canvas) => {
-			let map = canvas.toDataURL("img/png");
-			console.log(map);
+		this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
+			console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
 		});
 	}
 	
