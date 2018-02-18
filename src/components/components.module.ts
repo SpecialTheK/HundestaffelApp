@@ -5,6 +5,10 @@ import {FilterComponent} from "./filter/filter";
 import {CommonModule} from "@angular/common";
 import {TranslateModule} from "@ngx-translate/core";
 import {IonicModule} from "ionic-angular";
+
+/**
+ * Module containing all components for lazyLoading purposes.
+ */
 @NgModule({
 	declarations: [
 		TrailListComponent,
@@ -21,6 +25,7 @@ import {IonicModule} from "ionic-angular";
 		TrailCardComponent,
 		FilterComponent
 	],
-	schemas: [CUSTOM_ELEMENTS_SCHEMA]
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	entryComponents: [FilterComponent]
 })
 export class ComponentsModule {}

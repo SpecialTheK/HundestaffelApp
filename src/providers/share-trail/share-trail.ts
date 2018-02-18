@@ -3,16 +3,42 @@ import {File} from "@ionic-native/file";
 import {SocialSharing} from "@ionic-native/social-sharing";
 import {Trail} from "../../models/trail";
 
+/**
+ * Provider used to share a trailSet in the apps file format.
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 @Injectable()
 export class ShareTrailProvider {
 	
+	/**
+	 * Path where the file shall be stored.
+	 *
+	 * @type {string}
+	 * @since 1.0.0
+	 */
 	filePath: string = "";
+	
+	/**
+	 * Name of the file to share.
+	 *
+	 * @type {string}
+	 * @since 1.0.0
+	 */
 	fileName: string = "";
 	
 	constructor(public fileSystem: File, public sharing: SocialSharing) {
 		this.filePath = this.fileSystem.cacheDirectory+'shared/';
 	}
 	
+	/**
+	 * Method called to check if the directory used for storing the files is existing or else to create said directory.
+	 *
+	 * @returns {Promise<string>} Resolves when the directory is existing or was created, else rejects.
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	private initDirectory():Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.fileSystem.checkDir(this.fileSystem.cacheDirectory, 'shared').then((reason) => {
@@ -27,6 +53,14 @@ export class ShareTrailProvider {
 		});
 	}
 	
+	/**
+	 * Method called to create a new file and fill it with the trailSet.
+	 *
+	 * @param {Trail[]} trail The trailSet to write into the file.
+	 * @returns {Promise<string>} Resolves when the file was written.
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	private createFile(trail: Trail[]):Promise<string> {
 		return new Promise((resolve, reject) => {
 			this.fileName = 'trail_'+trail[0].startTime+'.xri';
@@ -42,6 +76,14 @@ export class ShareTrailProvider {
 		});
 	}
 	
+	/**
+	 * Method used to create a new file containing the trailSet and then share it.
+	 *
+	 * @param {Trail[]} trail The trailSet to share.
+	 * @returns {Promise<string>} Resolves when the file was successfully written and the share popover gets displayed.
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	shareTrail(trail: Trail[]):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.initDirectory().then((reason) => {

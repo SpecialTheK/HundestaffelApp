@@ -14,7 +14,7 @@
 		<ion-item-group>
 			<ion-list-header>{{ 'SETTINGS_GENERAL' | translate }}</ion-list-header>
 			<ion-item>
-				<ion-label>{{ 'LANGUAGE' | translate }}</ion-label>
+				<ion-label>{{ 'SETTINGS_LANGUAGE' | translate }}</ion-label>
 				<ion-select [(ngModel)]="language" (ionChange)="setLanguage()">
 					<ion-option value="en">English</ion-option>
 					<ion-option value="de">Deutsch</ion-option>
@@ -25,12 +25,12 @@
 		<ion-item-group>
 			<ion-list-header>{{ 'SETTINGS_ONLINE' | translate }}</ion-list-header>
 			<ion-item>
-				<ion-label>{{ 'SETTINGS_NAME' | translate }}</ion-label>
-				<ion-input type="text" [(ngModel)]="username" placeholder="{{ 'SETTINGS_NAME_PLACEHOLDER' | translate }}" (ionChange)="setUsername()"></ion-input>
+				<ion-label>{{ 'SETTINGS_ONLINE_NAME' | translate }}</ion-label>
+				<ion-input type="text" [(ngModel)]="username" placeholder="{{ 'SETTINGS_ONLINE_NAME_PLACEHOLDER' | translate }}" (ionChange)="setUsername()"></ion-input>
 			</ion-item>
 		</ion-item-group>
 		<ion-item-group>
-			<ion-list-header>CLEAR_STORAGE_DEBUG</ion-list-header>
+			<ion-list-header>{{'SETTINGS_STORAGE_CLEAR' | translate}}</ion-list-header>
 			<ion-item>
 				<button ion-button (click)="clearStorage()">CLEAR</button>
 			</ion-item>

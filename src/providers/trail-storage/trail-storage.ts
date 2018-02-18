@@ -3,6 +3,9 @@ import {Storage} from '@ionic/storage';
 import {Trail} from "../../models/trail";
 import {Observable} from "rxjs/Observable";
 
+/**
+ * Provider to interact with the database in order to save new trails, add them to a trailSet, display trailSets or delete a trailSet.
+ */
 @Injectable()
 export class TrailStorageProvider {
 
@@ -16,6 +19,8 @@ export class TrailStorageProvider {
 	 *
 	 * @returns {Promise<string>} Resolves on success, rejects when that trailSet is already existing or
 	 * the trailSet couldn't be saved to storage.
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	public addNewTrailSet(trail: Trail):Promise<string>{
 		return new Promise((resolve, reject) => {
@@ -46,6 +51,8 @@ export class TrailStorageProvider {
 	 *
 	 * @returns {Promise<string>} Resolves when the trailSet was updated or no entry could be found and a
 	 * new trailSet was created. Rejects when there was an error saving the trailSet.
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	public addTrailToSet(key: string, trail:Trail):Promise<string>{
 		return new Promise((resolve, reject) => {
@@ -79,6 +86,8 @@ export class TrailStorageProvider {
 	 *
 	 * @returns {Promise<string>} Resolves when the trailSet was removed,
 	 * rejects when it couldn't be found or couldn't be removed.
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	public removeTrailSet(key: string):Promise<string>{
 		return new Promise((resolve, reject) => {
@@ -105,6 +114,8 @@ export class TrailStorageProvider {
 	 *
 	 * @returns {Promise<string>} Resolves with the trailSet as answer if it could be retrieved,
 	 * rejects when the trailSet couldn't be found.
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	public getTrailSet(key: string):Promise<any>{
 		return new Promise<string>((resolve, reject) => {
@@ -130,6 +141,8 @@ export class TrailStorageProvider {
 	 * @param {number} limit Limit of the selection. If left 0, it returns all remaining trailSets.
 	 *
 	 * @returns {Observable<Trail[]>} Returns one trailSet in each push. Throws errors if the data couldn't be retrieved from the storage.
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	public getTrailSets(from:number = 0, limit:number = 0):Observable<Trail[]>{
 		return new Observable<Trail[]>((observer) => {
@@ -160,6 +173,8 @@ export class TrailStorageProvider {
 	 * @param {number} amount The amount of trailSets to fetch.
 	 *
 	 * @returns {Observable<Trail[]>} Returns one trailSet in each push. Throws an error if data couldn't be retrieved.
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	public getLatestTrailSets(amount:number):Observable<Trail[]>{
 		return new Observable<Trail[]>((observer) => {
@@ -192,6 +207,8 @@ export class TrailStorageProvider {
 	 * @param schemeChanges[] Array containing the schema changes in the form of ["oldProperty=>newProperty",...]
 	 *
 	 * @returns {Promise<string>} Resolves on successful update, rejects on error and creates a data dump of the existing entries.
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	public updateSchema(schemeChanges: string[]):Promise<string>{
 		return new Promise((resolve, reject) => {

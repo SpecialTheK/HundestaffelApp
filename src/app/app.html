@@ -18,7 +18,7 @@
 							<ion-icon item-start name="home"></ion-icon>{{ 'HOMEPAGE' | translate }}
 						</button>
 						<button ion-item menuClose>
-							<ion-icon item-start name="cloud-upload"></ion-icon>{{ 'ONLINE_TRAILING' | translate }}
+							<ion-icon item-start name="cloud-upload"></ion-icon>{{ 'MENU_TRAILING_ONLINE' | translate }}
 						</button>
 						<button menuClose ion-item (click)="openPage('HistoryPage')">
 							<ion-icon item-start name="pulse"></ion-icon>{{ 'HISTORY' | translate }}
@@ -26,7 +26,7 @@
 					</ion-item-group>
 					<ion-item-group>
 						<ion-list-header>
-							{{ 'LAST_TRAILS' | translate }}
+							{{ 'MENU_LAST_TRAILS' | translate }}
 						</ion-list-header>
 						<div *ngIf="trails.length > 0">
 							<trail-card menuClose *ngFor="let trailSet of trails" [trail]="trailSet" (click)="openEntry(trailSet)"></trail-card>

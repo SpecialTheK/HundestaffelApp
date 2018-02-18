@@ -6,24 +6,67 @@ import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage"
 import {FilterComponent} from "../filter/filter";
 
 /**
- * Generated class for the TrailListComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
+ * Displays all trailCards in a descending list with the option to filter them.
  */
 @Component({
 	selector: 'trail-list',
 	templateUrl: 'trail-list.html'
 })
 export class TrailListComponent {
+	/**
+	 * Defines if the user should be able to filter the cards or not.
+	 * @type {boolean}
+	 * @since 1.0.0
+	 */
 	@Input() showFilters: boolean = false;
-	@Output() cardSelected = new EventEmitter()
 	
+	/**
+	 * Emits the trail object of the clicked card back to the component.
+	 * @type {EventEmitter<any>}
+	 * @since 1.0.0
+	 */
+	@Output() cardSelected = new EventEmitter();
+	
+	/**
+	 * Array containing all currently displayed trailSets.
+	 * @type {Trail[][]}
+	 * @since 1.0.0
+	 */
 	trails: Trail[][] = [];
+	
+	/**
+	 * Array containing all existing trailSets.
+	 * @type {Trail[][]}
+	 * @since 1.0.0
+	 */
 	originalTrails: Trail[][] = [];
+	
+	/**
+	 * Filter parameter whether trainings should be displayed.
+	 * @type {boolean}
+	 * @since 1.0.0
+	 */
 	showTrainings: boolean = true;
+	
+	/**
+	 * Filter parameter whether operations should be displayed.
+	 * @type {boolean}
+	 * @since 1.0.0
+	 */
 	showOperations: boolean = true;
+	
+	/**
+	 * Filter parameter whether water trailSets should be displayed.
+	 * @type {boolean}
+	 * @since 1.0.0
+	 */
 	showWaterTrails: boolean = true;
+	
+	/**
+	 * Filter whether whether land trailSets should be displayed.
+	 * @type {boolean}
+	 * @since 1.0.0
+	 */
 	showLandTrails: boolean = true;
 	
 	constructor(public navCtrl: NavController, public storage: TrailStorageProvider, public translate: TranslateService, public popoverCtrl: PopoverController) {
@@ -33,6 +76,14 @@ export class TrailListComponent {
 		});
 	}
 	
+	/**
+	 * Fired when the user clicks on the filter fab Button.
+	 *
+	 * @param myEvent Event context.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	openFilters(myEvent) {
 		let popover = this.popoverCtrl.create(FilterComponent, {showTrainings: this.showTrainings, showOperations: this.showOperations, showWaterTrails: this.showWaterTrails, showLandTrails: this.showLandTrails});
 		popover.present({
@@ -68,6 +119,13 @@ export class TrailListComponent {
 		});
 	}
 	
+	/**
+	 * Fired when the user clicked on a card.
+	 * @param {Trail[]} trail
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	cardClicked(trail: Trail[]){
 		this.cardSelected.emit({trailObject: trail});
 	}
