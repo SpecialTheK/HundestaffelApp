@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, ModalController, NavParams } from 'ionic-angular';
 
+import { Trail } from '../../models/trail';
 import { MapProvider } from '../../providers/map/map';
 
 @IonicPage()
@@ -13,7 +14,12 @@ export class WaterMapPage {
 
     @ViewChild('map') mapElement: ElementRef;
 
+    trails: Trail[] = [];
+
     constructor(public modalCtrl: ModalController, public navParams: NavParams, public map: MapProvider) {
+        this.map.getDisplayedTrails().subscribe((value:Trail[]) =>{
+            this.trails = value;
+        });
     }
 
     ionViewDidLoad() {
@@ -29,12 +35,16 @@ export class WaterMapPage {
         this.map.addToTrailArray();
     }
 
+    //TODO: Vervollständige diese Funktion(warum kann der index nicht übergeben werden?)
     toggleTail(index){
+        /*
         if(this.map.trailArray[index].isHidden){
             this.map.trailArray[index].show();
         }else {
             this.map.trailArray[index].hide();
         }
+        */
+        console.log(index);
     }
 
     stopRecording() {

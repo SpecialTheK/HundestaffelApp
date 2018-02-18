@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
+import {Observable} from "rxjs/Observable";
 
 import { Position } from '../../models/position';
 import { Trail } from '../../models/trail';
@@ -155,6 +156,17 @@ export class MapProvider {
                 this.istriangleAddMode = true;
             }
         }
+    }
+
+    /**
+    * Returns a list of all trails displayed on the map
+    */
+    getDisplayedTrails(){
+        return new Observable<Trail[]>( observ =>{
+            let allTrails = this.trailArray;
+            allTrails.push(this.currentTrail);
+            observ.next(allTrails);
+        });
     }
 
     /**
