@@ -1,5 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, ModalController, NavParams } from 'ionic-angular';
+import { Trail } from '../../models/trail';
+
 import { MapProvider } from '../../providers/map/map';
 
 /**
@@ -20,7 +22,12 @@ export class WaterMapPage {
 	 */
     @ViewChild('map') mapElement: ElementRef;
 
+    trails: Trail[] = [];
+
     constructor(public modalCtrl: ModalController, public navParams: NavParams, public map: MapProvider) {
+        this.map.getDisplayedTrails().subscribe((value:Trail[]) =>{
+            this.trails = value;
+        });
     }
 	
 	/**
@@ -43,11 +50,14 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	toggleTail(index){
+        /*
         if(this.map.trailArray[index].isHidden){
             this.map.trailArray[index].show();
         }else {
             this.map.trailArray[index].hide();
         }
+        */
+        console.log(index);
     }
 	
 	/**
