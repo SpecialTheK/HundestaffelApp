@@ -27,15 +27,10 @@ export class WaterMapPage {
         if(this.navParams.get('trailSet') == null){
             this.map.startSession('Jonas', 'Hund2', false, false, false);
         } else {
-            this.map.startExistingSession(this.navParams.get('trailSet'), 'Jonas', 'Hund2', false, false, false);
+            this.map.startExistingSession('Jonas', 'Hund2', false, false, false);
         }
     }
 
-    addTrailToArray() {
-        this.map.addToTrailArray();
-    }
-
-    //TODO: Vervollständige diese Funktion(warum kann der index nicht übergeben werden?)
     toggleTail(index){
         /*
         if(this.map.trailArray[index].isHidden){

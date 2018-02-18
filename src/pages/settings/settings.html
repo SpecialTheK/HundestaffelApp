@@ -29,5 +29,11 @@
 				<ion-input type="text" [(ngModel)]="username" placeholder="{{ 'SETTINGS_NAME_PLACEHOLDER' | translate }}" (ionChange)="setUsername()"></ion-input>
 			</ion-item>
 		</ion-item-group>
+		<ion-item-group>
+			<ion-list-header>CLEAR_STORAGE_DEBUG</ion-list-header>
+			<ion-item>
+				<button ion-button (click)="clearStorage()">CLEAR</button>
+			</ion-item>
+		</ion-item-group>
 	</ion-list>
 </ion-content>

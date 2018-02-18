@@ -31,6 +31,7 @@ export class MyApp {
 					console.log("File not imported: "+reason);
 				});
 			}
+			
 			translate.setDefaultLang('en');
 			preferences.fetch('language').then((answer) => {
 				translate.use(answer);
@@ -51,7 +52,7 @@ export class MyApp {
 		}
 	}
 	
-	openEntry(trail: Trail){
+	openEntry(trail: Trail[]){
 		this.navCtrl.push('HistoryEntryPage', {trailObject: trail});
 	}
 }
