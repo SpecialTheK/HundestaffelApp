@@ -8,60 +8,25 @@ import {Position} from './position';
  */
 export class ColoredCircle {
 
-    google: any;
-    map: any;
-    map_circle: any;
     id: number;
-	
-	/**
-     * Position of the circle on the map.
-     *
-     * @since 1.0.0
-	 */
-	position: Position;
-	
-	/**
-     * Color of the circle.
-     *
-     * @since 1.0.0
-	 */
-	color: string;
-	
-	/**
-     * Opacity of the circle.
-     *
-     * @since 1.0.0
-	 */
-	opacity: number;
-	
-	/**
-     * Radius of the circle.
-     *
-     * @since 1.0.0
-	 */
-	radius: number;
+    position: Position;
+    color: string;
+    opacity: number;
+    radius: number;
 
-    constructor(google: any, map: any, id: number, position: Position, color: string, opacity: number){
-        this.google = google;
-        this.map = map;
+    //NOTE (christian): das ist der tatsächlich angezeigte kreis!
+    map_circle: any;
 
+    constructor(id: number, position: Position, color: string, opacity: number){
         this.id = id;
         this.position = new Position(position.lat, position.lng);
         this.color = color;
         this.opacity = opacity;
         this.radius = 100;
-
-        this.createCircle();
     }
-	
-	/**
-     * Method to create a new cicle in the center of the map.
-     *
-     * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	createCircle() {
-        this.map_circle = new this.google.maps.Circle({
+
+    addToMap(google: any, map: any){
+        this.map_circle = new google.maps.Circle({
             strokeColor: this.color,
             strokeOpacity: this.opacity,
             fillColor: this.color,
@@ -71,7 +36,6 @@ export class ColoredCircle {
         });
         this.map_circle.setEditable(false);
         this.map_circle.setDraggable(false);
-
         this.map_circle.addListener('dblclick', (i) => {
             if(this.map_circle.getEditable() == false){
                 this.map_circle.setEditable(true);
@@ -81,7 +45,6 @@ export class ColoredCircle {
                 this.map_circle.setDraggable(false);
             }
         });
-
         this.map_circle.addListener('center_changed', (i)=>{
             console.log(this.map_circle.getCenter().toJSON());
             this.position.lat = this.map_circle.getCenter().toJSON().lat;
@@ -92,37 +55,14 @@ export class ColoredCircle {
             this.radius = this.map_circle.getRadius();
         });
 
-        this.show();
+        this.map_circle.setMap(map);
     }
-	
-	/**
-     * Method to hide the circle.
-     *
-     * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	hide() {
-        this.map_circle.setMap(null);
+
+    toggle(map: any = null){
+        this.map_circle.setMap(map);
     }
-	
-	/**
-     * Method to show the circle.
-     *
-     * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	show() {
-        this.map_circle.setMap(this.map);
-    }
-	
-	/**
-     * Method to concert the circle into a normal object without methods to save it via JSON.stringify();
-     *
-	 * @returns {any}
-     * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	convertToSimpleObject(): any {
+
+    convertToSimpleObject(): any {
         return {
             id: this.id,
             position: this.position.convertToSimpleObject(),

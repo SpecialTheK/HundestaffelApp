@@ -8,67 +8,30 @@ import {Position} from './position';
  */
 export class Marker {
 
-    // List of marker symbols
-    // TODO: create more symbols
-    markerSymbol: any = {
-        cross: [],
-        attention: []
-    };
-
-    google: any;
-    map: any;
-    map_marker: any;
+    //TODO (christian): baue alle marker symbole!
 
     id: number;
-	
-	/**
-	 * Position of the marker on the map.
-	 *
-	 * @since 1.0.0
-	 */
-	position: Position;
-	
-	/**
-	 * Title of the marker
-	 *
-	 * @since 1.0.0
-	 */
+    position: Position;
     title: string;
-	
-	/**
-	 * Id of the symbol of the marker
-	 *
-	 * @since 1.0.0
-	 */
-	symbolID: number;
+    symbolID: number;
 
-    constructor(google: any, map: any, id: number, position: Position, title: string, symbolID: number) {
-        this.google = google;
-        this.map = map;
+    //NOTE (christian): das ist der tatsächlich angezeigte marker!
+    map_marker: any;
 
+    constructor(id: number, position: Position, title: string, symbolID: number){
         this.id = id;
-        this.position = new Position(position.lat, position.lng);
+        this.position = position;
         this.title = title;
         this.symbolID = symbolID;
-
-        this.createMarker();
     }
-	
-	/**
-	 * Method to create the marker in the middle of the map.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	createMarker() {
-        this.map_marker = new this.google.maps.Marker({
-            position: this.position,
+
+    addToMap(google: any, map: any){
+        this.map_marker = new google.maps.Marker({
+            position: this.position.convertToSimpleObject(),
             title: this.title
         });
-
         this.map_marker.setDraggable(false);
-
-        this.map_marker.addListener('dblclick', (i) => {
+        this.map_marker.addListener('dblclick', (f) => {
             if(this.map_marker.getDraggable() == false){
                 this.map_marker.setDraggable(true);
             }else {
@@ -76,43 +39,22 @@ export class Marker {
             }
         });
         this.map_marker.addListener('position_changed', (i)=>{
-            //console.log(this.map_marker.getPosition().toJSON());
             this.position.lat = this.map_marker.getPosition().toJSON().lat;
             this.position.lng = this.map_marker.getPosition().toJSON().lng;
-            console.log(this.position);
         })
 
-        this.show();
+        this.map_marker.setMap(map);
     }
-	
-	/**
-	 * Method to hide the marker.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	hide() {
-        this.map_marker.setMap(null);
+
+    toggle(map: any = null){
+        this.map_marker.setMap(map);
     }
-	
-	/**
-	 * Method to show the marker.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	show() {
-        this.map_marker.setMap(this.map);
+
+    highlight(){
+        //TODO (christian): highlight den marker
     }
-	
-	/**
-	 * Method to convert the marker into a normal object to save it via JSON.stringify()
-	 *
-	 * @returns {any}
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	convertToSimpleObject(): any {
+
+    convertToSimpleObject(): any{
         return {
             id: this.id,
             position: this.position.convertToSimpleObject(),
@@ -120,4 +62,5 @@ export class Marker {
             symbolID: this.symbolID
         };
     }
+
 }

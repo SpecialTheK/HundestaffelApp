@@ -1,9 +1,3 @@
-<!--
-  Generated template for the InitTrailPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -13,6 +7,128 @@
 </ion-header>
 
 
+<!--
+
+    Einzugebene Dinge:
+        - Hundename
+        - (vorerst) Wetterdaten
+            > Niederschlag
+            > Wind / Windrichtung
+            > Temperatur
+            >
+        - Personenbeschreibung
+            > Name
+            > Alter (0 - 99)
+            > Haarfarbe (bsp. : braun, blond, schwar, rot)
+            > Brille (ja / nein)
+            > Körperform (schlank, athletisch, normal, füllig, übergewichtig)
+            > Allergien? (bsp. : ...)
+            > Erkrankungen? (bsp. : ...)
+            > Medikamente? (TEXT)
+            >
+        - Situation
+            > Was ist passiert (TEXT)
+            > Was ist vor dem Vorfall passiert? (TEXT)
+            > Weitere Risikofaktoren (TEXT)
+
+-->
+
 <ion-content padding>
+
+    <ion-list>
+        <ion-list-header>Wetter</ion-list-header>
+        <ion-item>
+            <label>Hundename</label>
+            <ion-input type="text" placeholder="Hundename"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-list-header>Wetter</ion-list-header>
+        <ion-item>
+            <ion-label>Niederschlag</ion-label>
+            <ion-select>
+                <ion-option *ngFor="let percipitation of weather_Precipitation">{{percipitation}}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Windrichtung</ion-label>
+            <ion-select>
+                <ion-option *ngFor="let windDirection of weather_WindDirection">{{windDirection}}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Temperatur</ion-label>
+            <ion-input type="number" [(ngModel)]="weather_Temperature"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-list-header>Personenbeschreibung</ion-list-header>
+        <ion-item>
+            <ion-label>Name</ion-label>
+            <ion-input type="text" [(ngModel)]="person.name"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Alter</ion-label>
+            <ion-input type="number" [(ngModel)]="person.age"></ion-input>
+        </ion-item>
+        <ion-item>
+            <!-- TODO (Christian): Wie verknüpft man boolean mit ion select?  -->
+            <ion-label>Brille</ion-label>
+            <ion-select>
+                <ion-option>Ja</ion-option>
+                <ion-option>Nein</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Haare</ion-label>
+            <ion-select [(ngModel)]="person.hair_choice">
+                <ion-option *ngFor="let hair of person.hair">{{hair}}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Haarfarbe</ion-label>
+            <ion-select [(ngModel)]="person.hairColor_choice">
+                <ion-option *ngFor="let hairColor of person.hairColor">{{hairColor}}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Körperform</ion-label>
+            <ion-select [(ngModel)]="person.body_choice">
+                <ion-option *ngFor="let body of person.body">{{body}}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Allergien</ion-label>
+            <ion-input type="text" [(ngModel)]="person.allergies"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Erkrankungen</ion-label>
+            <ion-input type="text" [(ngModel)]="person.illness"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Medikamente</ion-label>
+            <ion-input type="text" [(ngModel)]="person.medication"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <ion-list>
+        <ion-list-header>Situation</ion-list-header>
+        <ion-item>
+            <ion-label>Was ist passiert?</ion-label>
+            <ion-input type="text" [(ngModel)]="situation"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Was ist vorher passiert?</ion-label>
+            <ion-input type="text" [(ngModel)]="preSituation"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Mögliche Risiken?</ion-label>
+            <ion-input type="text" [(ngModel)]="risks"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <button ion-button (click)="gotoMap()">Fertig</button>
 
 </ion-content>

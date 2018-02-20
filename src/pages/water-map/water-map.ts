@@ -14,7 +14,7 @@ import { MapProvider } from '../../providers/map/map';
     templateUrl: 'water-map.html',
 })
 export class WaterMapPage {
-	
+
 	/**
 	 * Reference of the mapElement in order to display google maps.
 	 *
@@ -25,23 +25,16 @@ export class WaterMapPage {
     trails: Trail[] = [];
 
     constructor(public modalCtrl: ModalController, public navParams: NavParams, public map: MapProvider) {
-        this.map.getDisplayedTrails().subscribe((value:Trail[]) =>{
-            this.trails = value;
-        });
     }
-	
+
 	/**
 	 * Ionic lifecycle events that is fired after the page is loaded to initialize the map.
 	 */
 	ionViewDidLoad() {
-        this.map.initMap(this.mapElement);
-        if(this.navParams.get('trailSet') == null){
-            this.map.startSession('Jonas', 'Hund2', false, false, false);
-        } else {
-            this.map.startExistingSession('Jonas', 'Hund2', false, false, false);
-        }
+        this.map.initMapObject(this.mapElement);
+        this.map.startSession(this.navParams.get('trailSet'));
     }
-	
+
 	/**
 	 * Method that is used to toggle the display of an existing trail.
 	 *
@@ -59,7 +52,7 @@ export class WaterMapPage {
         */
         console.log(index);
     }
-	
+
 	/**
 	 * Method that is called to stop the recording.
 	 *
@@ -69,7 +62,7 @@ export class WaterMapPage {
 	stopRecording() {
         this.map.endSession();
     }
-	
+
 	/**
 	 * Method that is called to add a circle to the map.
 	 *
@@ -80,7 +73,7 @@ export class WaterMapPage {
         let cricleAdd = this.modalCtrl.create('AddColoredCirclePage', {map: this.map});
         cricleAdd.present();
     }
-	
+
 	/**
 	 * Method that is called to add a marker to the map.
 	 *
@@ -91,7 +84,7 @@ export class WaterMapPage {
         let markerAdd = this.modalCtrl.create('AddMarkerPage', {map: this.map});
         markerAdd.present();
     }
-	
+
 	/**
 	 * Method that is called to add a triangle to the map.
 	 *
@@ -101,7 +94,7 @@ export class WaterMapPage {
 	addTriangle() {
         this.map.addTriangle();
     }
-	
+
 	/**
 	 * Method that is called to change the opacity of an object.
 	 *

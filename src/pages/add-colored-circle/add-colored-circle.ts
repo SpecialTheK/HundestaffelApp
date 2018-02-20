@@ -13,7 +13,7 @@ import { IonicPage, ViewController, NavParams } from 'ionic-angular';
     templateUrl: 'add-colored-circle.html',
 })
 export class AddColoredCirclePage {
-	
+
 	/**
 	 * The opacity of the new circle.
 	 *
@@ -21,7 +21,7 @@ export class AddColoredCirclePage {
 	 * @since 1.0.0
 	 */
     circleOpacity: number = 8;
-	
+
 	/**
 	 * The color of the new circle.
 	 *
@@ -32,7 +32,7 @@ export class AddColoredCirclePage {
 
     constructor(public navParams: NavParams, public viewCtrl: ViewController) {
     }
-	
+
 	/**
 	 * Method to change the color of the circle.
 	 *
@@ -43,7 +43,7 @@ export class AddColoredCirclePage {
 	changeColor(color){
         this.circleColor = color;
     }
-	
+
 	/**
 	 * Method calling the underlying trailObject to add the circle to the cirlces array.
 	 *
@@ -51,7 +51,7 @@ export class AddColoredCirclePage {
 	 * @version 1.0.0
 	 */
 	addCircle() {
-        this.navParams.get('map').addColoredCircle(this.circleColor, (this.circleOpacity/10));
+        this.navParams.get('map').addCircle(this.circleColor, (this.circleOpacity/10));
         this.viewCtrl.dismiss();
     }
 
