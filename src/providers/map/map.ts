@@ -11,7 +11,6 @@
 
 */
 
-
 import { Injectable, ElementRef } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -37,6 +36,7 @@ export class MapProvider {
     positionSub: any;
 
     trailSet: TrailSet;
+    currentTrail: Trail;
 
     path: any;
 
@@ -61,7 +61,9 @@ export class MapProvider {
         //NOTE (christian): fromData methode garantiert, dass man ein richtiges trailset bekommt!
         this.trailSet = TrailSet.fromData(trailSet, google, this.mapObject);
 
-        
+        this.trailSet.getCurrentTrail().subscribe((value: Trail) => {
+            this.currentTrail = value;
+        });
 
         this.watchCurrentPosition();
     }
@@ -77,25 +79,25 @@ export class MapProvider {
             //.filter((p) => p.coords !== undefined)
             .subscribe((data) => {
                 console.log(data.coords);
-                this.trailSet.getCurrentTrail().addToPath(data.coords.latitude, data.coords.longitude);
+                this.currentTrail.addToPath(data.coords.latitude, data.coords.longitude);
             });
     }
 
     addMarker(markerText: string, markerSymbolID: number){
-        if(this.trailSet.getCurrentTrail().path.length >= 1){
-            this.trailSet.getCurrentTrail().addMarker(markerText, markerSymbolID, this.trailSet.getCurrentTrail().getLastPosition().lat, this.trailSet.getCurrentTrail().getLastPosition().lng).addToMap(google, this.mapObject);
+        if(this.currentTrail.path.length >= 1){
+            this.currentTrail.addMarker(markerText, markerSymbolID, this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng).addToMap(google, this.mapObject);
         }
     }
 
     addCircle(color: string, opacity: number){
-        if(this.trailSet.getCurrentTrail().path.length >= 1){
-            this.trailSet.getCurrentTrail().addCircle(color, opacity, this.trailSet.getCurrentTrail().getLastPosition().lat, this.trailSet.getCurrentTrail().getLastPosition().lng).addToMap(google, this.mapObject);
+        if(this.currentTrail.path.length >= 1){
+            this.currentTrail.addCircle(color, opacity, this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng).addToMap(google, this.mapObject);
         }
     }
 
     addTriangle(){
-        if(this.trailSet.getCurrentTrail().path.length >= 1){
-            this.trailSet.getCurrentTrail().addTriangle(this.trailSet.getCurrentTrail().getLastPosition().lat, this.trailSet.getCurrentTrail().getLastPosition().lng).addToMap(google, this.mapObject);
+        if(this.currentTrail.path.length >= 1){
+            this.currentTrail.addTriangle(this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng).addToMap(google, this.mapObject);
         }
     }
 
