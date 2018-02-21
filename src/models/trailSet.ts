@@ -1,100 +1,188 @@
 import { Trail } from './trail';
 import { Person } from './person';
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
+/**
+ * Class defining the trailSet containing all trails for a single training/operation.
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 export class TrailSet {
-
-    //TODO (christian): wetter?
-
-    creationID: any;
-
-    person: Person;
-
-    isLandTrail: boolean;
-
+	/**
+	 * The key used for storing this trailSet in the database.
+	 *
+	 * @since 1.0.0
+	 */
+	creationID: string;
+	
+	/**
+	 * Defines whether the landMap or waterMap shall be used.
+	 *
+	 * @since 1.0.0
+	 */
+	isLandTrail: boolean;
+	
+	/**
+	 * Defines whether this trailSet was shared for filtering purposes.
+	 *
+	 * @since 1.0.0
+	 */
+	isSharedTrail: boolean;
+	
+	/**
+	 * Defines whether this trailSet is a training or operation.
+	 *
+	 * @since 1.0.0
+	 */
+	isTraining: boolean;
+	
+	/**
+	 * Describes the situation for this operation.
+	 *
+	 * @since 1.0.0
+	 */
     situation: string;
-    preSituation: string;
-    risks: string;
+	
+	/**
+	 * Weather info.
+	 *
+	 * @since 1.0.0
+	 */
+	weather: string;
+	
+	/**
+	 * @since 1.0.0
+	 */
+	risks: string;
+	
+	/**
+	 * Description of the person to search for.
+	 *
+	 * @since 1.0.0
+	 */
+	person: Person;
+	
+	/**
+	 * Array containing all trails in this trailSet.
+	 *
+	 * @type {Trail[]}
+	 * @since 1.0.0
+	 */
+    trails: Trail[];
 
-    trails: Trail[] = [];
-    currentTrail: Trail;
-
-    constructor(person: Person, isLandTrail: boolean, situation: string, preSituation: string, risks: string, trainer: string, dog: string){
-        this.person = Person.fromData(person);
+    constructor(isLandTrail: boolean, isSharedTrail: boolean, isTraining: boolean, situation: string, weather: string, risks: string, person: Person){
         this.isLandTrail = isLandTrail;
+        this.isSharedTrail = isSharedTrail;
+        this.isTraining = isTraining;
         this.situation = situation;
-        this.preSituation = preSituation;
+        this.weather = weather;
         this.risks = risks;
-
-        this.currentTrail = new Trail(0, trainer, dog, isLandTrail, false, false);
+        this.person = person;
+    	this.trails = [];
+    	this.creationID = new Date().getTime().toString();
     }
-
-    getCurrentTrail(){
-        return new Observable<Trail>((observ) => {
-            observ.next(this.currentTrail);
-        });
+	
+	/**
+	 * Method to add a new trail to this trailSet.
+	 *
+	 * @param {Trail} newTrail
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	public addTrailToSet(newTrail: Trail){
+    	this.trails.push(newTrail);
     }
-
-    convertToSimpleObject(){
-        //TODO (christian): ist es gut den currenttrail direkt in trails zu pushen?
-        this.trails.push(this.currentTrail);
-
+	
+	/**
+	 * Method to convert this class into a simple object without any methods in order to store it via JSON.stringify()
+	 *
+	 * @returns {Object}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	convertToSimpleObject(){
         let _trails : any[] = [];
         this.trails.forEach((t) => {
             _trails.push(t.convertToSimpleObject());
         });
-
         let _person = this.person.convertToSimpleObject();
 
         return {
             creationID: this.creationID,
             isLandTrail: this.isLandTrail,
-            situation: this.situation,
-            preSituation: this.preSituation,
-            risks: this.risks,
-            person: _person,
-            trails: _trails
+            isSharedTrail: this.isSharedTrail,
+	        isTraining: this.isTraining,
+	        situation: this.situation,
+	        weather: this.weather,
+	        risks: this.risks,
+	        person: _person,
+	        trails: _trails
         };
     }
-
+	
+	/**
+	 * Method used to convert a simple object into an instance of this class.
+	 *
+	 * @param {TrailSet} data The object contanining all data in order to create this trailSet.
+	 * @param google
+	 * @param map
+	 * @returns {TrailSet|null} Returns the new trailSet if the data is in the right format, else returns null.
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
     static fromData(data: TrailSet, google: any = null, map: any = null): TrailSet{
-        //TODO (christian): wo kommen diese werte her und wo müssen sie hin? (trainer, dog)
-        let trailSet = new TrailSet(data.person, data.isLandTrail, data.situation, data.preSituation, data.risks, "Trainer", "Hund");
-        for(let trail of data.trails){
-            trailSet.trails.push(Trail.fromData(trail, google, map));
-        }
-        return trailSet;
+    	if(TrailSet.isTrailObject(data)){
+    		let _person = new Person(data.person.name, data.person.age, data.person.glasses, data.person.hair_choice,
+			    data.person.hairColor_choice, data.person.body_choice, data.person.allergies, data.person.illness,
+			    data.person.medication);
+		    let trailSet = new TrailSet(data.isLandTrail, data.isSharedTrail, data.isTraining, data.situation, data.weather, data.risks, _person);
+		    for(let trail of data.trails){
+			    trailSet.trails.push(Trail.fromData(trail, google, map));
+		    }
+		    return trailSet;
+	    }
+        return null;
     }
-
-    static isTrailObject(object: any): boolean {
+	
+	/**
+	 * Checks whether a passed object contains all attributes to be a trailSet.
+	 *
+	 * @param object The object to check.
+	 * @returns {boolean}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	static isTrailObject(object: any): boolean {
         let isTrail = true;
 
         if(!object.hasOwnProperty('creationID')){
             isTrail = false;
         }
-        if(!object.hasOwnProperty('person')){
+        if(!object.hasOwnProperty('isLandTrail')){
             isTrail = false;
         }
-        if(!object.hasOwnProperty('isLandTrail')){
+        if(!object.hasOwnProperty('isSharedTrail')){
+            isTrail = false;
+        }
+        if(!object.hasOwnProperty('isTraining')){
             isTrail = false;
         }
         if(!object.hasOwnProperty('situation')){
             isTrail = false;
         }
-        if(!object.hasOwnProperty('preSituation')){
+        if(!object.hasOwnProperty('weather')){
             isTrail = false;
         }
         if(!object.hasOwnProperty('risks')){
             isTrail = false;
         }
-        if(!object.hasOwnProperty('trails')){
-            isTrail = false;
-        }
-        if(!object.hasOwnProperty('currentTrail')){
-            isTrail = false;
-        }
+	    if(!object.hasOwnProperty('person')){
+		    isTrail = false;
+	    }
+	    if(!object.hasOwnProperty('trails')){
+		    isTrail = false;
+	    }
 
         return isTrail;
     }
-
 }

@@ -51,7 +51,8 @@ export class InitTrailPage {
     }
 
     gotoMap(){
-        let trailSet;
+    	// TODO: Fix
+        /*let trailSet;
         if(this.navParams.get('isLandTrail')){
             console.log("LAND");
             trailSet = new TrailSet(this.person, true, this.situation, this.preSituation, this.risks, this.trainer, this.dogName);
@@ -60,7 +61,7 @@ export class InitTrailPage {
             console.log("WASSER");
             trailSet = new TrailSet(this.person, false, this.situation, this.preSituation, this.risks, this.trainer, this.dogName);
             this.navCtrl.push('WaterMapPage', {trailSet: trailSet});
-        }
+        }*/
     }
 
 }

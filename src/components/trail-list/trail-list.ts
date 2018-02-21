@@ -4,6 +4,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {NavController, PopoverController} from "ionic-angular";
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 import {FilterComponent} from "../filter/filter";
+import {TrailSet} from "../../models/trailSet";
 
 /**
  * Displays all trailCards in a descending list with the option to filter them.
@@ -32,14 +33,14 @@ export class TrailListComponent {
 	 * @type {Trail[][]}
 	 * @since 1.0.0
 	 */
-	trails: Trail[][] = [];
+	trails: TrailSet[] = [];
 	
 	/**
 	 * Array containing all existing trailSets.
 	 * @type {Trail[][]}
 	 * @since 1.0.0
 	 */
-	originalTrails: Trail[][] = [];
+	originalTrails: TrailSet[] = [];
 	
 	/**
 	 * Filter parameter whether trainings should be displayed.
@@ -70,7 +71,7 @@ export class TrailListComponent {
 	showLandTrails: boolean = true;
 	
 	constructor(public navCtrl: NavController, public storage: TrailStorageProvider, public translate: TranslateService, public popoverCtrl: PopoverController) {
-		this.storage.getTrailSets().subscribe((value:Trail[]) => {
+		this.storage.getLatestTrailSets().subscribe((value:TrailSet) => {
 			this.trails.push(value);
 			this.originalTrails.push(value);
 		});
@@ -95,18 +96,18 @@ export class TrailListComponent {
 		popover.onDidDismiss((data) => {
 			if(data){
 				this.trails = JSON.parse(JSON.stringify(this.originalTrails));
-				this.trails = this.trails.filter((trailSet :Trail[]) => {
+				this.trails = this.trails.filter((trailSet :TrailSet) => {
 					let show = true;
-					if(data.showLandTrails == false && trailSet[0].isLandActivity == true){
+					if(data.showLandTrails == false && trailSet.isLandTrail == true){
 						show = false;
 					}
-					if(data.showWaterTrails == false && trailSet[0].isLandActivity == false){
+					if(data.showWaterTrails == false && trailSet.isLandTrail == false){
 						show = false;
 					}
-					if(data.showTrainings == false && trailSet[0].isTraining == true){
+					if(data.showTrainings == false && trailSet.isTraining == true){
 						show = false;
 					}
-					if(data.showOperations == false && trailSet[0].isTraining == false){
+					if(data.showOperations == false && trailSet.isTraining == false){
 						show = false;
 					}
 					return show;

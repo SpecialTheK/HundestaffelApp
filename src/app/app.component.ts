@@ -8,7 +8,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {WebIntent} from "@ionic-native/web-intent";
 import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
-import {Trail} from "../models/trail";
+import {TrailSet} from "../models/trailSet";
 
 @Component({
 	templateUrl: 'app.html'
@@ -16,7 +16,7 @@ import {Trail} from "../models/trail";
 export class MyApp {
 	@ViewChild('mainMenu') navCtrl: NavController;
 	rootPage: any = Home;
-	trails: Trail[][] = [];
+	trails: TrailSet[] = [];
 	
 	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService, public webIntent: WebIntent, public storage: TrailStorageProvider) {
 		platform.ready().then(() => {
@@ -24,6 +24,7 @@ export class MyApp {
 			// Here you can do any higher level native things you might need.
 			if(platform.is('android')) {
 				this.webIntent.getIntent().then((answer) => {
+					console.log("intent: "+JSON.stringify(answer));
 					if(answer.extras != null && answer.extras["android.intent.extra.STREAM"] != undefined){
 						this.navCtrl.push('ImportPage', {source: answer.extras["android.intent.extra.STREAM"]});
 					}
@@ -37,7 +38,7 @@ export class MyApp {
 					translate.use(answer);
 				});
 			}
-			this.storage.getLatestTrailSets(5).subscribe((value:Trail[]) => {
+			this.storage.getLatestTrailSets(5).subscribe((value:TrailSet) => {
 				this.trails.push(value);
 			});
 			statusBar.styleDefault();
@@ -53,7 +54,7 @@ export class MyApp {
 		}
 	}
 	
-	openEntry(trail: Trail[]){
-		this.navCtrl.push('HistoryEntryPage', {trailObject: trail});
+	openEntry(trailSet: TrailSet){
+		this.navCtrl.push('HistoryEntryPage', {trailObject: trailSet});
 	}
 }

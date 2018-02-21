@@ -38,5 +38,4 @@ export class Position {
             lng: this.lng
         };
     }
-
 }

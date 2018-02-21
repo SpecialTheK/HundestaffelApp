@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpClient} from "@angular/common/http";
-import {Trail} from "../../models/trail";
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 import {TranslateService} from "@ngx-translate/core";
+import {TrailSet} from "../../models/trailSet";
 
 /**
  * Page opened when the user is opening the app with a file.
@@ -24,7 +24,7 @@ export class ImportPage {
 	 * @type {Trail[]}
 	 * @since 1.0.0
 	 */
-	private trailSet: Trail[] = [];
+	private trailSet: TrailSet;
 
 	/**
 	 * URi of the source file.
@@ -69,10 +69,7 @@ export class ImportPage {
 	 */
 	ionViewDidLoad(){
 		this.getFileContents(this.source).then((fileContent) => {
-			fileContent.forEach((value:Trail) => {
-				let dummyTrail = Trail.fromData(value);
-				this.trailSet.push(dummyTrail);
-			});
+				this.trailSet = fileContent
 		}).catch((error) => {
 			let alert = this.alertCtrl.create({
 				title: this.translatedTerms["import_failed"],
@@ -92,12 +89,12 @@ export class ImportPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	private getFileContents(source: string):Promise<Trail[]>{
+	private getFileContents(source: string):Promise<TrailSet>{
 		console.log("Importing file: "+source);
-		return new Promise<Trail[]>((resolve, reject) => {
-			this.http.get(source).subscribe((value:Array<any>) => {
-				if(Trail.isTrailObject(value)){
-					resolve(value);
+		return new Promise<TrailSet>((resolve, reject) => {
+			this.http.get(source).subscribe((value:TrailSet) => {
+				if(TrailSet.isTrailObject(value)){
+					resolve(TrailSet.fromData(value));
 				} else {
 					reject(this.translatedTerms["import_no_trail"]);
 				}
@@ -114,55 +111,22 @@ export class ImportPage {
 	 * @version 1.0.0
 	 */
 	importNew(){
-		let key: string = "";
-		let counter = 0;
-		this.trailSet.forEach((value, index) => {
-			value.isSharedActivity = true;
-			if(index == 0){
-				console.log(value);
-				key = value.startTime.toString();
-				this.storage.addNewTrailSet(value).then((answer) => {
-					++counter;
-					if(counter == this.trailSet.length){
-						let alert = this.alertCtrl.create({
-							title: this.translatedTerms["import_ok"],
-							subTitle: this.translatedTerms["import_ok_message"],
-							buttons: [this.translatedTerms["ok"]]
-						});
-						alert.present();
-						this.navCtrl.pop();
-					}
-				}).catch((error) => {
-					let alert = this.alertCtrl.create({
-						title: this.translatedTerms["import_failed"],
-						subTitle: this.translatedTerms["import_failed_message"]+'<br>'+error,
-						buttons: [this.translatedTerms["ok"]]
-					});
-					alert.present();
-					this.navCtrl.pop();
-				});
-			} else {
-				this.storage.addTrailToSet(key, value).then((answer) => {
-					++counter;
-					if(counter == this.trailSet.length){
-						let alert = this.alertCtrl.create({
-							title: this.translatedTerms["import_ok"],
-							subTitle: this.translatedTerms["import_ok_message"],
-							buttons: [this.translatedTerms["ok"]]
-						});
-						alert.present();
-						this.navCtrl.pop();
-					}
-				}).catch((error) => {
-					let alert = this.alertCtrl.create({
-						title: this.translatedTerms["import_failed"],
-						subTitle: this.translatedTerms["import_failed_message"]+'<br>'+error,
-						buttons: [this.translatedTerms["ok"]]
-					});
-					alert.present();
-					this.navCtrl.pop();
-				});
-			}
+		this.storage.addNewTrailSet(this.trailSet).then((answer) => {
+			let alert = this.alertCtrl.create({
+				title: this.translatedTerms["import_ok"],
+				subTitle: this.translatedTerms["import_ok_message"],
+				buttons: [this.translatedTerms["ok"]]
+			});
+			alert.present();
+			this.navCtrl.pop();
+		}).catch((error) => {
+			let alert = this.alertCtrl.create({
+				title: this.translatedTerms["import_failed"],
+				subTitle: this.translatedTerms["import_failed_message"]+'<br>'+error,
+				buttons: [this.translatedTerms["ok"]]
+			});
+			alert.present();
+			this.navCtrl.pop();
 		});
 	}
 
@@ -175,11 +139,10 @@ export class ImportPage {
 	 */
 	mergeWith(event){
 		let counter = 0;
-		this.trailSet.forEach((value) => {
-			value.isSharedActivity = true;
-			this.storage.addTrailToSet(event.trail[0].startTime, value).then((answer) => {
+		this.trailSet.trails.forEach((value) => {
+			this.storage.addTrailToSet(event.creationID, value, true).then((answer) => {
 				++counter;
-				if(counter == this.trailSet.length){
+				if(counter == this.trailSet.trails.length){
 					let alert = this.alertCtrl.create({
 						title: this.translatedTerms["import_ok"],
 						subTitle: this.translatedTerms["import_ok_message"],
