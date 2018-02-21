@@ -24,6 +24,7 @@ export class MyApp {
 			// Here you can do any higher level native things you might need.
 			if(platform.is('android')) {
 				this.webIntent.getIntent().then((answer) => {
+					console.log("intent: "+JSON.stringify(answer));
 					if(answer.extras != null && answer.extras["android.intent.extra.STREAM"] != undefined){
 						this.navCtrl.push('ImportPage', {source: answer.extras["android.intent.extra.STREAM"]});
 					}
