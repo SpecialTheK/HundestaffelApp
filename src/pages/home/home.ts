@@ -16,7 +16,7 @@ export class HomePage {
 
     constructor(public navCtrl: NavController) {
     }
-	
+
 	/**
 	 * Method to visit the map page for land trailing.
 	 *
@@ -24,9 +24,9 @@ export class HomePage {
 	 * @version 1.0.0
 	 */
 	gotoLandMap() {
-        this.navCtrl.push('LandMapPage');
+        this.navCtrl.push('InitTrailPage', {isLandTrail: true});
     }
-	
+
 	/**
 	 * Method to visit the map page for water trailing.
 	 *
@@ -34,9 +34,9 @@ export class HomePage {
 	 * @version 1.0.0
 	 */
 	gotoWaterMap() {
-        this.navCtrl.push('WaterMapPage');
+        this.navCtrl.push('InitTrailPage', {isLandTrail: false});
     }
-	
+
 	/**
 	 * Method to visit the history page containing all previus trailSets.
 	 *

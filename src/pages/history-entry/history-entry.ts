@@ -21,21 +21,21 @@ import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage"
 	templateUrl: 'history-entry.html',
 })
 export class HistoryEntryPage {
-	
+
 	/**
 	 * Direct ref to the map element in order to insert the map.
 	 *
 	 * @since 1.0.0
 	 */
 	@ViewChild('map') mapElement: ElementRef;
-	
+
 	/**
 	 * Array containing all trails of this trailSet.
 	 *
 	 * @since 1.0.0
 	 */
 	trailSet: Trail[];
-	
+
 	/**
 	 * String containing the localized name of the map type.
 	 *
@@ -43,7 +43,7 @@ export class HistoryEntryPage {
 	 * @since 1.0.0
 	 */
 	mapType = "";
-	
+
 	/**
 	 * String containing the localized name of the operation type.
 	 *
@@ -51,14 +51,14 @@ export class HistoryEntryPage {
 	 * @since 1.0.0
 	 */
 	operationType = "";
-	
+
 	/**
 	 * Number of total trails in this trailSet.
 	 *
 	 * @since 1.0.0
 	 */
 	trails: number;
-	
+
 	/**
 	 * Array containing all dogs and their duration that were part of this trailSet.
 	 *
@@ -66,7 +66,7 @@ export class HistoryEntryPage {
 	 * @since 1.0.0
 	 */
 	dogs: Array<Object> = [];
-	
+
 	/**
 	 * Array containing all terms to insert into the template after translating them.
 	 *
@@ -79,7 +79,7 @@ export class HistoryEntryPage {
 		this.trailSet = navParams.get('trailObject');
 		this.translateVariables();
 	}
-	
+
 	/**
 	 * Method called to translate all terms used in this template.
 	 *
@@ -94,7 +94,7 @@ export class HistoryEntryPage {
 			});
 		}
 	}
-	
+
 	/**
 	 * Ionic lifecycle event fired when the page is getting loaded.
 	 *
@@ -117,10 +117,11 @@ export class HistoryEntryPage {
 			this.dogs.push({name: value.dog, duration: (value.endTime-value.startTime)});
 		});
 
-		this.map.initMap(this.mapElement);
-		this.map.viewExistingSession(this.trailSet);
+		this.map.initMapObject(this.mapElement);
+		//TODO (christian): laden von trails wieder möglich machen!
+		//this.map.viewExistingSession(this.trailSet);
 	}
-	
+
 	/**
 	 * Method called to share the trailSet in the app's file format.
 	 *
@@ -130,7 +131,7 @@ export class HistoryEntryPage {
 	shareAsJSON(){
 		this.share.shareTrail(this.trailSet);
 	}
-	
+
 	/**
 	 * Method called to share a pdf of the trailSet.
 	 *
@@ -142,7 +143,7 @@ export class HistoryEntryPage {
 			console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
 		});
 	}
-	
+
 	/**
 	 * Method called to delete a trailSet from the storage. Cannot be reverted.
 	 *

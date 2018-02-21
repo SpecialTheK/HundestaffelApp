@@ -16,7 +16,7 @@ import { MapProvider } from '../../providers/map/map';
     templateUrl: 'land-map.html',
 })
 export class LandMapPage {
-	
+
 	/**
 	 * Method to work on the mapElement in order to display google maps.
 	 *
@@ -26,7 +26,7 @@ export class LandMapPage {
 
     constructor(public navParams: NavParams, public modalCtrl: ModalController, public map: MapProvider) {
     }
-	
+
 	/**
 	 * Ionic lifecycle event that is called after the page is loaded to initialize the map.
 	 *
@@ -34,9 +34,9 @@ export class LandMapPage {
 	 * @version 1.0.0
 	 */
 	ionViewDidLoad() {
-        this.map.initMap(this.mapElement);
+        this.map.initMapObject(this.mapElement);
     }
-	
+
 	/**
 	 * Method to show the current position of the user.
 	 *
@@ -44,9 +44,10 @@ export class LandMapPage {
 	 * @version 1.0.0
 	 */
 	showCurrentLocation(){
-        this.map.recordCurrentPosition();
+        //TODO (christian): erstelle eine button zum centern des views!
+        //this.map.recordCurrentPosition();
     }
-	
+
 	/**
 	 * Method that is called to stop the recording of a trail.
 	 *
@@ -56,7 +57,7 @@ export class LandMapPage {
 	stopRecording() {
         this.map.endSession();
     }
-	
+
 	/**
 	 * Method that is called to add a new marker to the map.
 	 *

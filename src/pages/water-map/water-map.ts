@@ -1,5 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, ModalController, NavParams } from 'ionic-angular';
+import { Trail } from '../../models/trail';
+
 import { MapProvider } from '../../providers/map/map';
 
 /**
@@ -12,7 +14,7 @@ import { MapProvider } from '../../providers/map/map';
     templateUrl: 'water-map.html',
 })
 export class WaterMapPage {
-	
+
 	/**
 	 * Reference of the mapElement in order to display google maps.
 	 *
@@ -20,21 +22,19 @@ export class WaterMapPage {
 	 */
     @ViewChild('map') mapElement: ElementRef;
 
+    trails: Trail[] = [];
+
     constructor(public modalCtrl: ModalController, public navParams: NavParams, public map: MapProvider) {
     }
-	
+
 	/**
 	 * Ionic lifecycle events that is fired after the page is loaded to initialize the map.
 	 */
 	ionViewDidLoad() {
-        this.map.initMap(this.mapElement);
-        if(this.navParams.get('trailSet') == null){
-            this.map.startSession('Jonas', 'Hund2', false, false, false);
-        } else {
-            this.map.startExistingSession('Jonas', 'Hund2', false, false, false);
-        }
+        this.map.initMapObject(this.mapElement);
+        this.map.startSession(this.navParams.get('trailSet'));
     }
-	
+
 	/**
 	 * Method that is used to toggle the display of an existing trail.
 	 *
@@ -43,13 +43,16 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	toggleTail(index){
+        /*
         if(this.map.trailArray[index].isHidden){
             this.map.trailArray[index].show();
         }else {
             this.map.trailArray[index].hide();
         }
+        */
+        console.log(index);
     }
-	
+
 	/**
 	 * Method that is called to stop the recording.
 	 *
@@ -59,7 +62,7 @@ export class WaterMapPage {
 	stopRecording() {
         this.map.endSession();
     }
-	
+
 	/**
 	 * Method that is called to add a circle to the map.
 	 *
@@ -70,7 +73,7 @@ export class WaterMapPage {
         let cricleAdd = this.modalCtrl.create('AddColoredCirclePage', {map: this.map});
         cricleAdd.present();
     }
-	
+
 	/**
 	 * Method that is called to add a marker to the map.
 	 *
@@ -81,7 +84,7 @@ export class WaterMapPage {
         let markerAdd = this.modalCtrl.create('AddMarkerPage', {map: this.map});
         markerAdd.present();
     }
-	
+
 	/**
 	 * Method that is called to add a triangle to the map.
 	 *
@@ -91,7 +94,7 @@ export class WaterMapPage {
 	addTriangle() {
         this.map.addTriangle();
     }
-	
+
 	/**
 	 * Method that is called to change the opacity of an object.
 	 *

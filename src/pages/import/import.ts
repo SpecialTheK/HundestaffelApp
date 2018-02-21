@@ -17,7 +17,7 @@ import {TranslateService} from "@ngx-translate/core";
 	templateUrl: 'import.html',
 })
 export class ImportPage {
-	
+
 	/**
 	 * Array containing all trails to import.
 	 *
@@ -25,14 +25,14 @@ export class ImportPage {
 	 * @since 1.0.0
 	 */
 	private trailSet: Trail[] = [];
-	
+
 	/**
 	 * URi of the source file.
 	 *
 	 * @since 1.0.0
 	 */
 	private source;
-	
+
 	/**
 	 * Array containing all translated terms to display in the template.
 	 *
@@ -45,7 +45,7 @@ export class ImportPage {
 		this.source = this.navParams.get('source');
 		this.translateVariables();
 	}
-	
+
 	/**
 	 * Method called to translate all variables needed for this page.
 	 *
@@ -60,7 +60,7 @@ export class ImportPage {
 			});
 		}
 	}
-	
+
 	/**
 	 * Ionic lifecycle event called after the page is loaded.
 	 *
@@ -70,8 +70,7 @@ export class ImportPage {
 	ionViewDidLoad(){
 		this.getFileContents(this.source).then((fileContent) => {
 			fileContent.forEach((value:Trail) => {
-				let dummyTrail = new Trail(value.id, value.trainer, value.dog, value.isLandActivity, value.isSharedActivity, value.isTraining);
-				dummyTrail.importTrail(value);
+				let dummyTrail = Trail.fromData(value);
 				this.trailSet.push(dummyTrail);
 			});
 		}).catch((error) => {
@@ -84,7 +83,7 @@ export class ImportPage {
 			this.navCtrl.pop();
 		});
 	}
-	
+
 	/**
 	 * Private method to get the content of a file.
 	 *
@@ -107,7 +106,7 @@ export class ImportPage {
 			});
 		});
 	}
-	
+
 	/**
 	 * Method called when the user wants to import the file as a new trailSet.
 	 *
@@ -166,7 +165,7 @@ export class ImportPage {
 			}
 		});
 	}
-	
+
 	/**
 	 * Method called when the user wants to merge the trails into an existing trailSet.
 	 *
