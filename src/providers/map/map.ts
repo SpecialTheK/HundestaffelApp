@@ -14,10 +14,9 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import { TrailStorageProvider } from '../trail-storage/trail-storage';
+import {Observable} from "rxjs";
 
-import { Position } from '../../models/position';
 import { Trail } from '../../models/trail';
 import { TrailSet } from '../../models/trailSet';
 

@@ -1,6 +1,6 @@
 import { Trail } from './trail';
 import { Person } from './person';
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 
 export class TrailSet {
 
