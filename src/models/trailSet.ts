@@ -26,10 +26,13 @@ export class TrailSet {
         this.preSituation = preSituation;
         this.risks = risks;
 
-        this.currentTrail = new Trail(0, trainer, dog, isLandTrail, false, false);
+        //this.currentTrail = new Trail(0, trainer, dog, isLandTrail, false, false);
     }
 
     getCurrentTrail(){
+        if(this.currentTrail == undefined){
+            this.currentTrail = new Trail(0, "Trainer", "Hund", false, false, false);
+        }
         return new Observable<Trail>((observ) => {
             observ.next(this.currentTrail);
         });

@@ -21,12 +21,17 @@ export class Trail {
 	isTraining: boolean;
 	//==
 
+	//DEBUG (christian): nur schnell was testen
+	polyline: any;
+
 	id: number;
 	trainer: string;
 	dog: string;
 
 	startTime: number;
 	endTime: number;
+
+	distance: number;
 
 	path: Position[] = [];
 	marker: Marker[] = [];
@@ -115,8 +120,16 @@ export class Trail {
 	static fromData(data: Trail, google: any = null, map: any = null){
 		let trail = new Trail(data.id, data.trainer, data.dog, data.isLandActivity, data.isSharedActivity, data.isTraining)
 
+		let polyline = new google.maps.Polyline({
+			strokeColor: "#ff0000",
+			strokeOpacity: 1.0,
+			strokeWeight: 3
+		});
+
 		for(let p of trail.path){
 			trail.addToPath(p.lat, p.lng);
+			let pp = polyline.getPath();
+        	pp.push(new google.maps.LatLng(p.lat, p.lng));
 		}
 		for(let mar of trail.marker){
 			let m = trail.addMarker(mar.title, mar.symbolID, mar.position.lat, mar.position.lng);

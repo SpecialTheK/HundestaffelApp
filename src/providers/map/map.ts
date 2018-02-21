@@ -40,6 +40,9 @@ export class MapProvider {
 
     path: any;
 
+    //DEBUG (christian): neuer trail zum vergleichen!
+    testCircle: any;
+
     constructor(public location: Geolocation, public navParams: NavParams){
         //NOTE (christian): kein code hier! html seite muss erst vollständig geladen sein!
     }
@@ -48,6 +51,9 @@ export class MapProvider {
         this.mapObject = new google.maps.Map(mapElement.nativeElement, {
                 disableDoubleClickZoom: true,
                 disableDefaultUI: true,
+                fullscreenControl: false,
+                streetViewControl: false,
+                zoomControl: true,
                 zoom: 16
             });
         this.location.getCurrentPosition().then((pos) => {
@@ -55,15 +61,46 @@ export class MapProvider {
         })
 
         //TODO (christian): event listener für die map!
+
+        //DEBUG (christian): wir test jetzt was!
+        this.mapObject.addListener('click', (i) => {
+            console.log(i.latLng.toJSON());
+
+            this.testCircle = new google.maps.Circle({
+                strokeColor: "#ff0000",
+                strokeOpacity: 0.6,
+                fillColor: "#ff0000",
+                fillOpacity: 0.6,
+                center: {lat: i.latLng.toJSON().lat, lng: i.latLng.toJSON().lng,},
+                radius: 50
+            });
+            this.testCircle.setMap(this.mapObject);
+
+            if(google.maps.geometry.spherical.computeDistanceBetween(
+                new google.maps.LatLng(this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng),
+                new google.maps.LatLng(i.latLng.toJSON().lat, i.latLng.toJSON().lng)
+            ) <= 50 ){
+                console.log("Ist drin!");
+            }else {
+                console.log("Ist nicht drin!")
+            }
+
+        });
+
     }
 
     startSession(trailSet: TrailSet){
         //NOTE (christian): fromData methode garantiert, dass man ein richtiges trailset bekommt!
         this.trailSet = TrailSet.fromData(trailSet, google, this.mapObject);
-
         this.trailSet.getCurrentTrail().subscribe((value: Trail) => {
             this.currentTrail = value;
         });
+        this.path = new google.maps.Polyline({
+            strokeColor: "#ff0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 3
+        });
+        this.path.setMap(this.mapObject);
 
         this.watchCurrentPosition();
     }
@@ -74,13 +111,23 @@ export class MapProvider {
     }
 
     watchCurrentPosition(){
+        let recordInterval = setInterval((i) => {
+            this.location.getCurrentPosition().then((pos) => {
+                this.currentTrail.addToPath(pos.coords.latitude, pos.coords.longitude);
+                this.drawPath(pos.coords.latitude, pos.coords.longitude);
+                console.log(pos);
+            })
+        }, 2000);
+        /*
         this.positionSub = this.location.watchPosition()
             //TODO (christian): finde heraus, warum filter nicht funktioniert!
             //.filter((p) => p.coords !== undefined)
             .subscribe((data) => {
                 console.log(data.coords);
                 this.currentTrail.addToPath(data.coords.latitude, data.coords.longitude);
+                this.mapObject.panTo(data.coords.latitude, data.coords.longitude);
             });
+        */
     }
 
     addMarker(markerText: string, markerSymbolID: number){
@@ -101,8 +148,9 @@ export class MapProvider {
         }
     }
 
-    drawPath(){
-
+    drawPath(lat: number, lng: number){
+        let p = this.path.getPath();
+        p.push(new google.maps.LatLng(lat, lng));
     }
 
     getLoadedTrails(){
