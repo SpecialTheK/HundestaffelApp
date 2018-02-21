@@ -44,6 +44,13 @@ export class Trail {
 	endTime: Date;
 	
 	/**
+	 * Distance of this trail.
+	 *
+	 * @since 1.0.0
+	 */
+	distance: number;
+	
+	/**
 	 * Array containing all tracked positions.
 	 *
 	 * @since 1.0.0
@@ -76,6 +83,7 @@ export class Trail {
 		this.trainer = trainer;
 		this.dog = dog;
 		this.startTime = new Date();
+		this.distance = 0;
 		this.path = [];
 		this.marker = [];
 		this.circles = [];
@@ -207,6 +215,7 @@ export class Trail {
 			id: this.id,
 			startTime: this.startTime,
 			endTime: this.endTime,
+			distance: this.distance,
 			trainer: this.trainer,
 			dog: this.dog,
 			path: pat,
@@ -231,6 +240,7 @@ export class Trail {
 			let trail = new Trail(data.id, data.trainer, data.dog);
 			trail.startTime = data.startTime;
 			trail.endTime = data.endTime;
+			trail.distance = data.distance;
 			
 			for(let p of trail.path){
 				trail.addToPath(p.lat, p.lng);
@@ -281,6 +291,9 @@ export class Trail {
 				returnValue = false;
 			}
 			if(!entry.hasOwnProperty('endTime')){
+				returnValue = false;
+			}
+			if(!entry.hasOwnProperty('distance')){
 				returnValue = false;
 			}
 			if(!entry.hasOwnProperty('trainer')){
