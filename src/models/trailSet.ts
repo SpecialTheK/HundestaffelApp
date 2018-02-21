@@ -79,6 +79,7 @@ export class TrailSet {
         this.risks = risks;
         this.person = person;
     	this.trails = [];
+    	this.creationID = new Date().getTime().toString();
     }
 	
 	/**
@@ -104,7 +105,6 @@ export class TrailSet {
         this.trails.forEach((t) => {
             _trails.push(t.convertToSimpleObject());
         });
-
         let _person = this.person.convertToSimpleObject();
 
         return {
@@ -132,7 +132,10 @@ export class TrailSet {
 	 */
     static fromData(data: TrailSet, google: any = null, map: any = null): TrailSet{
     	if(TrailSet.isTrailObject(data)){
-		    let trailSet = new TrailSet(data.isLandTrail, data.isSharedTrail, data.isTraining, data.situation, data.weather, data.risks, data.person);
+    		let _person = new Person(data.person.name, data.person.age, data.person.glasses, data.person.hair_choice,
+			    data.person.hairColor_choice, data.person.body_choice, data.person.allergies, data.person.illness,
+			    data.person.medication);
+		    let trailSet = new TrailSet(data.isLandTrail, data.isSharedTrail, data.isTraining, data.situation, data.weather, data.risks, _person);
 		    for(let trail of data.trails){
 			    trailSet.trails.push(Trail.fromData(trail, google, map));
 		    }
@@ -158,7 +161,7 @@ export class TrailSet {
         if(!object.hasOwnProperty('isLandTrail')){
             isTrail = false;
         }
-        if(!object.hasOwnProperty('isShardTrail')){
+        if(!object.hasOwnProperty('isSharedTrail')){
             isTrail = false;
         }
         if(!object.hasOwnProperty('isTraining')){

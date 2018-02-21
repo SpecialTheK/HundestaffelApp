@@ -60,9 +60,10 @@ export class MapProvider {
         //NOTE (christian): fromData methode garantiert, dass man ein richtiges trailset bekommt!
         this.trailSet = TrailSet.fromData(trailSet, google, this.mapObject);
 
-        this.trailSet.getCurrentTrail().subscribe((value: Trail) => {
+        // TODO: Fixen
+        /*this.trailSet.getCurrentTrail().subscribe((value: Trail) => {
             this.currentTrail = value;
-        });
+        });*/
 
         this.watchCurrentPosition();
     }
@@ -107,8 +108,9 @@ export class MapProvider {
     getLoadedTrails(){
         return new Observable<Trail[]>((observ) => {
             let allTrails = this.trailSet.trails;
-            allTrails.push(this.trailSet.currentTrail);
-            observ.next(allTrails);
+            // TODO: Fix
+            /*allTrails.push(this.trailSet.currentTrail);
+            observ.next(allTrails);*/
         });
     }
 

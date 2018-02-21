@@ -1,6 +1,8 @@
 import {Component, Input} from '@angular/core';
-import {Trail} from "../../models/trail";
 import {TranslateService} from "@ngx-translate/core";
+import {TrailSet} from "../../models/trailSet";
+import {Trail} from "../../models/trail";
+import moment from "moment";
 
 /**
  * Displays a trailSet in an ion-card.
@@ -14,7 +16,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class TrailCardComponent {
 
-@Input() trail: Trail[];
+@Input() trail: TrailSet;
 	
 	/**
 	 * The classes to apply for styling.
@@ -71,6 +73,15 @@ export class TrailCardComponent {
 	 */
 	isShared: boolean = false;
 	
+	/**
+	 * Array containing all translated terms.
+	 *
+	 * @type {string[]}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	translatedTerms: Array<string> = [];
+	
 	constructor(public translate: TranslateService) {
 	}
 	
@@ -81,13 +92,49 @@ export class TrailCardComponent {
 	 * @version 1.0.0
 	 */
 	ngOnInit(){
-		this.trails = this.trail.length;
+		this.translateVariables();
+		this.trails = this.trail.trails.length;
 		this.setClasses();
-		this.isShared = this.trail[0].isSharedActivity;
-		this.startTime = this.trail[0].startTime.toString();
-		this.trail.forEach((value: Trail, index:number) => {
-			this.dogs.push({name: value.dog, duration: (value.endTime-value.startTime)});
-		});
+		this.isShared = this.trail.isSharedTrail;
+		if(this.trail.trails[0] !== undefined){
+			this.startTime = this.trail.trails[0].startTime.toString();
+			this.trail.trails.forEach((value: Trail, index:number) => {
+				this.dogs.push({name: value.dog, duration: this.getDuration(value.startTime, value.endTime)});
+			});
+		}
+	}
+	
+	/**
+	 * Method called to translate all terms used in this template.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	private translateVariables(){
+		let translateTerms = Array("HOURS", "MINUTES", "SECONDS");
+		for(let term of translateTerms){
+			this.translate.get(term).subscribe((answer) => {
+				this.translatedTerms[term.toLowerCase()] = answer;
+			});
+		}
+	}
+	
+	/**
+	 * Method to get the duration between two Date objects using the moment.js library
+	 *
+	 * @param {Date} startTime
+	 * @param {Date} endTime
+	 * @returns {string}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	private getDuration(startTime: Date, endTime: Date):string{
+		let _startTime = moment(startTime);
+		let _endTime = moment(endTime);
+		
+		let totalTime = moment(_startTime.diff(_endTime)).toDate();
+		return totalTime.getHours()+" "+this.translatedTerms["hours"]+" "+totalTime.getMinutes()+
+			" "+this.translatedTerms["minutes"]+" "+" "+totalTime.getMinutes()+" "+this.translatedTerms["seconds"];
 	}
 	
 	/**
@@ -97,7 +144,7 @@ export class TrailCardComponent {
 	 * @version 1.0.0
 	 */
 	setClasses(){
-		if(this.trail[0].isTraining){
+		if(this.trail.isTraining){
 			this.classes = this.classes + ' training';
 			this.translate.get('TRAIL_TRAINING').subscribe(value => {
 				this.operationType = value;
@@ -108,7 +155,7 @@ export class TrailCardComponent {
 				this.operationType = value;
 			});
 		}
-		if(this.trail[0].isLandActivity){
+		if(this.trail.isLandTrail){
 			this.classes = this.classes + ' land-activity';
 			this.translate.get('TRAIL_LAND').subscribe(value => {
 				this.mapType = value;
