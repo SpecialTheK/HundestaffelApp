@@ -13,44 +13,106 @@ import {Observable} from "rxjs";
  * @version 1.0.0
  */
 export class Trail {
-
-	//NOTE (christian): die müssen hier drin sein (?)
-	//==
-	isLandActivity: boolean;
-	isSharedActivity: boolean;
-	isTraining: boolean;
-	//==
-
-	//DEBUG (christian): nur schnell was testen
-	polyline: any;
-
 	id: number;
+
+	/**
+	 * The name of the trainer recording this trail.
+	 *
+	 * @since 1.0.0
+	 */
 	trainer: string;
+
+	/**
+	 * The name of the dog walking this trail.
+	 *
+	 * @since 1.0.0
+	 */
 	dog: string;
 
-	startTime: number;
-	endTime: number;
+	/**
+	 * The time the recording of this trail was started.
+	 *
+	 * @since 1.0.0
+	 */
+	startTime: Date;
 
+	/**
+	 * The time the recoding was stopped.
+	 *
+	 * @since 1.0.0
+	 */
+	endTime: Date;
+
+	/**
+	 * Distance of this trail.
+	 *
+	 * @since 1.0.0
+	 */
 	distance: number;
 
-	path: Position[] = [];
-	marker: Marker[] = [];
-	circles: ColoredCircle[] = [];
-	triangles: Triangle[] = [];
+	/**
+	 * Array containing all tracked positions.
+	 *
+	 * @since 1.0.0
+	 */
+	path: Position[];
 
-	constructor(id: number, trainer: string, dog: string, isLandActivity: boolean, isSharedActivity: boolean, isTraining: boolean){
+	/**
+	 * Array containing all added markers.
+	 *
+	 * @since 1.0.0
+	 */
+	marker: Marker[];
+
+	/**
+	 * Array containing all added circles.
+	 *
+	 * @since 1.0.0
+	 */
+	circles: ColoredCircle[];
+
+	/**
+	 * Array containing all triangles.
+	 *
+	 * @since 1.0.0
+	 */
+	triangles: Triangle[];
+
+	constructor(id: number, trainer: string, dog: string){
 		this.id = id;
 		this.trainer = trainer;
 		this.dog = dog;
-		this.isLandActivity = isLandActivity;
-		this.isSharedActivity = isSharedActivity;
-		this.isTraining = isTraining;
+		this.startTime = new Date();
+		this.distance = 0;
+		this.path = [];
+		this.marker = [];
+		this.circles = [];
+		this.triangles = [];
 	}
 
+	/**
+	 * Method to add a new position to the path array.
+	 *
+	 * @param {number} lat The latitude of the position.
+	 * @param {number} lng The longitude of the position.
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	addToPath(lat: number, lng: number){
 		this.path.push(new Position(lat, lng));
 	}
 
+	/**
+	 * Method to add a new marker to the marker array.
+	 *
+	 * @param {string} title The title of the new marker.
+	 * @param {number} markerSymbolID The symbol of the new marker.
+	 * @param {number} lat The latitude of the new marker.
+	 * @param {number} lng The longitude of the new marker.
+	 * @returns {Marker} New marker object to manipulate it.
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	addMarker(title: string, markerSymbolID: number, lat: number, lng: number): Marker{
 		let mar = new Marker(this.marker.length, new Position(lat, lng), title, markerSymbolID);
 		this.marker.push(mar);
@@ -58,6 +120,17 @@ export class Trail {
 		return mar;
 	}
 
+	/**
+	 * Method to add a new circle to the circles array.
+	 *
+	 * @param {string} color The color of the new circle.
+	 * @param {number} opacity The opacity of the new circle.
+	 * @param {number} lat The latitude of the new circle.
+	 * @param {number} lng The longitude of the new circle.
+	 * @returns {ColoredCircle} The new circle object to manipulate it.
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	addCircle(color: string, opacity: number, lat: number, lng: number): ColoredCircle{
 		let cir = new ColoredCircle(this.circles.length, new Position(lat, lng), color, opacity);
 		this.circles.push(cir);
@@ -65,6 +138,15 @@ export class Trail {
 		return cir;
 	}
 
+	/**
+	 * Method to add a new triangle to the triangles array.
+	 *
+	 * @param {number} lat The latitude of the new triangle.
+	 * @param {number} lng The longitude of the new triangle.
+	 * @returns {Triangle} The new triangle object to manipulate it.
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	addTriangle(lat: number, lng: number): Triangle{
 		let tri = new Triangle(this.triangles.length, new Position(lat, lng));
 		this.triangles.push(tri);
@@ -72,20 +154,48 @@ export class Trail {
 		return tri;
 	}
 
+	/**
+	 * Method to hide or show this trail.
+	 *
+	 * @param map
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	toggleOnMap(map: any = null){
 		//NOTE (christian): wenn keine werte übergeben werden, dann wird der trail von der map entfernt. wenn google und map übergeben werden, dann wird der trail angezeigt!
 	}
 
+	/**
+	 * Get the last recorded position from the positions array.
+	 *
+	 * @returns {Position}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	getLastPosition(): Position{
 		return this.path[this.path.length - 1];
 	}
 
+	/**
+	 * Get an observable containing an array with all positions of this trail.
+	 *
+	 * @returns {Observable<Position[]>}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	getPath(): Observable<Position[]>{
 		return new Observable<Position[]>((observ) => {
 			observ.next(this.path);
 		});
 	}
 
+	/**
+	 * Convert this trail into a simple object without any methods in order to store it via JSON.stringify()
+	 *
+	 * @returns {Object}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	convertToSimpleObject(): any{
 		let pat: any[] = [], mar: any[] = [], cir: any[] = [], tri: any[] = [];
 
@@ -105,9 +215,7 @@ export class Trail {
 			id: this.id,
 			startTime: this.startTime,
 			endTime: this.endTime,
-			isLandActivity: this.isLandActivity,
-			isSharedActivity: this.isSharedActivity,
-			isTraining: this.isTraining,
+			distance: this.distance,
 			trainer: this.trainer,
 			dog: this.dog,
 			path: pat,
@@ -117,42 +225,59 @@ export class Trail {
 		};
 	}
 
+	/**
+	 * Static method to turn a simple object into an instance of this class.
+	 *
+	 * @param {Trail} data The data to use when creating the new instance.
+	 * @param google
+	 * @param map
+	 * @returns {Trail}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	static fromData(data: Trail, google: any = null, map: any = null){
-		let trail = new Trail(data.id, data.trainer, data.dog, data.isLandActivity, data.isSharedActivity, data.isTraining)
+		if(Trail.isTrailObject(data)){
+			let trail = new Trail(data.id, data.trainer, data.dog);
+			trail.startTime = data.startTime;
+			trail.endTime = data.endTime;
+			trail.distance = data.distance;
 
-		let polyline = new google.maps.Polyline({
-			strokeColor: "#ff0000",
-			strokeOpacity: 1.0,
-			strokeWeight: 3
-		});
+			for(let p of trail.path){
+				trail.addToPath(p.lat, p.lng);
+			}
+			for(let mar of trail.marker){
+				let m = trail.addMarker(mar.title, mar.symbolID, mar.position.lat, mar.position.lng);
+				if(google != null && map != null) {
+					m.addToMap(google, map);
+				}
+			}
+			for(let cir of trail.circles){
+				let c = trail.addCircle(cir.color, cir.opacity, cir.position.lat, cir.position.lng);
+				if(google != null && map != null) {
+					c.addToMap(google, map);
+				}
+			}
+			for(let tri of trail.triangles){
+				let t = trail.addTriangle(tri.position.lat, tri.position.lng);
+				if(google != null && map != null) {
+					t.addToMap(google, map);
+				}
+			}
 
-		for(let p of trail.path){
-			trail.addToPath(p.lat, p.lng);
-			let pp = polyline.getPath();
-        	pp.push(new google.maps.LatLng(p.lat, p.lng));
-		}
-		for(let mar of trail.marker){
-			let m = trail.addMarker(mar.title, mar.symbolID, mar.position.lat, mar.position.lng);
-			if(google != null && map != null) {
-				m.addToMap(google, map);
-			}
-		}
-		for(let cir of trail.circles){
-			let c = trail.addCircle(cir.color, cir.opacity, cir.position.lat, cir.position.lng);
-			if(google != null && map != null) {
-				c.addToMap(google, map);
-			}
-		}
-		for(let tri of trail.triangles){
-			let t = trail.addTriangle(tri.position.lat, tri.position.lng);
-			if(google != null && map != null) {
-				t.addToMap(google, map);
-			}
+			return trail;
 		}
 
-		return trail;
+		return null;
 	}
 
+	/**
+	 * Method to check whether the passed object can be converted into an instance of this class or not.
+	 *
+	 * @param object The object to check.
+	 * @returns {boolean}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	static isTrailObject(object: any) {
 		let returnValue = true;
 		if(!isArray(object)){
@@ -168,13 +293,7 @@ export class Trail {
 			if(!entry.hasOwnProperty('endTime')){
 				returnValue = false;
 			}
-			if(!entry.hasOwnProperty('isLandActivity')){
-				returnValue = false;
-			}
-			if(!entry.hasOwnProperty('isSharedActivity')){
-				returnValue = false;
-			}
-			if(!entry.hasOwnProperty('isTraining')){
+			if(!entry.hasOwnProperty('distance')){
 				returnValue = false;
 			}
 			if(!entry.hasOwnProperty('trainer')){
@@ -198,5 +317,4 @@ export class Trail {
 		});
 		return returnValue;
 	}
-
 }

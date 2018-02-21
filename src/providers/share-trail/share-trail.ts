@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {File} from "@ionic-native/file";
 import {SocialSharing} from "@ionic-native/social-sharing";
-import {Trail} from "../../models/trail";
+import {TrailSet} from "../../models/trailSet";
 
 /**
  * Provider used to share a trailSet in the apps file format.
@@ -56,18 +56,18 @@ export class ShareTrailProvider {
 	/**
 	 * Method called to create a new file and fill it with the trailSet.
 	 *
-	 * @param {Trail[]} trail The trailSet to write into the file.
+	 * @param {Trail[]} trailSet The trailSet to write into the file.
 	 * @returns {Promise<string>} Resolves when the file was written.
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	private createFile(trail: Trail[]):Promise<string> {
+	private createFile(trailSet: TrailSet):Promise<string> {
 		return new Promise((resolve, reject) => {
-			this.fileName = 'trail_'+trail[0].startTime+'.xri';
+			this.fileName = 'trail_'+trailSet.creationID+'.xri';
 			this.fileSystem.checkFile(this.filePath, this.fileName).then((reason) => {
 				resolve("File already existing");
 			}).catch((reason) => {
-				this.fileSystem.writeFile(this.filePath, this.fileName, JSON.stringify(trail)).then((reason) => {
+				this.fileSystem.writeFile(this.filePath, this.fileName, JSON.stringify(trailSet.convertToSimpleObject())).then((reason) => {
 					resolve("File created");
 				}).catch((reason) => {
 					reject("File not created: "+JSON.stringify(reason));
@@ -79,15 +79,15 @@ export class ShareTrailProvider {
 	/**
 	 * Method used to create a new file containing the trailSet and then share it.
 	 *
-	 * @param {Trail[]} trail The trailSet to share.
+	 * @param {Trail[]} trailSet The trailSet to share.
 	 * @returns {Promise<string>} Resolves when the file was successfully written and the share popover gets displayed.
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	shareTrail(trail: Trail[]):Promise<string>{
+	shareTrail(trailSet: TrailSet):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.initDirectory().then((reason) => {
-				this.createFile(trail).then((answer) => {
+				this.createFile(trailSet).then((answer) => {
 					this.sharing.share(null, null, this.filePath+this.fileName, null).then((answer) => {
 						resolve("Successfully shared");
 					}).catch((reason) => {
