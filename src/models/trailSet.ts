@@ -14,54 +14,54 @@ export class TrailSet {
 	 * @since 1.0.0
 	 */
 	creationID: string;
-	
+
 	/**
 	 * Defines whether the landMap or waterMap shall be used.
 	 *
 	 * @since 1.0.0
 	 */
 	isLandTrail: boolean;
-	
+
 	/**
 	 * Defines whether this trailSet was shared for filtering purposes.
 	 *
 	 * @since 1.0.0
 	 */
 	isSharedTrail: boolean;
-	
+
 	/**
 	 * Defines whether this trailSet is a training or operation.
 	 *
 	 * @since 1.0.0
 	 */
 	isTraining: boolean;
-	
+
 	/**
 	 * Describes the situation for this operation.
 	 *
 	 * @since 1.0.0
 	 */
     situation: string;
-	
+
 	/**
 	 * Weather info.
 	 *
 	 * @since 1.0.0
 	 */
 	weather: string;
-	
+
 	/**
 	 * @since 1.0.0
 	 */
 	risks: string;
-	
+
 	/**
 	 * Description of the person to search for.
 	 *
 	 * @since 1.0.0
 	 */
 	person: Person;
-	
+
 	/**
 	 * Array containing all trails in this trailSet.
 	 *
@@ -81,7 +81,7 @@ export class TrailSet {
     	this.trails = [];
     	this.creationID = new Date().getTime().toString();
     }
-	
+
 	/**
 	 * Method to add a new trail to this trailSet.
 	 *
@@ -92,7 +92,7 @@ export class TrailSet {
 	public addTrailToSet(newTrail: Trail){
     	this.trails.push(newTrail);
     }
-	
+
 	/**
 	 * Method to convert this class into a simple object without any methods in order to store it via JSON.stringify()
 	 *
@@ -107,6 +107,8 @@ export class TrailSet {
         });
         let _person = this.person.convertToSimpleObject();
 
+		console.log(_trails);
+
         return {
             creationID: this.creationID,
             isLandTrail: this.isLandTrail,
@@ -119,7 +121,7 @@ export class TrailSet {
 	        trails: _trails
         };
     }
-	
+
 	/**
 	 * Method used to convert a simple object into an instance of this class.
 	 *
@@ -143,7 +145,7 @@ export class TrailSet {
 	    }
         return null;
     }
-	
+
 	/**
 	 * Checks whether a passed object contains all attributes to be a trailSet.
 	 *

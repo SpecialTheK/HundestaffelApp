@@ -6,6 +6,15 @@ import {isArray} from "ionic-angular/util/util";
 
 import {Observable} from "rxjs";
 
+const color: string[] = [
+	'#ff0000',
+	'#00ff00',
+	'#0000ff',
+	'#ff00ff',
+	'#ffff00',
+	'#00ffff',
+];
+
 /**
  * Class defining the Trails used throughout the application.
  *
@@ -14,69 +23,77 @@ import {Observable} from "rxjs";
  */
 export class Trail {
 	id: number;
-	
+
 	/**
 	 * The name of the trainer recording this trail.
 	 *
 	 * @since 1.0.0
 	 */
 	trainer: string;
-	
+
 	/**
 	 * The name of the dog walking this trail.
 	 *
 	 * @since 1.0.0
 	 */
 	dog: string;
-	
+
 	/**
 	 * The time the recording of this trail was started.
 	 *
 	 * @since 1.0.0
 	 */
 	startTime: Date;
-	
+
 	/**
 	 * The time the recoding was stopped.
 	 *
 	 * @since 1.0.0
 	 */
 	endTime: Date;
-	
+
 	/**
 	 * Distance of this trail.
 	 *
 	 * @since 1.0.0
 	 */
-	distance: number;
-	
+	distance: number = 0;
+
 	/**
 	 * Array containing all tracked positions.
 	 *
 	 * @since 1.0.0
 	 */
 	path: Position[];
-	
+
 	/**
 	 * Array containing all added markers.
 	 *
 	 * @since 1.0.0
 	 */
 	marker: Marker[];
-	
+
 	/**
 	 * Array containing all added circles.
 	 *
 	 * @since 1.0.0
 	 */
 	circles: ColoredCircle[];
-	
+
 	/**
 	 * Array containing all triangles.
 	 *
 	 * @since 1.0.0
 	 */
 	triangles: Triangle[];
+
+	/**
+	 * Color the trail is displayed in.
+	 *
+	 * @since 1.0.0
+	 */
+	trailColor: string;
+
 
 	constructor(id: number, trainer: string, dog: string){
 		this.id = id;
@@ -88,8 +105,10 @@ export class Trail {
 		this.marker = [];
 		this.circles = [];
 		this.triangles = [];
+
+		this.trailColor = color[this.id];
 	}
-	
+
 	/**
 	 * Method to add a new position to the path array.
 	 *
@@ -101,7 +120,7 @@ export class Trail {
 	addToPath(lat: number, lng: number){
 		this.path.push(new Position(lat, lng));
 	}
-	
+
 	/**
 	 * Method to add a new marker to the marker array.
 	 *
@@ -119,7 +138,7 @@ export class Trail {
 
 		return mar;
 	}
-	
+
 	/**
 	 * Method to add a new circle to the circles array.
 	 *
@@ -137,7 +156,7 @@ export class Trail {
 
 		return cir;
 	}
-	
+
 	/**
 	 * Method to add a new triangle to the triangles array.
 	 *
@@ -153,7 +172,7 @@ export class Trail {
 
 		return tri;
 	}
-	
+
 	/**
 	 * Method to hide or show this trail.
 	 *
@@ -164,7 +183,7 @@ export class Trail {
 	toggleOnMap(map: any = null){
 		//NOTE (christian): wenn keine werte übergeben werden, dann wird der trail von der map entfernt. wenn google und map übergeben werden, dann wird der trail angezeigt!
 	}
-	
+
 	/**
 	 * Get the last recorded position from the positions array.
 	 *
@@ -175,7 +194,7 @@ export class Trail {
 	getLastPosition(): Position{
 		return this.path[this.path.length - 1];
 	}
-	
+
 	/**
 	 * Get an observable containing an array with all positions of this trail.
 	 *
@@ -188,7 +207,30 @@ export class Trail {
 			observ.next(this.path);
 		});
 	}
-	
+
+	/**
+	 * Sets the start time of the trail
+	 *
+	 * @returns {Object}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	setStartTime(){
+		this.startTime = new Date();
+	}
+
+
+	/**
+	 * Sets the end time of the trail
+	 *
+	 * @returns {Object}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	setEndTime(){
+		this.endTime = new Date();
+	}
+
 	/**
 	 * Convert this trail into a simple object without any methods in order to store it via JSON.stringify()
 	 *
@@ -224,7 +266,7 @@ export class Trail {
 			triangles: tri
 		};
 	}
-	
+
 	/**
 	 * Static method to turn a simple object into an instance of this class.
 	 *
@@ -241,35 +283,48 @@ export class Trail {
 			trail.startTime = data.startTime;
 			trail.endTime = data.endTime;
 			trail.distance = data.distance;
-			
-			for(let p of trail.path){
-				trail.addToPath(p.lat, p.lng);
+
+			let _polyline, _polylinePath;
+			if(google != null && map != null){
+				_polyline = new google.maps.Polyline({
+					strokeColor: trail.trailColor,
+					strokeOpacity: 1.0,
+					strokeWeight: 3
+				});
+				_polyline.setMap(map);
+				_polylinePath = _polyline.getPath();
 			}
-			for(let mar of trail.marker){
+
+			for(let p of data.path){
+				trail.addToPath(p.lat, p.lng);
+				if(google != null && map != null) {
+					_polylinePath.push(new google.maps.LatLng(p.lat, p.lng));
+				}
+			}
+			for(let mar of data.marker){
 				let m = trail.addMarker(mar.title, mar.symbolID, mar.position.lat, mar.position.lng);
 				if(google != null && map != null) {
 					m.addToMap(google, map);
 				}
 			}
-			for(let cir of trail.circles){
+			for(let cir of data.circles){
 				let c = trail.addCircle(cir.color, cir.opacity, cir.position.lat, cir.position.lng);
 				if(google != null && map != null) {
 					c.addToMap(google, map);
 				}
 			}
-			for(let tri of trail.triangles){
+			for(let tri of data.triangles){
 				let t = trail.addTriangle(tri.position.lat, tri.position.lng);
 				if(google != null && map != null) {
 					t.addToMap(google, map);
 				}
 			}
-			
 			return trail;
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Method to check whether the passed object can be converted into an instance of this class or not.
 	 *

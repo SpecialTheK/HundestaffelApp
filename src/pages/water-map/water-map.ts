@@ -1,8 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, ModalController, NavParams } from 'ionic-angular';
+import { IonicPage, ModalController, NavParams, ViewController } from 'ionic-angular';
+
 import { Trail } from '../../models/trail';
+import { TrailSet } from "../../models/trailSet";
 
 import { MapProvider } from '../../providers/map/map';
+import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
+
 
 /**
  * Page that displays the map for water trailing.
@@ -10,7 +14,7 @@ import { MapProvider } from '../../providers/map/map';
 @IonicPage()
 @Component({
     selector: 'page-water-map',
-    providers: [ MapProvider ],
+    providers: [MapProvider],
     templateUrl: 'water-map.html',
 })
 export class WaterMapPage {
@@ -22,9 +26,22 @@ export class WaterMapPage {
 	 */
     @ViewChild('map') mapElement: ElementRef;
 
-    trails: Trail[] = [];
+    trailSet: TrailSet;
 
-    constructor(public modalCtrl: ModalController, public navParams: NavParams, public map: MapProvider) {
+    showPerson = false;
+
+    hasTrails = false;
+
+    constructor(public modalCtrl: ModalController, public navParams: NavParams, public viewCtrl: ViewController, public map: MapProvider, public storage: TrailStorageProvider) {
+        /*
+            NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
+        */
+        this.trailSet = this.navParams.get('trailSet');
+        if(this.trailSet !== undefined){
+            this.showPerson = true;
+        }else {
+            this.hasTrails = true;
+        }
     }
 
 	/**
@@ -32,35 +49,39 @@ export class WaterMapPage {
 	 */
 	ionViewDidLoad() {
         this.map.initMapObject(this.mapElement);
-        this.map.startSession(this.navParams.get('trailSet'));
-    }
-
-	/**
-	 * Method that is used to toggle the display of an existing trail.
-	 *
-	 * @param index
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	toggleTail(index){
-        /*
-        if(this.map.trailArray[index].isHidden){
-            this.map.trailArray[index].show();
-        }else {
-            this.map.trailArray[index].hide();
+        if(this.hasTrails){
+            this.map.importTrailSet(this.trailSet);
         }
-        */
-        console.log(index);
+        this.map.startSession();
     }
 
-	/**
-	 * Method that is called to stop the recording.
+    /**
+	 * Method to set the map back in centered mode.
 	 *
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	stopRecording() {
+    centerMap(){
+        this.map.centerMap();
+    }
+
+    /**
+	 * Method that is called to stop the recording of a trail.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	endTrail() {
+        this.map.currentTrail.setEndTime();
+        this.trailSet.addTrailToSet(this.map.currentTrail);
+
+        console.log(this.trailSet);
+
+        this.storage.addNewTrailSet(this.trailSet);
+
         this.map.endSession();
+
+        this.viewCtrl.dismiss();
     }
 
 	/**
@@ -80,9 +101,8 @@ export class WaterMapPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	addMarker() {
-        let markerAdd = this.modalCtrl.create('AddMarkerPage', {map: this.map});
-        markerAdd.present();
+	addTargetMarker() {
+        this.map.addMarker("Ziel", 0);
     }
 
 	/**

@@ -1,16 +1,3 @@
-/*
-
-    TODO (christian):
-        - alles was die MAP tun soll, komm hier rein
-            > marker setzen
-            > kreise setzen
-            > dreiecke setzen
-
-        - in den MODELS wird es eine METHODE geben, die das
-            jeweilige OPTIONS-Objekt erstellt und wieder gibt
-
-*/
-
 import { Injectable, ElementRef } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -34,10 +21,19 @@ export class MapProvider {
     mapObject: any;
     positionSub: any;
 
-    trailSet: TrailSet;
-    currentTrail: Trail;
+    isCentered: boolean;
 
-    path: any;
+    currentTrail: Trail;
+    currentTrailNumber = 0;
+
+    polyline: any;
+
+    currentSpeed = 0;
+    currentDirection = 0;
+
+    //DEBUG (christian): neuer trail zum vergleichen!
+    testCircle: any;
+    testString = "Hallo";
 
     constructor(public location: Geolocation, public navParams: NavParams){
         //NOTE (christian): kein code hier! html seite muss erst vollständig geladen sein!
@@ -47,40 +43,122 @@ export class MapProvider {
         this.mapObject = new google.maps.Map(mapElement.nativeElement, {
                 disableDoubleClickZoom: true,
                 disableDefaultUI: true,
+                fullscreenControl: false,
+                streetViewControl: false,
+                zoomControl: true,
                 zoom: 16
             });
         this.location.getCurrentPosition().then((pos) => {
             this.mapObject.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
-        })
+            this.isCentered = true;
+        });
 
         //TODO (christian): event listener für die map!
+        this.mapObject.addListener('drag', (f) => {
+            this.isCentered = false;
+        });
+
+        //DEBUG (christian): wir test jetzt was!
+        this.mapObject.addListener('click', (i) => {
+            console.log(i.latLng.toJSON());
+
+            this.testCircle = new google.maps.Circle({
+                strokeColor: "#ff0000",
+                strokeOpacity: 0.6,
+                fillColor: "#ff0000",
+                fillOpacity: 0.6,
+                center: {lat: i.latLng.toJSON().lat, lng: i.latLng.toJSON().lng,},
+                radius: 50
+            });
+            this.testCircle.setMap(this.mapObject);
+
+            if(google.maps.geometry.spherical.computeDistanceBetween(
+                new google.maps.LatLng(this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng),
+                new google.maps.LatLng(i.latLng.toJSON().lat, i.latLng.toJSON().lng)
+            ) <= 50 ){
+                console.log("Ist drin!");
+            }else {
+                console.log("Ist nicht drin!")
+            }
+
+        });
+
     }
 
-    startSession(trailSet: TrailSet){
-        //NOTE (christian): fromData methode garantiert, dass man ein richtiges trailset bekommt!
-        this.trailSet = TrailSet.fromData(trailSet, google, this.mapObject);
+    importTrailSet(trailSet: TrailSet){
+        this.currentTrailNumber = TrailSet.fromData(trailSet, google, this.mapObject).trails.length;
+    }
 
-        // TODO: Fixen
-        /*this.trailSet.getCurrentTrail().subscribe((value: Trail) => {
-            this.currentTrail = value;
-        });*/
+    startSession(){
+        //NOTE (christian): fromData methode garantiert, dass man ein richtiges trailset bekommt!
+        this.currentTrail = new Trail(this.currentTrailNumber, "Trainer", "Hund");
+        this.currentTrail.setStartTime();
+
+        this.polyline = new google.maps.Polyline({
+            strokeColor: this.currentTrail.trailColor,
+            strokeOpacity: 1.0,
+            strokeWeight: 3
+        });
+        this.polyline.setMap(this.mapObject);
 
         this.watchCurrentPosition();
     }
 
     endSession(){
         //TODO (christian): speicher alles was gespeichert werden muss!
-        this.positionSub.unsubscribe();
+        //this.positionSub.unsubscribe();
     }
 
     watchCurrentPosition(){
+        //NOTE (christian): nur für testing sonst watchPosition benutzen!
+        let recordInterval = setInterval((i) => {
+            this.location.getCurrentPosition().then((pos) => {
+                console.log(pos);
+                this.currentTrail.addToPath(pos.coords.latitude, pos.coords.longitude);
+                this.drawPath(pos.coords.latitude, pos.coords.longitude);
+
+                if(pos.coords.speed !== null){
+                    this.currentSpeed = pos.coords.speed;
+                }
+
+                if(pos.coords.heading !== null){
+                    this.currentDirection = pos.coords.heading;
+                    this.mapObject.setHeading(pos.coords.heading);
+                }
+
+                if(this.isCentered){
+                    this.mapObject.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
+                }
+            })
+        }, 2000);
+        /*
         this.positionSub = this.location.watchPosition()
             //TODO (christian): finde heraus, warum filter nicht funktioniert!
             //.filter((p) => p.coords !== undefined)
             .subscribe((data) => {
-                console.log(data.coords);
-                this.currentTrail.addToPath(data.coords.latitude, data.coords.longitude);
+                console.log(pos);
+                this.currentTrail.addToPath(pos.coords.latitude, pos.coords.longitude);
+                this.drawPath(pos.coords.latitude, pos.coords.longitude);
+
+                if(pos.coords.speed !== null){
+                    this.currentSpeed = pos.coords.speed;
+                }
+
+                if(pos.coords.heading !== null){
+                    this.currentDirection = pos.coords.heading;
+                    this.mapObject.setHeading(pos.coords.heading);
+                }
+
+                if(this.isCentered){
+                    this.mapObject.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
+                }
             });
+        */
+    }
+
+    centerMap(){
+        this.mapObject.panTo(this.currentTrail.getLastPosition().convertToSimpleObject());
+        this.isCentered = true;
     }
 
     addMarker(markerText: string, markerSymbolID: number){
@@ -101,17 +179,9 @@ export class MapProvider {
         }
     }
 
-    drawPath(){
-
-    }
-
-    getLoadedTrails(){
-        return new Observable<Trail[]>((observ) => {
-            let allTrails = this.trailSet.trails;
-            // TODO: Fix
-            /*allTrails.push(this.trailSet.currentTrail);
-            observ.next(allTrails);*/
-        });
+    drawPath(lat: number, lng: number){
+        let p = this.polyline.getPath();
+        p.push(new google.maps.LatLng(lat, lng));
     }
 
 }
