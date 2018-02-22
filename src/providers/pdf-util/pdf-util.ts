@@ -171,7 +171,7 @@ export class PdfUtilProvider {
 				let dogs = [];
 				trailSet.trails.forEach((value: Trail) => {
 					dogs.push({text: this.translate["trail_trainer_name"] +' '+value.trainer+' '+this.translate["with"]+' '+value.dog+' '+
-						this.translate["for"]+' '+this.getDuration(value.startTime, value.endTime), color: 'red'});
+						this.translate["for"]+' '+this.getDuration(value.startTime, value.endTime), color: value.trailColor});
 				});
 				
 				resolve({
