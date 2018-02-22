@@ -68,7 +68,7 @@ export class HistoryEntryPage {
 	 * @since 1.0.0
 	 */
 	dogs: Array<Object> = [];
-	
+
 	/**
 	 * Day of the activity
 	 *
@@ -106,7 +106,7 @@ export class HistoryEntryPage {
 			});
 		}
 	}
-	
+
 	/**
 	 * Method to get the duration between two Date objects using the moment.js library
 	 *
@@ -119,7 +119,7 @@ export class HistoryEntryPage {
 	private getDuration(startTime: Date, endTime: Date):string{
 		let _startTime = moment(startTime);
 		let _endTime = moment(endTime);
-		
+
 		let totalTime = moment(_startTime.diff(_endTime)).toDate();
 		return totalTime.getHours()+" "+this.translatedTerms["hours"]+" "+totalTime.getMinutes()+
 			" "+this.translatedTerms["minutes"]+" "+" "+totalTime.getMinutes()+" "+this.translatedTerms["seconds"];
@@ -148,8 +148,7 @@ export class HistoryEntryPage {
 		});
 
 		this.map.initMapObject(this.mapElement);
-		//TODO (christian): laden von trails wieder möglich machen!
-		//this.map.viewExistingSession(this.trailSet);
+		this.map.importTrailSet(this.trailSet);
 	}
 
 	/**

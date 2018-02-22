@@ -2,6 +2,11 @@
 
   <ion-navbar>
     <ion-title>water-map</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="endTrail()">
+            <ion-icon name="done-all"></ion-icon>
+        </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -9,27 +14,153 @@
 
 <ion-content>
 
-    <!-- Container for the Controls -->
-    <div id="func-container">
-        <p>
-            <ion-fab>
-                <button ion-fab>Options</button>
-                <ion-fab-list side='right'>
-                    <button ion-fab (click)="stopRecording()">Stop</button>
-                    <button ion-fab (click)="addCircle()">Add Circle</button>
-                    <button ion-fab (click)="addMarker()">Add Marker</button>
-                    <button ion-fab (click)="addTriangle()">Add Triangle</button>
-                </ion-fab-list>
+    <div class="map-container">
+        <div class="map-buttons">
+            <ion-fab top right>
+                <button ion-fab (click)="centerMap()"><ion-icon name="locate"></ion-icon></button>
             </ion-fab>
-        </p>
-        <p>
-            <ion-list>
-                <ion-item *ngFor="let trail of trails" (click)="toggleTrail(trail.id)">Test123</ion-item>
-            </ion-list>
-        </p>
+        </div>
+        <div #map class="map"></div>
     </div>
 
-    <!-- Container for the Map -->
-    <div id="map" #map></div>
+    <div class="function-container">
+        <ion-slides loop="true">
+            <ion-slide class="info-slide">
+
+                <ion-grid>
+                    <ion-label>INFO</ion-label>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Distanz zum Zielpunkt:</ion-label>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Zeit:</ion-label>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Geschwindigkeit:</ion-label>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Zeit:</ion-label>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+
+            </ion-slide>
+            <ion-slide class="function-slide">
+                <ion-label>Marker</ion-label>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <button ion-button (click)="addTargetMarker()">Zielpunkt</button>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col>
+                            <ion-item>
+                                <button ion-button (click)="addCircle()">Kreis</button>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <button ion-button (click)="addWindDirectionMarker()">Windrichtung</button>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col>
+                            <ion-item>
+                                <button ion-button>KEINE FUNKTION</button>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-slide>
+            <ion-slide class="person-slide" *ngIf="showPerson === true">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Name: {{trailSet.person.name}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Brille: {{trailSet.person.glasses}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Alter: {{trailSet.person.age}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Haare: {{trailSet.person.hair_choice}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Allergien: {{trailSet.person.allergies}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Haarfarbe: {{trailSet.person.hairColor_choice}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Krankheiten: {{trailSet.person.illness}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Körperform: {{trailSet.person.body_choice}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Medikamente: {{trailSet.person.medication}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <button ion-button>Bild</button>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-slide>
+        </ion-slides>
+    </div>
 
 </ion-content>

@@ -6,6 +6,15 @@ import {isArray} from "ionic-angular/util/util";
 
 import {Observable} from "rxjs";
 
+const color: string[] = [
+	'#ff0000',
+	'#00ff00',
+	'#0000ff',
+	'#ff00ff',
+	'#ffff00',
+	'#00ffff',
+];
+
 /**
  * Class defining the Trails used throughout the application.
  *
@@ -48,7 +57,7 @@ export class Trail {
 	 *
 	 * @since 1.0.0
 	 */
-	distance: number;
+	distance: number = 0;
 
 	/**
 	 * Array containing all tracked positions.
@@ -78,6 +87,14 @@ export class Trail {
 	 */
 	triangles: Triangle[];
 
+	/**
+	 * Color the trail is displayed in.
+	 *
+	 * @since 1.0.0
+	 */
+	trailColor: string;
+
+
 	constructor(id: number, trainer: string, dog: string){
 		this.id = id;
 		this.trainer = trainer;
@@ -88,6 +105,8 @@ export class Trail {
 		this.marker = [];
 		this.circles = [];
 		this.triangles = [];
+
+		this.trailColor = color[this.id];
 	}
 
 	/**
@@ -190,6 +209,29 @@ export class Trail {
 	}
 
 	/**
+	 * Sets the start time of the trail
+	 *
+	 * @returns {Object}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	setStartTime(){
+		this.startTime = new Date();
+	}
+
+
+	/**
+	 * Sets the end time of the trail
+	 *
+	 * @returns {Object}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	setEndTime(){
+		this.endTime = new Date();
+	}
+
+	/**
 	 * Convert this trail into a simple object without any methods in order to store it via JSON.stringify()
 	 *
 	 * @returns {Object}
@@ -242,28 +284,41 @@ export class Trail {
 			trail.endTime = data.endTime;
 			trail.distance = data.distance;
 
-			for(let p of trail.path){
-				trail.addToPath(p.lat, p.lng);
+			let _polyline, _polylinePath;
+			if(google != null && map != null){
+				_polyline = new google.maps.Polyline({
+					strokeColor: trail.trailColor,
+					strokeOpacity: 1.0,
+					strokeWeight: 3
+				});
+				_polyline.setMap(map);
+				_polylinePath = _polyline.getPath();
 			}
-			for(let mar of trail.marker){
+
+			for(let p of data.path){
+				trail.addToPath(p.lat, p.lng);
+				if(google != null && map != null) {
+					_polylinePath.push(new google.maps.LatLng(p.lat, p.lng));
+				}
+			}
+			for(let mar of data.marker){
 				let m = trail.addMarker(mar.title, mar.symbolID, mar.position.lat, mar.position.lng);
 				if(google != null && map != null) {
 					m.addToMap(google, map);
 				}
 			}
-			for(let cir of trail.circles){
+			for(let cir of data.circles){
 				let c = trail.addCircle(cir.color, cir.opacity, cir.position.lat, cir.position.lng);
 				if(google != null && map != null) {
 					c.addToMap(google, map);
 				}
 			}
-			for(let tri of trail.triangles){
+			for(let tri of data.triangles){
 				let t = trail.addTriangle(tri.position.lat, tri.position.lng);
 				if(google != null && map != null) {
 					t.addToMap(google, map);
 				}
 			}
-
 			return trail;
 		}
 

@@ -4,18 +4,38 @@ page-land-map {
         overflow: hidden;
     }
 
+    ion-grid{
+        height: 100%;
+        align-items: stretch;
+    }
+
+    ion-label{
+        align-self: flex-start;
+    }
+
     ::-webkit-scrollbar {
         display: none;
     }
 
-    #map {
-        height: 100%;
+    .map-container{
+        height: 70%;
+        width: 100%;
     }
 
-    #func-container{
+    .map-buttons{
         position: absolute;
-        right: 50%;
-        z-index: 5;
+        height: 100%;
+        width: 100%;
+    }
+
+    .map{
+        height: 100%;
+        width: 100%;
+    }
+
+    .function-container{
+        height: 30%;
+        width: 100%;
     }
 
 }
