@@ -106,7 +106,7 @@ export class Trail {
 		this.circles = [];
 		this.triangles = [];
 
-		this.trailColor = color[this.id];
+		this.trailColor = color[this.id%this.trailColor.length];
 	}
 
 	/**
