@@ -5,6 +5,7 @@ import { TrailSet } from '../../models/trailSet';
 
 import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
+import {TranslateService} from "@ngx-translate/core";
 
 
 /**
@@ -43,8 +44,10 @@ export class LandMapPage {
     timeInterval: any;
 
     someString = "Hallo";
+    
+    translatedTerms: Array<string> = [];
 
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public map: MapProvider, public storage: TrailStorageProvider) {
+    constructor(public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
@@ -56,6 +59,7 @@ export class LandMapPage {
         }
         this.startTime = new Date();
         this.deltaTime = new Date();
+        this.translateVariables();
     }
 
 	/**
@@ -73,6 +77,21 @@ export class LandMapPage {
         this.mapLoaded = true;
         this.startTimer();
     }
+	
+	/**
+	 * Method called to translate all variables needed for this page.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	private translateVariables(){
+		let translateTerms = Array("MAP_MARKER_END", "MAP_MARKER_INTEREST");
+		for(let term of translateTerms){
+			this.translateService.get(term).subscribe((answer) => {
+				this.translatedTerms[term.toLowerCase()] = answer;
+			});
+		}
+	}
 
     /**
 	 * Method that is called to stop the recording of a trail.
@@ -136,7 +155,7 @@ export class LandMapPage {
 	 */
     addEndMarker(){
         console.log("Added End Marker");
-        this.map.addMarker("Some Text", 0);
+        this.map.addMarker(this.translatedTerms["map_marker_end"], 0);
     }
 
     /**
@@ -147,7 +166,7 @@ export class LandMapPage {
      */
     addInterestMarker(){
         console.log("Added Interest Marker");
-        this.map.addMarker("Some Text", 1);
+        this.map.addMarker(this.translatedTerms["map_marker_interest"], 1);
     }
 
     /**

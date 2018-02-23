@@ -1,11 +1,11 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, ModalController, NavParams, ViewController } from 'ionic-angular';
 
-import { Trail } from '../../models/trail';
 import { TrailSet } from "../../models/trailSet";
 
 import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
+import {TranslateService} from "@ngx-translate/core";
 
 
 /**
@@ -31,8 +31,10 @@ export class WaterMapPage {
     showPerson = false;
 
     hasTrails = false;
+    
+    translatedTerms:Array<string> = [];
 
-    constructor(public modalCtrl: ModalController, public navParams: NavParams, public viewCtrl: ViewController, public map: MapProvider, public storage: TrailStorageProvider) {
+    constructor(public modalCtrl: ModalController, public navParams: NavParams, public viewCtrl: ViewController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
@@ -42,7 +44,23 @@ export class WaterMapPage {
         }else {
             this.hasTrails = true;
         }
+        this.translateVariables();
     }
+	
+	/**
+	 * Method called to translate all variables needed for this page.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	private translateVariables(){
+		let translateTerms = Array("MAP_MARKER_END");
+		for(let term of translateTerms){
+			this.translateService.get(term).subscribe((answer) => {
+				this.translatedTerms[term.toLowerCase()] = answer;
+			});
+		}
+	}
 
 	/**
 	 * Ionic lifecycle events that is fired after the page is loaded to initialize the map.
@@ -102,7 +120,7 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	addTargetMarker() {
-        this.map.addMarker("Ziel", 0);
+        this.map.addMarker(this.translatedTerms["map_marker_end"], 0);
     }
 
 	/**

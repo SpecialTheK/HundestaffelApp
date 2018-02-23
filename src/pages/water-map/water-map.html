@@ -1,19 +1,14 @@
 <ion-header>
-
   <ion-navbar>
-    <ion-title>water-map</ion-title>
+    <ion-title>{{'MAP_WATER' | translate}}</ion-title>
     <ion-buttons end>
         <button ion-button icon-only (click)="endTrail()">
             <ion-icon name="done-all"></ion-icon>
         </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
-
-
 <ion-content>
-
     <div class="map-container">
         <div class="map-buttons">
             <ion-fab top right>
@@ -22,23 +17,22 @@
         </div>
         <div #map class="map"></div>
     </div>
-
     <div class="function-container">
         <ion-slides loop="true">
             <ion-slide class="info-slide">
 
                 <ion-grid>
-                    <ion-label>INFO</ion-label>
+                    <ion-label>{{'MAP_INFO' | translate}}</ion-label>
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <ion-label>Distanz zum Zielpunkt:</ion-label>
+                                <ion-label>{{'MAP_DISTANCE' | translate}}:</ion-label>
                             </ion-item>
                         </ion-col>
 
                         <ion-col>
                             <ion-item>
-                                <ion-label>Zeit:</ion-label>
+                                <ion-label>{{'TIME' | translate}}:</ion-label>
                             </ion-item>
                         </ion-col>
                     </ion-row>
@@ -46,19 +40,17 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <ion-label>Geschwindigkeit:</ion-label>
+                                <ion-label>{{'MAP_SPEED' | translate}}</ion-label>
                             </ion-item>
                         </ion-col>
 
                         <ion-col>
                             <ion-item>
-                                <ion-label>Zeit:</ion-label>
+                                <ion-label>{{'TIME' | translate}}</ion-label>
                             </ion-item>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
-
-
             </ion-slide>
             <ion-slide class="function-slide">
                 <ion-label>Marker</ion-label>
@@ -66,13 +58,13 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <button ion-button (click)="addTargetMarker()">Zielpunkt</button>
+                                <button ion-button (click)="addTargetMarker()">{{'MAP_ENDPOINT' | translate}}</button>
                             </ion-item>
                         </ion-col>
 
                         <ion-col>
                             <ion-item>
-                                <button ion-button (click)="addCircle()">Kreis</button>
+                                <button ion-button (click)="addCircle()">{{'MAP_CIRCLE' | translate}}</button>
                             </ion-item>
                         </ion-col>
                     </ion-row>
@@ -80,13 +72,13 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <button ion-button (click)="addWindDirectionMarker()">Windrichtung</button>
+                                <button ion-button (click)="addWindDirectionMarker()">{{'MAP_WIND_DIRECTION' | translate}}</button>
                             </ion-item>
                         </ion-col>
 
                         <ion-col>
                             <ion-item>
-                                <button ion-button>KEINE FUNKTION</button>
+                                <button ion-button>{{'MAP_NO_FUNCTION' | translate}}</button>
                             </ion-item>
                         </ion-col>
                     </ion-row>
@@ -97,25 +89,12 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <ion-label>Name: {{trailSet.person.name}}</ion-label>
+                                <ion-label>{{'PERSON_NAME' | translate}}: {{trailSet.person.name}}</ion-label>
                             </ion-item>
                         </ion-col>
                         <ion-col>
                             <ion-item>
-                                <ion-label>Brille: {{trailSet.person.glasses}}</ion-label>
-                            </ion-item>
-                        </ion-col>
-                    </ion-row>
-
-                    <ion-row>
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>Alter: {{trailSet.person.age}}</ion-label>
-                            </ion-item>
-                        </ion-col>
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>Haare: {{trailSet.person.hair_choice}}</ion-label>
+                                <ion-label>{{'PERSON_GLASSES' | translate}}: {{trailSet.person.glasses}}</ion-label>
                             </ion-item>
                         </ion-col>
                     </ion-row>
@@ -123,25 +102,12 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <ion-label>Allergien: {{trailSet.person.allergies}}</ion-label>
+                                <ion-label>{{'PERSON_AGE' | translate}}: {{trailSet.person.age}}</ion-label>
                             </ion-item>
                         </ion-col>
                         <ion-col>
                             <ion-item>
-                                <ion-label>Haarfarbe: {{trailSet.person.hairColor_choice}}</ion-label>
-                            </ion-item>
-                        </ion-col>
-                    </ion-row>
-
-                    <ion-row>
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>Krankheiten: {{trailSet.person.illness}}</ion-label>
-                            </ion-item>
-                        </ion-col>
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>Körperform: {{trailSet.person.body_choice}}</ion-label>
+                                <ion-label>{{'PERSON_HAIR' | translate}}: {{trailSet.person.hair_choice}}</ion-label>
                             </ion-item>
                         </ion-col>
                     </ion-row>
@@ -149,12 +115,38 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <ion-label>Medikamente: {{trailSet.person.medication}}</ion-label>
+                                <ion-label>{{'PERSON_ALLERGIES' | translate}}: {{trailSet.person.allergies}}</ion-label>
                             </ion-item>
                         </ion-col>
                         <ion-col>
                             <ion-item>
-                                <button ion-button>Bild</button>
+                                <ion-label>{{'PERSON_HAIR_COLOR' | translate}}: {{trailSet.person.hairColor_choice}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>{{'PERSON_ILLNESS' | translate}}: {{trailSet.person.illness}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>{{'PERSON_BODY_TYPE' | translate}}: {{trailSet.person.body_choice}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>{{'PERSON_MEDICATION' | translate}}: {{trailSet.person.medication}}</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <button ion-button>{{'PERSON_IMAGE' | translate}}</button>
                             </ion-item>
                         </ion-col>
                     </ion-row>
@@ -162,5 +154,4 @@
             </ion-slide>
         </ion-slides>
     </div>
-
 </ion-content>

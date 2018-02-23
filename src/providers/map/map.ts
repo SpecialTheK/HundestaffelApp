@@ -1,8 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { TrailStorageProvider } from '../trail-storage/trail-storage';
-import {Observable} from "rxjs";
 
 import { Trail } from '../../models/trail';
 import { TrailSet } from '../../models/trailSet';
