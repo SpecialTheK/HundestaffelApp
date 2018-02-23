@@ -1,9 +1,11 @@
 {
 	"CONFIRM"                               : "Confirm",
 	"FOR"                                   : "for",
+	"HOURS"                                 : "hours",
 	"MINUTE"                                : "minute",
 	"MINUTES"                               : "minutes",
 	"OK"                                    : "Ok",
+	"SECONDS"                               : "seconds",
 	"WITH"                                  : "with",
 
 	"ABOUT"                                 : "About this app",

@@ -61,5 +61,4 @@ export class Triangle {
             position: this.position.convertToSimpleObject()
         }
     }
-
 }

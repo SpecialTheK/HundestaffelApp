@@ -1,13 +1,16 @@
+///<reference path="../../../node_modules/ionic-angular/navigation/view-controller.d.ts"/>
 import {Injectable} from '@angular/core';
 import {LoadingController, Platform} from "ionic-angular";
 import {File} from "@ionic-native/file";
 import {Trail} from "../../models/trail";
 import {SocialSharing} from "@ionic-native/social-sharing";
 import {TranslateService} from "@ngx-translate/core";
+import {TrailSet} from "../../models/trailSet";
 
 import html2canvas from "html2canvas/dist/html2canvas"
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import moment from "moment";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 /**
@@ -66,12 +69,30 @@ export class PdfUtilProvider {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("TRAIL_FROM", "TRAIL_DURATION", "FOR", "TRAIL_TYPE", "TRAIL_LAND", "TRAIL_WATER", "TRAIL_OPERATION", "TRAIL_TRAINING", "TRAIL_TRAINER_NAME", "WITH", "IMPORT_CREATING_PDF");
+		let translateTerms = Array("TRAIL_FROM", "TRAIL_DURATION", "FOR", "TRAIL_TYPE", "TRAIL_LAND", "TRAIL_WATER", "TRAIL_OPERATION", "TRAIL_TRAINING", "TRAIL_TRAINER_NAME", "WITH", "IMPORT_CREATING_PDF", "HOURS", "MINUTES", "SECONDS");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translate[term.toLowerCase()] = answer;
 			});
 		}
+	}
+	
+	/**
+	 * Method to get the duration between two Date objects using the moment.js library
+	 *
+	 * @param {Date} startTime
+	 * @param {Date} endTime
+	 * @returns {string}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	private getDuration(startTime: Date, endTime: Date):string{
+		let _startTime = moment(startTime);
+		let _endTime = moment(endTime);
+		
+		let totalTime = moment(_startTime.diff(_endTime)).toDate();
+		return totalTime.getHours()+" "+this.translate["hours"]+" "+totalTime.getMinutes()+
+			" "+this.translate["minutes"]+" "+" "+totalTime.getMinutes()+" "+this.translate["seconds"];
 	}
 	
 	/**
@@ -98,12 +119,14 @@ export class PdfUtilProvider {
 	/**
 	 * Method called to create a new PDF and fill it with content.
 	 *
+	 * @param trailSet The trailSet used as content.
+	 * @param map A reference to the map object in order to create screenshot of the map.
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	private createPdf(trailSet: Trail[], map):Promise<string>{
+	private createPdf(trailSet: TrailSet, map):Promise<string>{
 		return new Promise<string>((resolve, reject) => {
-			this.fileName = 'trail_'+trailSet[0].startTime+'.pdf';
+			this.fileName = 'trail_'+trailSet.creationID+'.pdf';
 			this.fileSystem.checkFile(this.pdfDirectory+this.appName+'/', this.fileName).then((reason) => {
 				resolve("File already existing");
 			}).catch((reason) => {
@@ -129,33 +152,32 @@ export class PdfUtilProvider {
 	/**
 	 * Method called to generate the content of the new PDF file.
 	 *
-	 * @param {Trail[]} trailSet The trailSet used as content,
+	 * @param {TrailSet} trailSet The trailSet used as content,
 	 * @param mapElement A reference to the mapElement in order to print an image of the map.
 	 * @returns {Promise<Object>} Resolves when all content was generated, else it rejects.
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	private generateContent(trailSet: Trail[], mapElement):Promise<Object>{
+	private generateContent(trailSet: TrailSet, mapElement):Promise<Object>{
 		return new Promise<Object>((resolve, reject) => {
 			html2canvas(mapElement.nativeElement, {
 				allowTaint: false,
 				useCORS: true,
 				logging: true
 			}).then((canvas) => {
-				let totalTime:number = (trailSet[trailSet.length-1].endTime)-(trailSet[0].startTime);
-				let training = (trailSet[0].isTraining) ? this.translate["trail_training"] : this.translate["trail_operation"];
-				let activity = (trailSet[0].isLandActivity) ? this.translate["trail_land"] : this.translate["trail_water"];
+				let training = (trailSet.isTraining) ? this.translate["trail_training"] : this.translate["trail_operation"];
+				let activity = (trailSet.isLandTrail) ? this.translate["trail_land"] : this.translate["trail_water"];
 				let map = canvas.toDataURL("img/png");
 				let dogs = [];
-				trailSet.forEach((value) => {
+				trailSet.trails.forEach((value: Trail) => {
 					dogs.push({text: this.translate["trail_trainer_name"] +' '+value.trainer+' '+this.translate["with"]+' '+value.dog+' '+
-						this.translate["for"]+' '+(value.endTime-value.startTime), color: 'red'});
+						this.translate["for"]+' '+this.getDuration(value.startTime, value.endTime), color: value.trailColor});
 				});
 				
 				resolve({
 					content: [
 						{text: this.translate["trail_from"]+' '+trailSet[0].startTime, fontSize: 18, alignment: 'center'},
-						{text: '\n'+this.translate["trail_duration"]+' '+totalTime, fontSize: 13, alignment: 'center'},
+						{text: '\n'+this.translate["trail_duration"]+' '+this.getDuration(trailSet.trails[0].startTime, trailSet.trails[trailSet.trails.length-1].endTime), fontSize: 13, alignment: 'center'},
 						{text: '\n\n\n\n'+this.translate["trail_type"]+ ' '+training+", "+activity+'\n\n', fontSize: 13},
 						{image: map, width: 400, alignment: 'center'},
 						'\n\n\n',
@@ -171,13 +193,13 @@ export class PdfUtilProvider {
 	/**
 	 * Method called to create and share a PDF.
 	 *
-	 * @param {Trail[]} trailSet The trailSet to create a PDF of.
+	 * @param {TrailSet} trailSet The trailSet to create a PDF of.
 	 * @param map A reference to the map Element in order to capture an image of the map.
 	 * @returns {Promise<string>} Resolves when the PDF was created and the sharing dialog opens, else rejects.
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	sharePdf(trailSet: Trail[], map):Promise<string>{
+	sharePdf(trailSet: TrailSet, map):Promise<string>{
 		let loading = this.loadingCtrl.create({
 			content: this.translate["import_creating_pdf"]
 		});

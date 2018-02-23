@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {Trail} from "../../models/trail";
 import {Observable} from "rxjs/Observable";
+import {TrailSet} from "../../models/trailSet";
 
 /**
  * Provider to interact with the database in order to save new trails, add them to a trailSet, display trailSets or delete a trailSet.
@@ -13,25 +14,22 @@ export class TrailStorageProvider {
 	}
 
 	/**
-	 * Add a new trailSet with the passed trail.
+	 * Add a new trailSet with the passed trailSet.
 	 *
-	 * @param {Trail} trail The trail to push to the new trailSet.
+	 * @param {Trail} trailSet The trailSet to push to the new trailSet.
 	 *
 	 * @returns {Promise<string>} Resolves on success, rejects when that trailSet is already existing or
 	 * the trailSet couldn't be saved to storage.
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	public addNewTrailSet(trail: Trail):Promise<string>{
+	public addNewTrailSet(trailSet: TrailSet):Promise<string>{
 		return new Promise((resolve, reject) => {
-			console.log(JSON.stringify(trail.convertToSimpleObject()));
-			this.getTrailSet(trail.startTime.toString()).then((answer) => {
+			this.getTrailSet(trailSet.creationID).then((answer) => {
 				reject("TrailSet already existing, aborting... "+answer);
 			}).catch((error) => {
-				let trailSet: Trail[] = [];
-				trailSet.push(trail.convertToSimpleObject());
 				this.storage.ready().then((answer) => {
-					this.storage.set(trailSet[0].startTime.toString(), JSON.stringify(trailSet)).then((answer) => {
+					this.storage.set(trailSet.creationID, JSON.stringify(trailSet.convertToSimpleObject())).then((answer) => {
 						resolve("New TrailSet added "+answer);
 					}).catch((error) => {
 						reject("TrailSet couldn't be added: "+error);
@@ -48,19 +46,22 @@ export class TrailStorageProvider {
 	 *
 	 * @param {string} key The key identifying the trailSet to be updated.
 	 * @param {Trail} trail The trail to add.
+	 * @param sharedActivity
 	 *
-	 * @returns {Promise<string>} Resolves when the trailSet was updated or no entry could be found and a
-	 * new trailSet was created. Rejects when there was an error saving the trailSet.
+	 * @returns {Promise<string>} Resolves when the trailSet was updated. Rejects when there was an error saving the trailSet or the trailSet couldn't be found.
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	public addTrailToSet(key: string, trail:Trail):Promise<string>{
+	public addTrailToSet(key: string, trail:Trail, sharedActivity: boolean = false):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.getTrailSet(key).then((answer) => {
-				let trailSet:Trail[] = JSON.parse(answer);
-				trailSet.push(trail.convertToSimpleObject());
+				let trailSet:TrailSet = answer;
+				trailSet.addTrailToSet(trail);
+				if(sharedActivity){
+					trailSet.isSharedTrail = true;
+				}
 				this.storage.ready().then((answer) => {
-					this.storage.set(key, JSON.stringify(trailSet)).then((answer) => {
+					this.storage.set(key, JSON.stringify(trailSet.convertToSimpleObject())).then((answer) => {
 						resolve("TrailSet updated "+answer);
 					}).catch((error) => {
 						reject("Could not update trailSet: "+error);
@@ -69,12 +70,7 @@ export class TrailStorageProvider {
 					reject("Internal storage error: "+error);
 				});
 			}).catch((error) => {
-				console.log("TrailSet not found, creating new trailSet.");
-				this.addNewTrailSet(trail).then((answer) => {
-					resolve(answer);
-				}).catch((error) => {
-					reject(error);
-				})
+				reject("TrailSet not found, creating new trailSet.");
 			});
 		});
 	}
@@ -117,14 +113,14 @@ export class TrailStorageProvider {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	public getTrailSet(key: string):Promise<any>{
-		return new Promise<string>((resolve, reject) => {
+	public getTrailSet(key: string):Promise<TrailSet>{
+		return new Promise<TrailSet>((resolve, reject) => {
 			this.storage.ready().then((answer) => {
 				this.storage.get(key).then((answer) => {
 					if(answer === null){
 						reject("trailSet not found");
 					}
-					resolve(answer);
+					resolve(TrailSet.fromData(JSON.parse(answer)));
 				}).catch((error) => {
 					reject("Couldn't get trailSet: "+error);
 				});
@@ -144,8 +140,8 @@ export class TrailStorageProvider {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	public getTrailSets(from:number = 0, limit:number = 0):Observable<Trail[]>{
-		return new Observable<Trail[]>((observer) => {
+	public getTrailSets(from:number = 0, limit:number = 0):Observable<TrailSet>{
+		return new Observable<TrailSet>((observer) => {
 			// TODO: Performanter machen
 			this.storage.ready().then((answer) => {
 				this.storage.forEach((value, key, iterationNumber) => {
@@ -154,7 +150,7 @@ export class TrailStorageProvider {
 						observer.complete();
 					}
 					if(iterationNumber >= from && ((<number>iterationNumber)-from < limit || limit === 0)){
-						observer.next(JSON.parse(value));
+						observer.next(TrailSet.fromData(JSON.parse(value)));
 					}
 				}).then((answer) => {
 					observer.complete();
@@ -176,23 +172,23 @@ export class TrailStorageProvider {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	public getLatestTrailSets(amount:number):Observable<Trail[]>{
-		return new Observable<Trail[]>((observer) => {
+	public getLatestTrailSets(amount:number = 0):Observable<TrailSet>{
+		return new Observable<TrailSet>((observer) => {
 			this.storage.ready().then((answer) => {
 				this.storage.keys().then((keys) => {
 					let reversedKeys = keys.reverse();
-					if(amount > reversedKeys.length){
+					if(amount > reversedKeys.length || amount == 0){
 						amount = reversedKeys.length;
 					}
 					for(let i = 0; i < amount; i++){
 						this.getTrailSet(reversedKeys[i]).then((answer) => {
-							observer.next(JSON.parse(answer));
+							observer.next(answer);
 							if(i == amount-1){ // Doesn't work outside of for loop
 								observer.complete();
 							}
 						}).catch((error) => {
 							observer.error("Couldn't fetch trailSet: "+error);
-						})
+						});
 					}
 				}).catch((error) => {
 					observer.error("Couldn't fetch keys: "+error);

@@ -71,5 +71,4 @@ export class ColoredCircle {
             radius: this.radius
         };
     }
-
 }

@@ -7,6 +7,8 @@ import {MapProvider} from "../../providers/map/map";
 import {ShareTrailProvider} from "../../providers/share-trail/share-trail";
 import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
+import {TrailSet} from "../../models/trailSet";
+import moment from "moment";
 
 /**
  * Page to display a single entry from the history.
@@ -34,7 +36,7 @@ export class HistoryEntryPage {
 	 *
 	 * @since 1.0.0
 	 */
-	trailSet: Trail[];
+	trailSet: TrailSet;
 
 	/**
 	 * String containing the localized name of the map type.
@@ -68,6 +70,13 @@ export class HistoryEntryPage {
 	dogs: Array<Object> = [];
 
 	/**
+	 * Day of the activity
+	 *
+	 * @since 1.0.0
+	 */
+	trailDate: Date = new Date();
+
+	/**
 	 * Array containing all terms to insert into the template after translating them.
 	 *
 	 * @type {string[]}
@@ -77,6 +86,9 @@ export class HistoryEntryPage {
 
 	constructor(public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
 		this.trailSet = navParams.get('trailObject');
+		if(this.trailSet.trails.length > 0){
+			this.trailDate = this.trailSet.trails[0].startTime;
+		}
 		this.translateVariables();
 	}
 
@@ -96,30 +108,47 @@ export class HistoryEntryPage {
 	}
 
 	/**
+	 * Method to get the duration between two Date objects using the moment.js library
+	 *
+	 * @param {Date} startTime
+	 * @param {Date} endTime
+	 * @returns {string}
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	private getDuration(startTime: Date, endTime: Date):string{
+		let _startTime = moment(startTime);
+		let _endTime = moment(endTime);
+
+		let totalTime = moment(_startTime.diff(_endTime)).toDate();
+		return totalTime.getHours()+" "+this.translatedTerms["hours"]+" "+totalTime.getMinutes()+
+			" "+this.translatedTerms["minutes"]+" "+" "+totalTime.getMinutes()+" "+this.translatedTerms["seconds"];
+	}
+
+	/**
 	 * Ionic lifecycle event fired when the page is getting loaded.
 	 *
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
 	ionViewWillLoad(){
-		if(this.trailSet[0].isTraining){
+		if(this.trailSet.isTraining){
 			this.operationType = this.translatedTerms["trail_training"];
 		} else {
 			this.operationType = this.translatedTerms["trail_operation"];
 		}
-		if(this.trailSet[0].isLandActivity){
+		if(this.trailSet.isLandTrail){
 			this.mapType = this.translatedTerms["trail_land"];
 		} else {
 			this.mapType = this.translatedTerms["trail_water"];
 		}
-		this.trails = this.trailSet.length;
-		this.trailSet.forEach((value: Trail) => {
-			this.dogs.push({name: value.dog, duration: (value.endTime-value.startTime)});
+		this.trails = this.trailSet.trails.length;
+		this.trailSet.trails.forEach((value: Trail) => {
+			this.dogs.push({name: value.dog, duration: this.getDuration(value.startTime, value.endTime)});
 		});
 
 		this.map.initMapObject(this.mapElement);
-		//TODO (christian): laden von trails wieder möglich machen!
-		//this.map.viewExistingSession(this.trailSet);
+		this.map.importTrailSet(this.trailSet);
 	}
 
 	/**
@@ -165,7 +194,7 @@ export class HistoryEntryPage {
 				{
 					text: this.translatedTerms["delete"],
 					handler: () => {
-						this.trailStorage.removeTrailSet(this.trailSet[0].startTime.toString()).then((answer) => {
+						this.trailStorage.removeTrailSet(this.trailSet.creationID).then((answer) => {
 							this.navCtrl.pop();
 						})
 					}

@@ -104,5 +104,4 @@ export class Person {
         
         return isPerson;
     }
-
 }

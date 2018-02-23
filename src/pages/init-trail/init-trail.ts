@@ -54,11 +54,11 @@ export class InitTrailPage {
         let trailSet;
         if(this.navParams.get('isLandTrail')){
             console.log("LAND");
-            trailSet = new TrailSet(this.person, true, this.situation, this.preSituation, this.risks, this.trainer, this.dogName);
+            trailSet = new TrailSet(true, false, true, this.situation, "wetter", this.risks, this.person);
             this.navCtrl.push('LandMapPage', {trailSet: trailSet});
         }else {
             console.log("WASSER");
-            trailSet = new TrailSet(this.person, false, this.situation, this.preSituation, this.risks, this.trainer, this.dogName);
+            trailSet = new TrailSet(false, false, true, this.situation, "wetter", this.risks, this.person);
             this.navCtrl.push('WaterMapPage', {trailSet: trailSet});
         }
     }
