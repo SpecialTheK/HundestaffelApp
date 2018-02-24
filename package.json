@@ -34,6 +34,8 @@
     "@ngx-translate/http-loader": "^2.0.1",
     "com-darryncampbell-cordova-plugin-intent": "0.0.19",
     "cordova-android": "6.3.0",
+    "cordova-custom-config": "^5.0.2",
+    "cordova-ios": "4.5.4",
     "cordova-multidex": "git+https://github.com/jwall149/cordova-multidex.git",
     "cordova-plugin-app-preferences": "^0.99.3",
     "cordova-plugin-device": "^1.1.4",
@@ -78,10 +80,15 @@
       "cordova-plugin-x-socialsharing": {},
       "cordova-plugin-app-preferences": {},
       "com-darryncampbell-cordova-plugin-intent": {},
+<<<<<<< HEAD
       "cordova-plugin-vibration": {}
+=======
+      "cordova-custom-config": {}
+>>>>>>> 626929b2a00c7c4503b0f8c3cef5b7e1c5165c47
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
