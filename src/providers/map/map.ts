@@ -2,7 +2,8 @@ import { Injectable, ElementRef } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { TrailStorageProvider } from '../trail-storage/trail-storage';
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
+import {Vibration} from '@ionic-native/vibration';
 
 import { Trail } from '../../models/trail';
 import { TrailSet } from '../../models/trailSet';
@@ -23,19 +24,21 @@ export class MapProvider {
 
     isCentered: boolean;
 
+    currentTrailSubject: Subject<Trail>;
     currentTrail: Trail;
     currentTrailNumber = 0;
 
-    polyline: any;
+    virtualTrainerIsActive = false;
+    comparisonTrail: Trail;
 
-    currentSpeed = 0;
-    currentDirection = 0;
+    
+
+    polyline: any;
 
     //DEBUG (christian): neuer trail zum vergleichen!
     testCircle: any;
-    testString = "Hallo";
 
-    constructor(public location: Geolocation, public navParams: NavParams){
+    constructor(public location: Geolocation, public navParams: NavParams, public vibration: Vibration){
         //NOTE (christian): kein code hier! html seite muss erst vollständig geladen sein!
     }
 
@@ -91,6 +94,7 @@ export class MapProvider {
 
     startSession(){
         //NOTE (christian): fromData methode garantiert, dass man ein richtiges trailset bekommt!
+        this.currentTrailSubject = new Subject<Trail>();
         this.currentTrail = new Trail(this.currentTrailNumber, "Trainer", "Hund");
         this.currentTrail.setStartTime();
 
@@ -118,17 +122,32 @@ export class MapProvider {
                 this.drawPath(pos.coords.latitude, pos.coords.longitude);
 
                 if(pos.coords.speed !== null){
-                    this.currentSpeed = pos.coords.speed;
+                    this.currentTrail.speed = pos.coords.speed;
                 }
 
                 if(pos.coords.heading !== null){
-                    this.currentDirection = pos.coords.heading;
+                    this.currentTrail.direction = pos.coords.heading;
                     this.mapObject.setHeading(pos.coords.heading);
+                }
+
+                if(this.virtualTrainerIsActive === true){
+                    if(google.maps.geometry.poly.isLocationOnEdge(
+                        new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+                        this.comparisonTrail.polyline.getPath(),
+                        10e-5
+                    )){
+                        console.log("JA")
+                    }else {
+                        this.vibration.vibrate(1000);
+                        console.log("NEIN")
+                    }
                 }
 
                 if(this.isCentered){
                     this.mapObject.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
                 }
+
+                this.currentTrailSubject.next(this.currentTrail);
             })
         }, 2000);
         /*
@@ -156,6 +175,15 @@ export class MapProvider {
         */
     }
 
+    toggleVirtualTrainer(comparison: Trail){
+        if(this.virtualTrainerIsActive){
+            this.virtualTrainerIsActive = false;
+        } else {
+            this.virtualTrainerIsActive = true;
+            this.comparisonTrail = Trail.fromData(comparison, google, this.mapObject);
+        }
+    }
+
     centerMap(){
         this.mapObject.panTo(this.currentTrail.getLastPosition().convertToSimpleObject());
         this.isCentered = true;
@@ -164,24 +192,31 @@ export class MapProvider {
     addMarker(markerText: string, markerSymbolID: number){
         if(this.currentTrail.path.length >= 1){
             this.currentTrail.addMarker(markerText, markerSymbolID, this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng).addToMap(google, this.mapObject);
+            this.currentTrailSubject.next(this.currentTrail);
         }
     }
 
     addCircle(color: string, opacity: number){
         if(this.currentTrail.path.length >= 1){
             this.currentTrail.addCircle(color, opacity, this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng).addToMap(google, this.mapObject);
+            this.currentTrailSubject.next(this.currentTrail);
         }
     }
 
     addTriangle(){
         if(this.currentTrail.path.length >= 1){
             this.currentTrail.addTriangle(this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng).addToMap(google, this.mapObject);
+            this.currentTrailSubject.next(this.currentTrail);
         }
     }
 
     drawPath(lat: number, lng: number){
         let p = this.polyline.getPath();
         p.push(new google.maps.LatLng(lat, lng));
+    }
+
+    getCurrentTrailSubject(): Subject<Trail>{
+        return this.currentTrailSubject;
     }
 
 }

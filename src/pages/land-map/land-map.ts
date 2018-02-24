@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavParams, ModalController, ViewController } from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
+import { Trail } from '../../models/trail';
 
 import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
@@ -29,6 +30,8 @@ export class LandMapPage {
     @ViewChild('map') mapElement: ElementRef;
 
     trailSet: TrailSet;
+    runnerTrail: Trail;
+    dogTrail: Trail;
 
     showPerson = false;
 
@@ -48,12 +51,8 @@ export class LandMapPage {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
-        this.trailSet = this.navParams.get('trailSet');
-        if(this.trailSet !== undefined){
-            this.showPerson = true;
-        }else {
-            this.hasTrails = true;
-        }
+        this.trailSet = TrailSet.fromData(this.navParams.get('trailSet'));
+
         this.startTime = new Date();
         this.deltaTime = new Date();
     }
@@ -64,38 +63,46 @@ export class LandMapPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	ionViewDidLoad() {
+    ionViewDidLoad() {
         this.map.initMapObject(this.mapElement);
-        if(this.hasTrails){
+        if(this.trailSet.trails.length > 0){
             this.map.importTrailSet(this.trailSet);
+            this.runnerTrail = this.trailSet.trails[0];
+            console.log(this.runnerTrail);
+            this.hasTrails = true;
         }
         this.map.startSession();
-        this.mapLoaded = true;
+
+        this.map.getCurrentTrailSubject().subscribe((data) => {
+            this.dogTrail = data;
+            this.mapLoaded = true;
+        });
+
         this.startTimer();
     }
 
     /**
-	 * Method that is called to stop the recording of a trail.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-     startTimer() {
-         this.timeInterval = setInterval((i) => {
-             this.deltaTime = new Date();
-             this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
-         }, 1000);
-     }
+    * Method that is called to stop the recording of a trail.
+    *
+    * @since 1.0.0
+    * @version 1.0.0
+    */
+    startTimer() {
+        this.timeInterval = setInterval((i) => {
+            this.deltaTime = new Date();
+            this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
+        }, 1000);
+    }
 
-     /**
-      * Method that is called to stop the recording of a trail.
-      *
-      * @since 1.0.0
-      * @version 1.0.0
-      */
-      endTimer() {
-          clearInterval(this.timeInterval);
-      }
+    /**
+    * Method that is called to stop the recording of a trail.
+    *
+    * @since 1.0.0
+    * @version 1.0.0
+    */
+    endTimer() {
+      clearInterval(this.timeInterval);
+    }
 
 
 	/**

@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from "@ionic-native/geolocation";
+import {Vibration} from '@ionic-native/vibration';
 
 import {MyApp} from './app.component';
 
@@ -45,7 +46,8 @@ import {ComponentsModule} from "../components/components.module";
         AppPreferences,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         WebIntent,
-		TrailStorageProvider
+		TrailStorageProvider,
+		Vibration
     ],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

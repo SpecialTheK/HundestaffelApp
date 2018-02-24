@@ -57,7 +57,21 @@ export class Trail {
 	 *
 	 * @since 1.0.0
 	 */
-	distance: number = 0;
+	distance: number;
+
+	/**
+	 * Current direction of the trail.
+	 *
+	 * @since 1.0.0
+	 */
+	direction: number;
+
+	/**
+	 * Current speed of the trail.
+	 *
+	 * @since 1.0.0
+	 */
+	speed: number;
 
 	/**
 	 * Array containing all tracked positions.
@@ -93,6 +107,10 @@ export class Trail {
 	 * @since 1.0.0
 	 */
 	trailColor: string;
+
+
+	//NOTE(christian): schau wie man das anders machen kann
+	polyline: any;
 
 
 	constructor(id: number, trainer: string, dog: string){
@@ -284,15 +302,15 @@ export class Trail {
 			trail.endTime = data.endTime;
 			trail.distance = data.distance;
 
-			let _polyline, _polylinePath;
+			let _polylinePath;
 			if(google != null && map != null){
-				_polyline = new google.maps.Polyline({
+				trail.polyline = new google.maps.Polyline({
 					strokeColor: trail.trailColor,
 					strokeOpacity: 1.0,
 					strokeWeight: 3
 				});
-				_polyline.setMap(map);
-				_polylinePath = _polyline.getPath();
+				trail.polyline.setMap(map);
+				_polylinePath = trail.polyline.getPath();
 			}
 
 			for(let p of data.path){

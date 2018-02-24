@@ -13,6 +13,10 @@ page-land-map {
         align-self: flex-start;
     }
 
+    .force-color-black{
+        color: black !important;
+    }
+
     ::-webkit-scrollbar {
         display: none;
     }

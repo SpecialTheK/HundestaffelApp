@@ -24,35 +24,35 @@
     </div>
 
     <div class="function-container">
-        <ion-slides loop="true">
+        <ion-slides>
             <ion-slide class="info-slide">
 
                 <ion-grid>
                     <ion-label>Runner</ion-label>
-                    <ion-row *ngIf="mapLoaded === true">
+                    <ion-row *ngIf="hasTrails === true">
                         <ion-col>
                             <ion-item>
-                                <ion-label>Distanz: </ion-label>
+                                <ion-label>Distanz: {{runnerTrail.distance}}</ion-label>
                             </ion-item>
                         </ion-col>
 
                         <ion-col>
                             <ion-item>
-                                <ion-label>Zeit: </ion-label>
+                                <ion-label>Zeit: irgend eine Zeit</ion-label>
                             </ion-item>
                         </ion-col>
                     </ion-row>
 
                     <ion-label>Hund</ion-label>
-                    <ion-row>
+                    <ion-row *ngIf="mapLoaded === true">
                         <ion-col>
                             <ion-item>
-                                <ion-label>Distanz: </ion-label>
+                                <ion-label>Distanz: {{dogTrail.distance}}</ion-label>
                             </ion-item>
                         </ion-col>
 
                         <ion-col>
-                            <ion-item>
+                            <ion-item class="force-color-black">
                                 <ion-label>Zeit:</ion-label>
                                 <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
                             </ion-item>

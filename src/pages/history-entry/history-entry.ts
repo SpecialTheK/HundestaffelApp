@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import {Trail} from "../../models/trail";
 import {TranslateService} from "@ngx-translate/core";
 import {SocialSharing} from "@ionic-native/social-sharing";
@@ -84,7 +84,7 @@ export class HistoryEntryPage {
 	 */
 	translatedTerms: Array<string> = [];
 
-	constructor(public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
+	constructor(public viewCtrl: ViewController, public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
 		this.trailSet = navParams.get('trailObject');
 		if(this.trailSet.trails.length > 0){
 			this.trailDate = this.trailSet.trails[0].startTime;
@@ -149,6 +149,20 @@ export class HistoryEntryPage {
 
 		this.map.initMapObject(this.mapElement);
 		this.map.importTrailSet(this.trailSet);
+	}
+
+	/**
+	 * Method called to share the trailSet in the app's file format.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	gotoMap(){
+		if(this.trailSet.isLandTrail){
+			this.navCtrl.push('LandMapPage', {trailSet: this.trailSet});
+		}else {
+			this.navCtrl.push('WaterMapPage', {trailSet: this.trailSet});
+		}
 	}
 
 	/**
