@@ -40,15 +40,16 @@ export class WaterMapPage {
     displayOpacityMin: number;
 
     mapLoaded = false;
-   
+
     translatedTerms:Array<string> = [];
 
     constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
         this.trailSet = this.navParams.get('trailSet');
 
-        this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund1"));
-        this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund2"));
-        this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund3"));
+        let dogs = this.navParams.get('dogs') as string[];
+        dogs.forEach((dog) => {
+            this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", dog));
+        });
 
         this.distanceToTargetMarker = 0;
         this.displayOpacityMin = 2;
@@ -59,7 +60,7 @@ export class WaterMapPage {
 
         this.translateVariables();
     }
-	
+
 	/**
 	 * Method called to translate all variables needed for this page.
 	 *

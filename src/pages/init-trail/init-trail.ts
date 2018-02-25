@@ -18,9 +18,9 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class InitTrailPage {
 
-    dogName: string = "";
+    dogNames: string[];
     trainer: string = "test";
-    
+
     translatedTerms: Array<string> = [];
 
     person: Person;
@@ -37,13 +37,18 @@ export class InitTrailPage {
     preSituation: string = "";
     risks: string = "";
 
+    isLandTrail: boolean;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public translateService: TranslateService) {
+        this.isLandTrail = this.navParams.get('isLandTrail');
+        this.person = new Person();
+        this.dogNames = [];
+        this.dogNames.push("");
         this.translateVariables();
 	    this.person = new Person();
         this.person.hairColor_choice = "123";
     }
-	
+
 	/**
 	 * Method called to translate all variables needed for this page.
 	 *
@@ -105,16 +110,34 @@ export class InitTrailPage {
 		];
 	}
 
+    customTrackBy(index: number, obj: any): any {
+    	return index;
+    }
+
+    addDogInput(event, index){
+        if(event.value === "" && this.dogNames.length > 1){
+            this.dogNames.splice(index, 1);
+            if((this.dogNames.length - index) !== 1){
+                this.dogNames.push("");
+            }
+        }else {
+            if((this.dogNames.length - index) === 1){
+                this.dogNames.push("");
+            }
+        }
+    }
+
     gotoMap(){
         let trailSet;
-        if(this.navParams.get('isLandTrail')){
+        if(this.isLandTrail){
             console.log("LAND");
             trailSet = new TrailSet(true, false, true, this.preSituation, this.situation, "wetter", this.risks, this.person);
-            this.navCtrl.push('LandMapPage', {trailSet: trailSet});
+            this.navCtrl.push('LandMapPage', {trailSet: trailSet, dog: this.dogNames[0]});
         }else {
             console.log("WASSER");
+            this.dogNames.splice((this.dogNames.length - 1), 1);
             trailSet = new TrailSet(false, false, true, this.preSituation, this.situation, "wetter", this.risks, this.person);
-            this.navCtrl.push('WaterMapPage', {trailSet: trailSet});
+            this.navCtrl.push('WaterMapPage', {trailSet: trailSet, dogs: this.dogNames});
         }
     }
 }
