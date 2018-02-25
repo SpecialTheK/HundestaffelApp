@@ -45,7 +45,7 @@ export class LandMapPage {
 
     translatedTerms: Array<string> = [];
 
-  
+
     constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
@@ -98,7 +98,7 @@ export class LandMapPage {
         }
         this.startTimer();
     }
-	
+
 	/**
 	 * Method called to translate all variables needed for this page.
 	 *
@@ -197,10 +197,8 @@ export class LandMapPage {
      */
     addWindDirectionMarker(event){
         console.log("Added Wind Direction Marker");
-        this.map.addMarker("Some Text", -1, 0);
-        let lastMarker = this.map.currentTrail.marker[this.map.currentTrail.marker.length - 1];
-        let popover = this.popCtrl.create('WindmarkerOrientationPage', {marker: lastMarker});
-        popover.present({ev: event});
+        //this.map.addMarker("Some Text", -1, 0);
+        this.map.setzeWindMarker();
     }
 
 }
