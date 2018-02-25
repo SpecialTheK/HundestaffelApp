@@ -7,6 +7,8 @@ import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
 import {TranslateService} from "@ngx-translate/core";
 import {Trail} from "../../models/trail";
+import {Flashlight} from "@ionic-native/flashlight";
+import {AppPreferences} from "@ionic-native/app-preferences";
 
 
 /**
@@ -43,13 +45,20 @@ export class WaterMapPage {
 
     translatedTerms:Array<string> = [];
 
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
+    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService, public flashlight: Flashlight, appPreferences: AppPreferences) {
         this.trailSet = this.navParams.get('trailSet');
-
+		let trainerName = "Trainer";
         let dogs = this.navParams.get('dogs') as string[];
-        dogs.forEach((dog) => {
-            this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", dog));
-        });
+	    appPreferences.fetch('username').then((answer) => {
+		    dogs.forEach((dog) => {
+			    this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, answer, dog));
+		    });
+	    }).catch((error) => {
+		    console.log("Error: "+error);
+		    dogs.forEach((dog) => {
+			    this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", dog));
+		    });
+	    });
 
         this.distanceToTargetMarker = 0;
         this.displayOpacityMin = 2;
@@ -203,4 +212,10 @@ export class WaterMapPage {
             });
         });
     }
+	
+	public toggleFlashlight(){
+		if(this.flashlight.available()){
+			this.flashlight.toggle();
+		}
+	}
 }

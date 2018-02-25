@@ -94,6 +94,8 @@ export class TrailSet {
 	 */
 	public addTrailToSet(newTrail: Trail){
     	this.trails.push(newTrail);
+    	
+    	return this.trails.length-1;
     }
 
 	/**

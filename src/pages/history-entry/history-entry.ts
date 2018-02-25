@@ -99,7 +99,7 @@ export class HistoryEntryPage {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("TRAIL_DELETE", "DELETE", "TRAIL_DELETE_MESSAGE", "ABORT", "TRAIL_TRAINING", "TRAIL_OPERATION", "TRAIL_LAND", "TRAIL_WATER");
+		let translateTerms = Array("TRAIL_DELETE", "DELETE", "TRAIL_DELETE_MESSAGE", "ABORT", "TRAIL_TRAINING", "TRAIL_OPERATION", "TRAIL_LAND", "TRAIL_WATER","MINUTES","HOURS","SECONDS");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translatedTerms[term.toLowerCase()] = answer;

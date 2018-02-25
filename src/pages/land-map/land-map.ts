@@ -7,6 +7,8 @@ import { Trail } from '../../models/trail';
 import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
 import {TranslateService} from "@ngx-translate/core";
+import {Flashlight} from "@ionic-native/flashlight";
+import {AppPreferences} from "@ionic-native/app-preferences";
 
 
 /**
@@ -33,7 +35,8 @@ export class LandMapPage {
     trailSet: TrailSet;
     runnerTrail: Trail;
     dogTrail: Trail;
-
+	dogName: string;
+	trainerName: string = "";
     mapLoaded = false;
 
     startTime: Date;
@@ -46,17 +49,22 @@ export class LandMapPage {
     translatedTerms: Array<string> = [];
 
 
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
+    constructor(public navParams: NavParams, public viewCtrl: ViewController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService, public flashlight: Flashlight, appPreferences: AppPreferences) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
         this.trailSet = TrailSet.fromData(this.navParams.get('trailSet'));
-
+		this.dogName = this.navParams.get('dog');
         if(this.trailSet.trails.length === 0 && this.trailSet.isTraining){
             this.isRunnerTrail = true;
         } else{
             this.isRunnerTrail = false;
         }
+        appPreferences.fetch('username').then((answer) => {
+        	this.trainerName = answer;
+        }).catch((error) => {
+        	console.log("Error: "+error);
+        });
 
         this.startTime = new Date();
         this.deltaTime = new Date();
@@ -74,13 +82,13 @@ export class LandMapPage {
 
         this.map.initMapObject(this.mapElement);
         if(this.isRunnerTrail){
-            this.map.startSession(true);
+            this.map.startSession(true, this.trainerName, this.dogName);
             this.map.getCurrentTrailSubject().subscribe((data) => {
                 this.runnerTrail = data;
                 this.mapLoaded = true;
             });
         } else if(!this.trailSet.isTraining){
-            this.map.startSession(true);
+            this.map.startSession(true, this.trainerName, this.dogName);
             this.map.getCurrentTrailSubject().subscribe((data) => {
                 this.dogTrail = data;
                 this.mapLoaded = true;
@@ -89,7 +97,7 @@ export class LandMapPage {
             this.map.importTrailSet(this.trailSet);
             //NOTE (christian): dies kann sich im verlauf des Trails ändern, wenn ein anderer Trail im auswahlmenu gewählt wird
             this.runnerTrail = this.trailSet.trails[0];
-            this.map.startSession(true);
+            this.map.startSession(true, this.trainerName, this.dogName);
             this.map.toggleVirtualTrainer(this.runnerTrail);
             this.map.getCurrentTrailSubject().subscribe((data) => {
                 this.dogTrail = data;
@@ -200,5 +208,10 @@ export class LandMapPage {
         //this.map.addMarker("Some Text", -1, 0);
         this.map.setzeWindMarker();
     }
-
+    
+    public toggleFlashlight(){
+    	if(this.flashlight.available()){
+    		this.flashlight.toggle();
+	    }
+    }
 }

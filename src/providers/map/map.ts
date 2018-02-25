@@ -89,11 +89,11 @@ export class MapProvider {
         TrailSet.fromData(trailSet, google, this.mapObject);
     }
 
-    startSession(isLandTrail: boolean){
+    startSession(isLandTrail: boolean, trainer = "Trainer", dog = "Hund"){
         this.isLandTrail = isLandTrail;
         this.distanceToTargetMarker = new Subject<number>();
         this.currentTrailSubject = new Subject<Trail>();
-        this.currentTrail = new Trail(0, "Trainer", "Hund");
+        this.currentTrail = new Trail(0, trainer, dog);
         this.currentTrail.setStartTime();
 
         this.polyline = new google.maps.Polyline({

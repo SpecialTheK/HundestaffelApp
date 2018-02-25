@@ -1,4 +1,3 @@
-///<reference path="../../../node_modules/ionic-angular/navigation/view-controller.d.ts"/>
 import {Injectable} from '@angular/core';
 import {LoadingController, Platform} from "ionic-angular";
 import {File} from "@ionic-native/file";
@@ -176,7 +175,7 @@ export class PdfUtilProvider {
 				
 				resolve({
 					content: [
-						{text: this.translate["trail_from"]+' '+trailSet[0].startTime, fontSize: 18, alignment: 'center'},
+						{text: this.translate["trail_from"]+' '+trailSet.trails[0].startTime, fontSize: 18, alignment: 'center'},
 						{text: '\n'+this.translate["trail_duration"]+' '+this.getDuration(trailSet.trails[0].startTime, trailSet.trails[trailSet.trails.length-1].endTime), fontSize: 13, alignment: 'center'},
 						{text: '\n\n\n\n'+this.translate["trail_type"]+ ' '+training+", "+activity+'\n\n', fontSize: 13},
 						{image: map, width: 400, alignment: 'center'},

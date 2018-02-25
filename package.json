@@ -24,6 +24,7 @@
     "@ionic-native/core": "4.5.3",
     "@ionic-native/device-orientation": "^4.5.3",
     "@ionic-native/file": "^4.5.3",
+    "@ionic-native/flashlight": "^4.5.3",
     "@ionic-native/geolocation": "^4.5.3",
     "@ionic-native/social-sharing": "^4.5.3",
     "@ionic-native/splash-screen": "4.5.3",
@@ -38,9 +39,11 @@
     "cordova-ios": "4.5.4",
     "cordova-multidex": "git+https://github.com/jwall149/cordova-multidex.git",
     "cordova-plugin-app-preferences": "^0.99.3",
+    "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-device-orientation": "^1.0.7",
     "cordova-plugin-file": "^6.0.1",
+    "cordova-plugin-flashlight": "^3.2.0",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-splashscreen": "^4.0.3",
@@ -82,11 +85,12 @@
       "cordova-plugin-app-preferences": {},
       "com-darryncampbell-cordova-plugin-intent": {},
       "cordova-plugin-vibration": {},
-      "cordova-plugin-device-orientation": {}
+      "cordova-plugin-device-orientation": {},
+      "cordova-plugin-flashlight": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

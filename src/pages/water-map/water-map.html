@@ -14,6 +14,9 @@
             <ion-fab top right>
                 <button ion-fab (click)="centerMap()"><ion-icon name="locate"></ion-icon></button>
             </ion-fab>
+            <ion-fab center right>
+                <button ion-fab (click)="toggleFlashlight()"><ion-icon name="sunny"></ion-icon></button>
+            </ion-fab>
         </div>
         <div #map class="map"></div>
     </div>
@@ -21,9 +24,8 @@
         <div class="loading" *ngIf="mapLoaded === false">
             <ion-spinner></ion-spinner>
         </div>
-
         <div class="loaded" *ngIf="mapLoaded === true">
-            <ion-slides >
+            <ion-slides>
                 <ion-slide class="info-slide">
 
                     <ion-grid>
