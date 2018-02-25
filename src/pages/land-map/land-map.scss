@@ -13,6 +13,10 @@ page-land-map {
         align-self: flex-start;
     }
 
+    .force-color-black{
+        color: black !important;
+    }
+
     ::-webkit-scrollbar {
         display: none;
     }
@@ -24,8 +28,9 @@ page-land-map {
 
     .map-buttons{
         position: absolute;
-        height: 100%;
+        height: 70%;
         width: 100%;
+        z-index: 2;
     }
 
     .map{
