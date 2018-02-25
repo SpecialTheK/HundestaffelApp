@@ -22,26 +22,10 @@ export class AddColoredCirclePage {
 	 */
     circleOpacity: number = 8;
 
-	/**
-	 * The color of the new circle.
-	 *
-	 * @type {string}
-	 * @since 1.0.0
-	 */
-	circleColor: string = '#ff0000';
+    map: any;
 
     constructor(public navParams: NavParams, public viewCtrl: ViewController) {
-    }
-
-	/**
-	 * Method to change the color of the circle.
-	 *
-	 * @param color The new color.
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	changeColor(color){
-        this.circleColor = color;
+        this.map = this.navParams.get('map')
     }
 
 	/**
@@ -51,7 +35,17 @@ export class AddColoredCirclePage {
 	 * @version 1.0.0
 	 */
 	addCircle() {
-        this.navParams.get('map').addCircle(this.circleColor, (this.circleOpacity/10));
+        this.map.addCircle((this.circleOpacity/10));
+        this.viewCtrl.dismiss();
+    }
+
+    hide(){
+        this.map.toggleWaterDogTrail(true);
+        this.viewCtrl.dismiss();
+    }
+
+    show(){
+        this.map.toggleWaterDogTrail(false);
         this.viewCtrl.dismiss();
     }
 

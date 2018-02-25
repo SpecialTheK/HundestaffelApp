@@ -42,6 +42,8 @@ export class TrailSet {
 	 * @since 1.0.0
 	 */
     situation: string;
+    
+    preSituation: string;
 
 	/**
 	 * Weather info.
@@ -70,10 +72,11 @@ export class TrailSet {
 	 */
     trails: Trail[];
 
-    constructor(isLandTrail: boolean, isSharedTrail: boolean, isTraining: boolean, situation: string, weather: string, risks: string, person: Person){
+    constructor(isLandTrail: boolean, isSharedTrail: boolean, isTraining: boolean, preSituation: string, situation: string, weather: string, risks: string, person: Person){
         this.isLandTrail = isLandTrail;
         this.isSharedTrail = isSharedTrail;
         this.isTraining = isTraining;
+        this.preSituation = preSituation;
         this.situation = situation;
         this.weather = weather;
         this.risks = risks;
@@ -114,6 +117,7 @@ export class TrailSet {
             isLandTrail: this.isLandTrail,
             isSharedTrail: this.isSharedTrail,
 	        isTraining: this.isTraining,
+	        preSituation: this.preSituation,
 	        situation: this.situation,
 	        weather: this.weather,
 	        risks: this.risks,
@@ -137,7 +141,7 @@ export class TrailSet {
     		let _person = new Person(data.person.name, data.person.age, data.person.glasses, data.person.hair_choice,
 			    data.person.hairColor_choice, data.person.body_choice, data.person.allergies, data.person.illness,
 			    data.person.medication);
-		    let trailSet = new TrailSet(data.isLandTrail, data.isSharedTrail, data.isTraining, data.situation, data.weather, data.risks, _person);
+		    let trailSet = new TrailSet(data.isLandTrail, data.isSharedTrail, data.isTraining, data.preSituation, data.situation, data.weather, data.risks, _person);
 		    for(let trail of data.trails){
 			    trailSet.trails.push(Trail.fromData(trail, google, map));
 		    }
@@ -169,6 +173,9 @@ export class TrailSet {
         if(!object.hasOwnProperty('isTraining')){
             isTrail = false;
         }
+		if(!object.hasOwnProperty('preSituation')){
+			isTrail = false;
+		}
         if(!object.hasOwnProperty('situation')){
             isTrail = false;
         }

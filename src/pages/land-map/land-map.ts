@@ -1,10 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { IonicPage, NavParams, ViewController, PopoverController } from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
+import { Trail } from '../../models/trail';
 
 import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
+import {TranslateService} from "@ngx-translate/core";
 
 
 /**
@@ -29,33 +31,36 @@ export class LandMapPage {
     @ViewChild('map') mapElement: ElementRef;
 
     trailSet: TrailSet;
-
-    showPerson = false;
-
-    hasTrails = false;
+    runnerTrail: Trail;
+    dogTrail: Trail;
 
     mapLoaded = false;
 
     startTime: Date;
     deltaTime: Date;
     runTime: string;
-
     timeInterval: any;
 
-    someString = "Hallo";
+    isRunnerTrail = false;
 
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public map: MapProvider, public storage: TrailStorageProvider) {
+    translatedTerms: Array<string> = [];
+
+  
+    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
-        this.trailSet = this.navParams.get('trailSet');
-        if(this.trailSet !== undefined){
-            this.showPerson = true;
-        }else {
-            this.hasTrails = true;
+        this.trailSet = TrailSet.fromData(this.navParams.get('trailSet'));
+
+        if(this.trailSet.trails.length === 0 && this.trailSet.isTraining){
+            this.isRunnerTrail = true;
+        } else{
+            this.isRunnerTrail = false;
         }
+
         this.startTime = new Date();
         this.deltaTime = new Date();
+        this.translateVariables();
     }
 
 	/**
@@ -64,39 +69,73 @@ export class LandMapPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	ionViewDidLoad() {
+    ionViewDidLoad() {
+        console.log(this.isRunnerTrail);
+
         this.map.initMapObject(this.mapElement);
-        if(this.hasTrails){
+        if(this.isRunnerTrail){
+            this.map.startSession(true);
+            this.map.getCurrentTrailSubject().subscribe((data) => {
+                this.runnerTrail = data;
+                this.mapLoaded = true;
+            });
+        } else if(!this.trailSet.isTraining){
+            this.map.startSession(true);
+            this.map.getCurrentTrailSubject().subscribe((data) => {
+                this.dogTrail = data;
+                this.mapLoaded = true;
+            });
+        } else {
             this.map.importTrailSet(this.trailSet);
+            //NOTE (christian): dies kann sich im verlauf des Trails ändern, wenn ein anderer Trail im auswahlmenu gewählt wird
+            this.runnerTrail = this.trailSet.trails[0];
+            this.map.startSession(true);
+            this.map.toggleVirtualTrainer(this.runnerTrail);
+            this.map.getCurrentTrailSubject().subscribe((data) => {
+                this.dogTrail = data;
+                this.mapLoaded = true;
+            });
         }
-        this.map.startSession();
-        this.mapLoaded = true;
         this.startTimer();
     }
-
-    /**
-	 * Method that is called to stop the recording of a trail.
+	
+	/**
+	 * Method called to translate all variables needed for this page.
 	 *
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-     startTimer() {
-         this.timeInterval = setInterval((i) => {
-             this.deltaTime = new Date();
-             this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
-         }, 1000);
-     }
+	private translateVariables(){
+		let translateTerms = Array("MAP_MARKER_END", "MAP_MARKER_INTEREST");
+		for(let term of translateTerms){
+			this.translateService.get(term).subscribe((answer) => {
+				this.translatedTerms[term.toLowerCase()] = answer;
+			});
+		}
+	}
 
-     /**
-      * Method that is called to stop the recording of a trail.
-      *
-      * @since 1.0.0
-      * @version 1.0.0
-      */
-      endTimer() {
-          clearInterval(this.timeInterval);
-      }
+    /**
+    * Method that is called to stop the recording of a trail.
+    *
+    * @since 1.0.0
+    * @version 1.0.0
+    */
+    startTimer() {
+        this.timeInterval = setInterval((i) => {
+            this.deltaTime = new Date();
+            this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
+        }, 1000);
+    }
 
+    /**
+    * Method that is called to stop the timer.
+    *
+    * @since 1.0.0
+    * @version 1.0.0
+    */
+    endTimer() {
+      clearInterval(this.timeInterval);
+    }
 
 	/**
 	 * Method that is called to stop the recording of a trail.
@@ -136,7 +175,7 @@ export class LandMapPage {
 	 */
     addEndMarker(){
         console.log("Added End Marker");
-        this.map.addMarker("Some Text", 0);
+        this.map.addMarker(this.translatedTerms["map_marker_end"], 0);
     }
 
     /**
@@ -147,7 +186,7 @@ export class LandMapPage {
      */
     addInterestMarker(){
         console.log("Added Interest Marker");
-        this.map.addMarker("Some Text", 1);
+        this.map.addMarker(this.translatedTerms["map_marker_interest"], 1);
     }
 
     /**
@@ -156,10 +195,12 @@ export class LandMapPage {
      * @since 1.0.0
      * @version 1.0.0
      */
-    addWindDirectionMarker(){
-        //TODO (christian): benutz den FORWARD_CLOSED_ARROW und rotiere ihn!
-        //TODO (christian): setze das heading der map anhand von geolocation haeding!
-        console.log("WIND DIRECTION MARKER STILL IN DEVELOPMENT!");
+    addWindDirectionMarker(event){
+        console.log("Added Wind Direction Marker");
+        this.map.addMarker("Some Text", -1, 0);
+        let lastMarker = this.map.currentTrail.marker[this.map.currentTrail.marker.length - 1];
+        let popover = this.popCtrl.create('WindmarkerOrientationPage', {marker: lastMarker});
+        popover.present({ev: event});
     }
 
 }
