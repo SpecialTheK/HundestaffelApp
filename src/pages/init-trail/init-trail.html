@@ -75,19 +75,19 @@
         <ion-item>
             <ion-label>{{'PERSON_HAIR' | translate}}</ion-label>
             <ion-select [(ngModel)]="person.hair_choice">
-                <ion-option *ngFor="let hair of person.hair">{{hair}}</ion-option>
+                <ion-option *ngFor="let hair of hair">{{hair}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
             <ion-label>{{'PERSON_HAIR_COLOR' | translate}}</ion-label>
             <ion-select [(ngModel)]="person.hairColor_choice">
-                <ion-option *ngFor="let hairColor of person.hairColor">{{hairColor}}</ion-option>
+                <ion-option *ngFor="let hairColor of hairColor">{{hairColor}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
             <ion-label>{{'PERSON_BODY_TYPE' | translate}}</ion-label>
             <ion-select [(ngModel)]="person.body_choice">
-                <ion-option *ngFor="let body of person.body">{{body}}</ion-option>
+                <ion-option *ngFor="let body of body">{{body}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
@@ -108,6 +108,10 @@
         <ion-item>
             <ion-label>{{'TRAIL_SITUATION_WHAT' | translate}}</ion-label>
             <ion-input type="text" [(ngModel)]="situation"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>{{'TRAIL_SITUATION_PRE' | translate}}</ion-label>
+            <ion-input type="text" [(ngModel)]="preSituation"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label>{{'TRAIL_SITUATION_RISKS' | translate}}</ion-label>

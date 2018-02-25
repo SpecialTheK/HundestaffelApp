@@ -1,11 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, ModalController, NavParams, ViewController, PopoverController } from 'ionic-angular';
+import { IonicPage, NavParams, ViewController, PopoverController } from 'ionic-angular';
 
 import { TrailSet } from "../../models/trailSet";
 
 import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
 import {TranslateService} from "@ngx-translate/core";
+import {Trail} from "../../models/trail";
 
 
 /**
@@ -42,7 +43,7 @@ export class WaterMapPage {
    
     translatedTerms:Array<string> = [];
 
-    constructor(public modalCtrl: ModalController, public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
+    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
         this.trailSet = this.navParams.get('trailSet');
 
         this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund1"));

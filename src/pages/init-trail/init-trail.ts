@@ -24,6 +24,31 @@ export class InitTrailPage {
     translatedTerms: Array<string> = [];
 
     person: Person;
+	
+	hair: string[] = [
+		"Kahl",
+		"Kurz",
+		"Mittellang",
+		"Lang"
+	];
+	hairColor: string[] = [
+		"Braun",
+		"Dunkelbraun",
+		"Hellbraun",
+		"Blond",
+		"Dunkelblond",
+		"Schwarz",
+		"Rot",
+		"Grau",
+		"Weiß"
+	];
+	body: string[] = [
+		"Schlank",
+		"Athletisch",
+		"Normal",
+		"Füllig",
+		"Übergewichtig"
+	];
 
     weather_Precipitation: string[] = [
 	    this.translatedTerms["MAP_PRECIPITATION_NONE"],
@@ -73,11 +98,11 @@ export class InitTrailPage {
         let trailSet;
         if(this.navParams.get('isLandTrail')){
             console.log("LAND");
-            trailSet = new TrailSet(true, false, true, this.situation, "wetter", this.risks, this.person);
+            trailSet = new TrailSet(true, false, true, this.preSituation, this.situation, "wetter", this.risks, this.person);
             this.navCtrl.push('LandMapPage', {trailSet: trailSet});
         }else {
             console.log("WASSER");
-            trailSet = new TrailSet(false, false, true, this.situation, "wetter", this.risks, this.person);
+            trailSet = new TrailSet(false, false, true, this.preSituation, this.situation, "wetter", this.risks, this.person);
             this.navCtrl.push('WaterMapPage', {trailSet: trailSet});
         }
     }

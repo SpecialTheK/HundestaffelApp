@@ -1,34 +1,6 @@
 //NOTE (christian): vielleicht ist diese klasse etwas overkill?
 
 export class Person {
-
-    //NOTE (christian): formular optionen!
-    hair: string[] = [
-        "Kahl",
-        "Kurz",
-        "Mittellang",
-        "Lang"
-    ];
-    hairColor: string[] = [
-        "Braun",
-        "Dunkelbraun",
-        "Hellbraun",
-        "Blond",
-        "Dunkelblond",
-        "Schwarz",
-        "Rot",
-        "Grau",
-        "Weiß"
-    ];
-    body: string[] = [
-        "Schlank",
-        "Athletisch",
-        "Normal",
-        "Füllig",
-        "Übergewichtig"
-    ];
-
-
     name: string;
     age: number;
     glasses: boolean;

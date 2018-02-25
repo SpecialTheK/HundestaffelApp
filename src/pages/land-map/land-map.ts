@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, ModalController, ViewController, PopoverController } from 'ionic-angular';
+import { IonicPage, NavParams, ViewController, PopoverController } from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -46,7 +46,7 @@ export class LandMapPage {
     translatedTerms: Array<string> = [];
 
   
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public modalCtrl: ModalController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
+    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */

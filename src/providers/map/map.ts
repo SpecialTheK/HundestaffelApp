@@ -1,8 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { TrailStorageProvider } from '../trail-storage/trail-storage';
-import {Observable, Subject} from "rxjs";
+import {Subject} from "rxjs";
 import {Vibration} from '@ionic-native/vibration';
 import {DeviceOrientation, DeviceOrientationCompassHeading} from '@ionic-native/device-orientation';
 
@@ -25,11 +24,7 @@ export class MapProvider {
     positionSub: any;
     headingSub: any;
     headingMap: DeviceOrientationCompassHeading;
-
     isCentered: boolean;
-
-    currentTrailNumber = 0;
-
     currentTrail: Trail;
     comparisonTrail: Trail;
     waterDogTrail: Trail;

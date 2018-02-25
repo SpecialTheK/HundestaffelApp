@@ -119,7 +119,7 @@ export class Trail {
 		this.triangles = [];
 
 		this.isHidden = false;
-		this.trailColor = color[this.id%this.trailColor.length];
+		this.trailColor = color[this.id%color.length];
 	}
 
 	/**
@@ -306,8 +306,8 @@ export class Trail {
 		}
 		return {
 			id: this.id,
-			startTime: this.startTime,
-			endTime: this.endTime,
+			startTime: this.startTime.toISOString(),
+			endTime: this.endTime.toISOString(),
 			distance: this.distance,
 			trainer: this.trainer,
 			dog: this.dog,
@@ -331,8 +331,8 @@ export class Trail {
 	static fromData(data: Trail, google: any = null, map: any = null){
 		if(Trail.isTrailObject(data)){
 			let trail = new Trail(data.id, data.trainer, data.dog);
-			trail.startTime = data.startTime;
-			trail.endTime = data.endTime;
+			trail.startTime = new Date(data.startTime);
+			trail.endTime = new Date(data.endTime);
 			trail.distance = data.distance;
 
 			let _polylinePath;
