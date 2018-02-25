@@ -27,20 +27,18 @@
                 </div>
 
                 <div class="trail-info" *ngIf="mapLoaded === true">
-
                     <ion-grid>
-
-                        <ion-label>Runner</ion-label>
+                        <ion-label>{{'MAP_RUNNER' | translate}}</ion-label>
                         <ion-row *ngIf="isRunnerTrail === true">
                             <ion-col>
                                 <ion-item>
-                                    <ion-label>Distanz: {{runnerTrail.distance}}</ion-label>
+                                    <ion-label>{{'MAP_DISTANCE' | translate}}: {{runnerTrail.distance}}</ion-label>
                                 </ion-item>
                             </ion-col>
 
                             <ion-col>
                                 <ion-item>
-                                    <ion-label>Zeit:</ion-label>
+                                    <ion-label>{{'TIME' | translate}}:</ion-label>
                                     <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
                                 </ion-item>
                             </ion-col>
@@ -49,13 +47,13 @@
                         <ion-row *ngIf="isRunnerTrail === false">
                             <ion-col>
                                 <ion-item>
-                                    <ion-label>Distanz: {{runnerTrail.distance}}</ion-label>
+                                    <ion-label>{{'MAP_DISTANCE' | translate}}: {{runnerTrail.distance}}</ion-label>
                                 </ion-item>
                             </ion-col>
 
                             <ion-col>
                                 <ion-item>
-                                    <ion-label>Zeit:</ion-label>
+                                    <ion-label>{{'TIME' | translate}}:</ion-label>
                                     <!--
                                     <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
                                     -->
@@ -63,25 +61,23 @@
                             </ion-col>
                         </ion-row>
 
-                        <ion-label>Hund</ion-label>
+                        <ion-label>{{'TRAIL_DOG' | translate}}</ion-label>
                         <ion-row *ngIf="isRunnerTrail === false">
                             <ion-col>
                                 <ion-item>
-                                    <ion-label>Distanz: {{dogTrail.distance}}</ion-label>
+                                    <ion-label>{{'MAP_DISTANCE' | translate}}: {{dogTrail.distance}}</ion-label>
                                 </ion-item>
                             </ion-col>
 
                             <ion-col>
                                 <ion-item>
-                                    <ion-label>Zeit:</ion-label>
+                                    <ion-label>{{'TIME' | translate}}:</ion-label>
                                     <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
                                 </ion-item>
                             </ion-col>
                         </ion-row>
                     </ion-grid>
-
                 </div>
-
             </ion-slide>
             <ion-slide class="function-slide">
                 <ion-label>{{'MAP_MARKER' | translate}}</ion-label>
@@ -101,7 +97,7 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <button ion-button (click)="addWindDirectionMarker($event)">Windrichtung</button>
+                                <button ion-button (click)="addWindDirectionMarker($event)">{{'MAP_WIND_DIRECTION' | translate}}</button>
 
                             </ion-item>
                         </ion-col>
