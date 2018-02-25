@@ -1,19 +1,14 @@
 <ion-header>
-
   <ion-navbar>
-    <ion-title>water-map</ion-title>
+    <ion-title>{{'MAP_WATER' | translate}}</ion-title>
     <ion-buttons end>
         <button ion-button icon-only (click)="endTrail()">
             <ion-icon name="done-all"></ion-icon>
         </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
-
-
 <ion-content>
-
     <div class="map-container">
         <div class="map-buttons">
             <ion-fab top right>
@@ -22,7 +17,6 @@
         </div>
         <div #map class="map"></div>
     </div>
-
     <div class="function-container">
         <div class="loading" *ngIf="mapLoaded === false">
             <ion-spinner></ion-spinner>
@@ -160,7 +154,5 @@
                 </ion-slide>
             </ion-slides>
         </div>
-
     </div>
-
 </ion-content>

@@ -39,22 +39,6 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-        <config-file parent="./application/activity" target="AndroidManifest.xml">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="*" />
-                <data android:scheme="file" />
-                <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.wny" />
-                <data android:pathPattern=".*\\..*\\.wny" />
-                <data android:pathPattern=".*\\..*\\..*\\.wny" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.wny" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.wny" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.wny" />
-            </intent-filter>
-        </config-file>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -92,7 +76,9 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
+    <allow-navigation href="http://10.170.148.64:8101" />
     <engine name="android" spec="6.3.0" />
+    <engine name="ios" spec="4.5.4" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Getting your location" />
     </plugin>
@@ -107,7 +93,6 @@
     <plugin name="cordova-plugin-app-preferences" spec="^0.99.3" />
     <plugin name="com-darryncampbell-cordova-plugin-intent" spec="0.0.19" />
     <plugin name="cordova-plugin-vibration" spec="^3.0.1" />
-    <plugin name="cordova-custom-config" spec="^5.0.2" />
     <engine name="ios" spec="~4.5.4" />
     <plugin name="cordova-plugin-device-orientation" spec="^1.0.7" />
 </widget>

@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, NgZone, ViewChild} from '@angular/core';
 import {NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -10,6 +10,11 @@ import {WebIntent} from "@ionic-native/web-intent";
 import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
 import {TrailSet} from "../models/trailSet";
 
+// Needed outside of class as this has to be executed before the app is loaded
+(window as any).handleOpenURL = (url: string) => {
+	(window as any).handleOpenURL_LastURL = url;
+};
+
 @Component({
 	templateUrl: 'app.html'
 })
@@ -18,7 +23,7 @@ export class MyApp {
 	rootPage: any = Home;
 	trails: TrailSet[] = [];
 	
-	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService, public webIntent: WebIntent, public storage: TrailStorageProvider) {
+	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService, public webIntent: WebIntent, public storage: TrailStorageProvider, public ngZone: NgZone) {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
@@ -32,6 +37,19 @@ export class MyApp {
 					console.log("File not imported: "+reason);
 				});
 			}
+			if(platform.is('ios')){
+				(window as any).handleOpenURL = (url: string) => {
+					// this context is called outside of angular zone!
+					setTimeout(() => {
+						// so we need to get back into the zone..
+						this.ngZone.run(() => {
+							// this is in the zone again..
+							this.navCtrl.push('ImportPage', {source: url});
+						});
+					}, 0);
+				};
+			}
+			
 			translate.setDefaultLang('en');
 			if(platform.is('cordova')){
 				preferences.fetch('language').then((answer) => {

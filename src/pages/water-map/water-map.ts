@@ -1,11 +1,11 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, ModalController, NavParams, ViewController, PopoverController } from 'ionic-angular';
 
-import { Trail } from '../../models/trail';
 import { TrailSet } from "../../models/trailSet";
 
 import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
+import {TranslateService} from "@ngx-translate/core";
 
 
 /**
@@ -39,14 +39,12 @@ export class WaterMapPage {
     displayOpacityMin: number;
 
     mapLoaded = false;
+   
+    translatedTerms:Array<string> = [];
 
-    constructor(public modalCtrl: ModalController, public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider) {
-        /*
-            NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
-        */
+    constructor(public modalCtrl: ModalController, public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
         this.trailSet = this.navParams.get('trailSet');
 
-        //TODO (christian): mit jonas klären, dass hunde ein array wird!
         this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund1"));
         this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund2"));
         this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund3"));
@@ -57,7 +55,24 @@ export class WaterMapPage {
         this.startTime = new Date();
         this.deltaTime = new Date();
         this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
+
+        this.translateVariables();
     }
+	
+	/**
+	 * Method called to translate all variables needed for this page.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	private translateVariables(){
+		let translateTerms = Array("MAP_MARKER_END");
+		for(let term of translateTerms){
+			this.translateService.get(term).subscribe((answer) => {
+				this.translatedTerms[term.toLowerCase()] = answer;
+			});
+		}
+	}
 
 	/**
 	 * Ionic lifecycle events that is fired after the page is loaded to initialize the map.
@@ -156,7 +171,7 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	addTargetMarker() {
-        this.map.addMarker("Ziel", 0);
+        this.map.addMarker(this.translatedTerms["map_marker_end"], 0);
     }
 
 	/**

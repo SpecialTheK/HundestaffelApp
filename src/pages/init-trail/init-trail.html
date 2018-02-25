@@ -1,12 +1,8 @@
 <ion-header>
-
   <ion-navbar>
-    <ion-title>init-trail</ion-title>
+    <ion-title>{{'TRAIL_INIT' | translate}}</ion-title>
   </ion-navbar>
-
 </ion-header>
-
-
 <!--
 
     Einzugebene Dinge:
@@ -32,102 +28,91 @@
             > Weitere Risikofaktoren (TEXT)
 
 -->
-
 <ion-content padding>
-
     <ion-list>
         <ion-item>
-            <label>Hundename</label>
-            <ion-input type="text" placeholder="Hundename"></ion-input>
+            <label>{{'TRAIL_DOG_NAME' | translate}}</label>
+            <ion-input type="text" placeholder="{{'TRAIL_DOG_NAME' | translate}}"></ion-input>
         </ion-item>
     </ion-list>
-
     <ion-list>
-        <ion-list-header>Wetter</ion-list-header>
+        <ion-list-header>{{'MAP_PRECIPITATION' | translate}}</ion-list-header>
         <ion-item>
-            <ion-label>Niederschlag</ion-label>
+            <ion-label>{{'MAP_RAINFALL' | translate}}</ion-label>
             <ion-select>
                 <ion-option *ngFor="let percipitation of weather_Precipitation">{{percipitation}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label>Windrichtung</ion-label>
+            <ion-label>{{'MAP_WIND_DIRECTION' | translate}}</ion-label>
             <ion-select>
                 <ion-option *ngFor="let windDirection of weather_WindDirection">{{windDirection}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label>Temperatur</ion-label>
+            <ion-label>{{'MAP_TEMPERATURE' | translate}}</ion-label>
             <ion-input type="number" [(ngModel)]="weather_Temperature"></ion-input>
         </ion-item>
     </ion-list>
-
     <ion-list>
-        <ion-list-header>Personenbeschreibung</ion-list-header>
+        <ion-list-header>{{'PERSON_DESCRIPTION' | translate}}</ion-list-header>
         <ion-item>
-            <ion-label>Name</ion-label>
+            <ion-label>{{'PERSON_NAME' | translate}}</ion-label>
             <ion-input type="text" [(ngModel)]="person.name"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label>Alter</ion-label>
+            <ion-label>{{'PERSON_NAME' | translate}}</ion-label>
             <ion-input type="number" [(ngModel)]="person.age"></ion-input>
         </ion-item>
         <ion-item>
             <!-- TODO (Christian): Wie verknüpft man boolean mit ion select?  -->
-            <ion-label>Brille</ion-label>
+            <ion-label>{{'PERSON_GLASSES' | translate}}</ion-label>
             <ion-select>
-                <ion-option>Ja</ion-option>
-                <ion-option>Nein</ion-option>
+                <ion-option>{{'YES' | translate}}</ion-option>
+                <ion-option>{{'NO' | translate}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label>Haare</ion-label>
+            <ion-label>{{'PERSON_HAIR' | translate}}</ion-label>
             <ion-select [(ngModel)]="person.hair_choice">
                 <ion-option *ngFor="let hair of person.hair">{{hair}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label>Haarfarbe</ion-label>
+            <ion-label>{{'PERSON_HAIR_COLOR' | translate}}</ion-label>
             <ion-select [(ngModel)]="person.hairColor_choice">
                 <ion-option *ngFor="let hairColor of person.hairColor">{{hairColor}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label>Körperform</ion-label>
+            <ion-label>{{'PERSON_BODY_TYPE' | translate}}</ion-label>
             <ion-select [(ngModel)]="person.body_choice">
                 <ion-option *ngFor="let body of person.body">{{body}}</ion-option>
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label>Allergien</ion-label>
+            <ion-label>{{'PERSON_ALLERGIES' | translate}}</ion-label>
             <ion-input type="text" [(ngModel)]="person.allergies"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label>Erkrankungen</ion-label>
+            <ion-label>{{'PERSON_ILLNESS' | translate}}</ion-label>
             <ion-input type="text" [(ngModel)]="person.illness"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label>Medikamente</ion-label>
+            <ion-label>{{'PERSON_MEDICATION' | translate}}</ion-label>
             <ion-input type="text" [(ngModel)]="person.medication"></ion-input>
         </ion-item>
     </ion-list>
-
     <ion-list>
-        <ion-list-header>Situation</ion-list-header>
+        <ion-list-header>{{'TRAIL_SITUATION' | translate}}</ion-list-header>
         <ion-item>
-            <ion-label>Was ist passiert?</ion-label>
+            <ion-label>{{'TRAIL_SITUATION_WHAT' | translate}}</ion-label>
             <ion-input type="text" [(ngModel)]="situation"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label>Was ist vorher passiert?</ion-label>
-            <ion-input type="text" [(ngModel)]="preSituation"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label>Mögliche Risiken?</ion-label>
+            <ion-label>{{'TRAIL_SITUATION_RISKS' | translate}}</ion-label>
             <ion-input type="text" [(ngModel)]="risks"></ion-input>
         </ion-item>
     </ion-list>
-
-    <button ion-button (click)="gotoMap()">Fertig</button>
-
+    <button ion-button (click)="gotoMap()">{{'GO' | translate}}</button>
 </ion-content>
