@@ -33,7 +33,6 @@
     "@ngx-translate/http-loader": "^2.0.1",
     "com-darryncampbell-cordova-plugin-intent": "0.0.19",
     "cordova-android": "6.3.0",
-    "cordova-custom-config": "^5.0.2",
     "cordova-ios": "4.5.4",
     "cordova-multidex": "git+https://github.com/jwall149/cordova-multidex.git",
     "cordova-plugin-app-preferences": "^0.99.3",
@@ -77,8 +76,7 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-x-socialsharing": {},
       "cordova-plugin-app-preferences": {},
-      "com-darryncampbell-cordova-plugin-intent": {},
-      "cordova-custom-config": {}
+      "com-darryncampbell-cordova-plugin-intent": {}
     },
     "platforms": [
       "android",
