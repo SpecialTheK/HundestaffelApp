@@ -21,6 +21,7 @@
     "@angular/platform-browser": "5.0.3",
     "@angular/platform-browser-dynamic": "5.0.3",
     "@ionic-native/app-preferences": "^4.5.3",
+    "@ionic-native/background-mode": "^4.5.3",
     "@ionic-native/core": "4.5.3",
     "@ionic-native/device-orientation": "^4.5.3",
     "@ionic-native/file": "^4.5.3",
@@ -39,6 +40,7 @@
     "cordova-ios": "4.5.4",
     "cordova-multidex": "git+https://github.com/jwall149/cordova-multidex.git",
     "cordova-plugin-app-preferences": "^0.99.3",
+    "cordova-plugin-background-mode": "^0.7.2",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-device-orientation": "^1.0.7",
@@ -86,7 +88,8 @@
       "com-darryncampbell-cordova-plugin-intent": {},
       "cordova-plugin-vibration": {},
       "cordova-plugin-device-orientation": {},
-      "cordova-plugin-flashlight": {}
+      "cordova-plugin-flashlight": {},
+      "cordova-plugin-background-mode": {}
     },
     "platforms": [
       "ios",

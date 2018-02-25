@@ -9,6 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {Trail} from "../../models/trail";
 import {Flashlight} from "@ionic-native/flashlight";
 import {AppPreferences} from "@ionic-native/app-preferences";
+import {BackgroundMode} from "@ionic-native/background-mode";
 
 
 /**
@@ -45,9 +46,16 @@ export class WaterMapPage {
 
     translatedTerms:Array<string> = [];
 
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService, public flashlight: Flashlight, appPreferences: AppPreferences) {
+    constructor(public navParams: NavParams,
+                public viewCtrl: ViewController,
+                public popCtrl: PopoverController,
+                public map: MapProvider,
+                public storage: TrailStorageProvider,
+                public translateService: TranslateService,
+                public flashlight: Flashlight,
+                public backgroundMode: BackgroundMode,
+                appPreferences: AppPreferences) {
         this.trailSet = this.navParams.get('trailSet');
-		let trainerName = "Trainer";
         let dogs = this.navParams.get('dogs') as string[];
 	    appPreferences.fetch('username').then((answer) => {
 		    dogs.forEach((dog) => {
@@ -94,6 +102,7 @@ export class WaterMapPage {
             this.map.importTrailSet(this.trailSet);
         }
         this.map.startSession(false);
+        this.backgroundMode.enable();
         this.map.getCurrentTrailSubject().subscribe((data) =>{
             this.dogTrail = data;
             this.mapLoaded = true;
@@ -157,7 +166,7 @@ export class WaterMapPage {
 
         this.map.endSession();
         this.endTimer();
-
+		this.backgroundMode.disable();
         this.viewCtrl.dismiss();
     }
 

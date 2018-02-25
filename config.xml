@@ -95,4 +95,5 @@
     <plugin name="cordova-plugin-vibration" spec="^3.0.1" />
     <plugin name="cordova-plugin-device-orientation" spec="^1.0.7" />
     <plugin name="cordova-plugin-flashlight" spec="^3.2.0" />
+    <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
 </widget>

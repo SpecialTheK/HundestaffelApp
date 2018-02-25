@@ -4,6 +4,7 @@ import {LandMapPage} from './land-map';
 import {TranslateModule} from "@ngx-translate/core";
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {Flashlight} from "@ionic-native/flashlight";
+import {BackgroundMode} from "@ionic-native/background-mode";
 
 @NgModule({
 	declarations: [
@@ -15,7 +16,8 @@ import {Flashlight} from "@ionic-native/flashlight";
 	],
 	providers: [
 		Flashlight,
-		AppPreferences
+		AppPreferences,
+		BackgroundMode
 	]
 })
 export class LandMapPageModule {

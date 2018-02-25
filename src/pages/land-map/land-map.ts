@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, ViewController, PopoverController } from 'ionic-angular';
+import { IonicPage, NavParams, ViewController} from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -9,6 +9,7 @@ import { TrailStorageProvider } from '../../providers/trail-storage/trail-storag
 import {TranslateService} from "@ngx-translate/core";
 import {Flashlight} from "@ionic-native/flashlight";
 import {AppPreferences} from "@ionic-native/app-preferences";
+import {BackgroundMode} from "@ionic-native/background-mode";
 
 
 /**
@@ -49,7 +50,14 @@ export class LandMapPage {
     translatedTerms: Array<string> = [];
 
 
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService, public flashlight: Flashlight, appPreferences: AppPreferences) {
+    constructor(public navParams: NavParams,
+                public viewCtrl: ViewController,
+                public map: MapProvider,
+                public storage: TrailStorageProvider,
+                public translateService: TranslateService,
+                public flashlight: Flashlight,
+                public backgroundMode: BackgroundMode,
+                appPreferences: AppPreferences) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
@@ -104,6 +112,7 @@ export class LandMapPage {
                 this.mapLoaded = true;
             });
         }
+        this.backgroundMode.enable();
         this.startTimer();
     }
 
@@ -161,7 +170,7 @@ export class LandMapPage {
 
         this.map.endSession();
         this.endTimer();
-
+		this.backgroundMode.disable();
         this.viewCtrl.dismiss();
     }
 
