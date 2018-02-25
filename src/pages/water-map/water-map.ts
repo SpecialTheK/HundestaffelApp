@@ -173,7 +173,7 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	addTargetMarker() {
-        this.map.addMarker(this.translatedTerms["map_marker_end"], 0);
+        this.map.addMarker(0);
     }
 
 	/**

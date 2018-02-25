@@ -74,7 +74,7 @@ export class MapProvider {
                     this.firstPos,
                     f.latLng
                 ));
-                this.addMarker("", -1, ori);
+                this.addMarker(-1, ori);
                 this.isWindDirectionMode = false;
                 this.isClickedOnce = false;
             }
@@ -187,12 +187,12 @@ export class MapProvider {
         this.isCentered = true;
     }
 
-    addMarker(markerText: string, markerSymbolID: number, orientation?: number){
+    addMarker(markerSymbolID: number, orientation?: number){
         if(!this.isLandTrail && this.currentTrail.marker.length > 0){
             this.currentTrail.marker[this.currentTrail.marker.length - 1].toggle(null);
         }
         if(this.currentTrail.path.length >= 1){
-            let mar = this.currentTrail.addMarker(markerText, markerSymbolID, this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng, orientation);
+            let mar = this.currentTrail.addMarker(markerSymbolID, this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng, orientation);
             mar.addToMap(google, this.mapObject);
 
             this.currentTrailSubject.next(this.currentTrail);

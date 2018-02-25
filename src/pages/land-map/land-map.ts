@@ -175,7 +175,7 @@ export class LandMapPage {
 	 */
     addEndMarker(){
         console.log("Added End Marker");
-        this.map.addMarker(this.translatedTerms["map_marker_end"], 0);
+        this.map.addMarker(0);
     }
 
     /**
@@ -186,7 +186,7 @@ export class LandMapPage {
      */
     addInterestMarker(){
         console.log("Added Interest Marker");
-        this.map.addMarker(this.translatedTerms["map_marker_interest"], 1);
+        this.map.addMarker(1);
     }
 
     /**

@@ -16,17 +16,15 @@ export class Marker {
 
     id: number;
     position: Position;
-    title: string;
     symbolID: number;
     orientation: number = 0;
 
     //NOTE (christian): das ist der tatsächlich angezeigte marker!
     map_marker: any;
 
-    constructor(id: number, position: Position, title: string, symbolID: number, orientation?: number){
+    constructor(id: number, position: Position, symbolID: number, orientation?: number){
         this.id = id;
         this.position = position;
-        this.title = title;
         this.symbolID = symbolID;
         this.orientation = orientation;
     }
@@ -36,13 +34,11 @@ export class Marker {
             this.map_marker = new google.maps.Marker({
                 position: this.position.convertToSimpleObject(),
                 icon: {url: symbol_url[this.symbolID], anchor: new google.maps.Point(16, 16)},
-                title: this.title
             });
         }else {
             this.map_marker = new google.maps.Marker({
                 position: this.position.convertToSimpleObject(),
                 icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, rotation: this.orientation, scale: 4},
-                title: this.title
             });
         }
         this.map_marker.setDraggable(false);
@@ -74,7 +70,6 @@ export class Marker {
         return {
             id: this.id,
             position: this.position.convertToSimpleObject(),
-            title: this.title,
             symbolID: this.symbolID,
             orientation: this.orientation
         };
