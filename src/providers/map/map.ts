@@ -24,7 +24,13 @@ export class MapProvider {
     positionSub: any;
     headingSub: any;
     headingMap: DeviceOrientationCompassHeading;
+
     isCentered: boolean;
+
+    isWindDirectionMode: boolean;
+    isClickedOnce: boolean;
+    firstPos: any;
+
     currentTrail: Trail;
     comparisonTrail: Trail;
     waterDogTrail: Trail;
@@ -40,7 +46,9 @@ export class MapProvider {
     isLandTrail: boolean;
 
     constructor(public location: Geolocation, public navParams: NavParams, public vibration: Vibration, public deviceOrientation: DeviceOrientation){
-        //NOTE (christian): kein code hier! html seite muss erst vollständig geladen sein!
+        this.isCentered = true;
+        this.isWindDirectionMode = false;
+        this.isClickedOnce = false;
     }
 
     initMapObject(mapElement: ElementRef){
@@ -52,15 +60,29 @@ export class MapProvider {
                 zoomControl: true,
                 zoom: 16
         });
-        this.location.getCurrentPosition().then((pos) => {
-            this.mapObject.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
-            this.isCentered = true;
-        });
 
         this.mapObject.addListener('drag', (f) => {
             this.isCentered = false;
         });
+        this.mapObject.addListener('click', (f) => {
+            if(this.isWindDirectionMode && !this.isClickedOnce){
+                console.log("1 click");
+                this.firstPos = f.latLng;
+                this.isClickedOnce = true;
+            }else if(this.isWindDirectionMode && this.isClickedOnce){
+                let ori = (google.maps.geometry.spherical.computeHeading(
+                    this.firstPos,
+                    f.latLng
+                ));
+                this.addMarker("", -1, ori);
+                this.isWindDirectionMode = false;
+                this.isClickedOnce = false;
+            }
+        });
+    }
 
+    setzeWindMarker(){
+        this.isWindDirectionMode = true;
     }
 
     importTrailSet(trailSet: TrailSet){
@@ -85,11 +107,11 @@ export class MapProvider {
     }
 
     endSession(){
-        //this.positionSub.unsubscribe();
+        this.positionSub.unsubscribe();
+        this.headingSub.unsubscribe();
     }
 
     watchCurrentPosition(){
-        //NOTE (christian): nur für testing sonst watchPosition benutzen!
         this.headingSub = this.deviceOrientation.watchHeading().subscribe(
             (data: DeviceOrientationCompassHeading) => {this.headingMap = data;},
             (error: any) => {
@@ -98,8 +120,7 @@ export class MapProvider {
             }
         );
 
-        let recordInterval = setInterval((i) => {
-            this.location.getCurrentPosition().then((pos) => {
+        this.positionSub = this.location.watchPosition().subscribe((pos) => {
                 console.log(pos);
                 this.currentTrail.addToPath(pos.coords.latitude, pos.coords.longitude);
                 this.drawPath(pos.coords.latitude, pos.coords.longitude);
@@ -123,29 +144,7 @@ export class MapProvider {
                 }
 
                 this.currentTrailSubject.next(this.currentTrail);
-            })
-        }, 2000);
-        /*
-        this.positionSub = this.location.watchPosition()
-            .subscribe((data) => {
-                console.log(pos);
-                this.currentTrail.addToPath(pos.coords.latitude, pos.coords.longitude);
-                this.drawPath(pos.coords.latitude, pos.coords.longitude);
-
-                if(pos.coords.speed !== null){
-                    this.currentSpeed = pos.coords.speed;
-                }
-
-                if(pos.coords.heading !== null){
-                    this.currentDirection = pos.coords.heading;
-                    this.mapObject.setHeading(pos.coords.heading);
-                }
-
-                if(this.isCentered){
-                    this.mapObject.panTo({lat: pos.coords.latitude, lng: pos.coords.longitude});
-                }
             });
-        */
     }
 
     cumputeDistanceToTargetMarker(lat: number, lng: number){
@@ -193,7 +192,9 @@ export class MapProvider {
             this.currentTrail.marker[this.currentTrail.marker.length - 1].toggle(null);
         }
         if(this.currentTrail.path.length >= 1){
-            this.currentTrail.addMarker(markerText, markerSymbolID, this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng, orientation).addToMap(google, this.mapObject);
+            let mar = this.currentTrail.addMarker(markerText, markerSymbolID, this.currentTrail.getLastPosition().lat, this.currentTrail.getLastPosition().lng, orientation);
+            mar.addToMap(google, this.mapObject);
+
             this.currentTrailSubject.next(this.currentTrail);
         }
     }
