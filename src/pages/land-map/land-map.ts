@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, ViewController} from 'ionic-angular';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -51,7 +51,7 @@ export class LandMapPage {
 
 
     constructor(public navParams: NavParams,
-                public viewCtrl: ViewController,
+                public navCtrl: NavController,
                 public map: MapProvider,
                 public storage: TrailStorageProvider,
                 public translateService: TranslateService,
@@ -171,7 +171,9 @@ export class LandMapPage {
         this.map.endSession();
         this.endTimer();
 		this.backgroundMode.disable();
-        this.viewCtrl.dismiss();
+		this.navCtrl.popToRoot().then((answer) => {
+			this.navCtrl.push('HistoryPage');
+		});
     }
 
     /**

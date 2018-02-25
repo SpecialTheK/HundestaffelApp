@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, ViewController, PopoverController } from 'ionic-angular';
+import { IonicPage, NavParams, NavController, PopoverController } from 'ionic-angular';
 
 import { TrailSet } from "../../models/trailSet";
 
@@ -47,7 +47,7 @@ export class WaterMapPage {
     translatedTerms:Array<string> = [];
 
     constructor(public navParams: NavParams,
-                public viewCtrl: ViewController,
+                public navCtrl: NavController,
                 public popCtrl: PopoverController,
                 public map: MapProvider,
                 public storage: TrailStorageProvider,
@@ -167,7 +167,9 @@ export class WaterMapPage {
         this.map.endSession();
         this.endTimer();
 		this.backgroundMode.disable();
-        this.viewCtrl.dismiss();
+	    this.navCtrl.popToRoot().then((answer) => {
+		    this.navCtrl.push('HistoryPage');
+	    });
     }
 
 	/**
