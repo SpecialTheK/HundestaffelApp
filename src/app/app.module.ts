@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from "@ionic-native/geolocation";
 import {Vibration} from '@ionic-native/vibration';
+import {DeviceOrientation} from '@ionic-native/device-orientation';
 
 import {MyApp} from './app.component';
 
@@ -47,7 +48,8 @@ import {ComponentsModule} from "../components/components.module";
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         WebIntent,
 		TrailStorageProvider,
-		Vibration
+		Vibration,
+		DeviceOrientation
     ],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

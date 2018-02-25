@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { IonicPage, NavParams, ModalController, ViewController, PopoverController } from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -33,25 +33,26 @@ export class LandMapPage {
     runnerTrail: Trail;
     dogTrail: Trail;
 
-    showPerson = false;
-
-    hasTrails = false;
-
     mapLoaded = false;
 
     startTime: Date;
     deltaTime: Date;
     runTime: string;
-
     timeInterval: any;
 
-    someString = "Hallo";
+    isRunnerTrail = false;
 
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public map: MapProvider, public storage: TrailStorageProvider) {
+    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public modalCtrl: ModalController, public map: MapProvider, public storage: TrailStorageProvider) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
         this.trailSet = TrailSet.fromData(this.navParams.get('trailSet'));
+
+        if(this.trailSet.trails.length === 0 && this.trailSet.isTraining){
+            this.isRunnerTrail = true;
+        } else{
+            this.isRunnerTrail = false;
+        }
 
         this.startTime = new Date();
         this.deltaTime = new Date();
@@ -64,20 +65,32 @@ export class LandMapPage {
 	 * @version 1.0.0
 	 */
     ionViewDidLoad() {
+        console.log(this.isRunnerTrail);
+
         this.map.initMapObject(this.mapElement);
-        if(this.trailSet.trails.length > 0){
+        if(this.isRunnerTrail){
+            this.map.startSession(true);
+            this.map.getCurrentTrailSubject().subscribe((data) => {
+                this.runnerTrail = data;
+                this.mapLoaded = true;
+            });
+        } else if(!this.trailSet.isTraining){
+            this.map.startSession(true);
+            this.map.getCurrentTrailSubject().subscribe((data) => {
+                this.dogTrail = data;
+                this.mapLoaded = true;
+            });
+        } else {
             this.map.importTrailSet(this.trailSet);
+            //NOTE (christian): dies kann sich im verlauf des Trails ändern, wenn ein anderer Trail im auswahlmenu gewählt wird
             this.runnerTrail = this.trailSet.trails[0];
-            console.log(this.runnerTrail);
-            this.hasTrails = true;
+            this.map.startSession(true);
+            this.map.toggleVirtualTrainer(this.runnerTrail);
+            this.map.getCurrentTrailSubject().subscribe((data) => {
+                this.dogTrail = data;
+                this.mapLoaded = true;
+            });
         }
-        this.map.startSession();
-
-        this.map.getCurrentTrailSubject().subscribe((data) => {
-            this.dogTrail = data;
-            this.mapLoaded = true;
-        });
-
         this.startTimer();
     }
 
@@ -95,7 +108,7 @@ export class LandMapPage {
     }
 
     /**
-    * Method that is called to stop the recording of a trail.
+    * Method that is called to stop the timer.
     *
     * @since 1.0.0
     * @version 1.0.0
@@ -103,7 +116,6 @@ export class LandMapPage {
     endTimer() {
       clearInterval(this.timeInterval);
     }
-
 
 	/**
 	 * Method that is called to stop the recording of a trail.
@@ -163,10 +175,12 @@ export class LandMapPage {
      * @since 1.0.0
      * @version 1.0.0
      */
-    addWindDirectionMarker(){
-        //TODO (christian): benutz den FORWARD_CLOSED_ARROW und rotiere ihn!
-        //TODO (christian): setze das heading der map anhand von geolocation haeding!
-        console.log("WIND DIRECTION MARKER STILL IN DEVELOPMENT!");
+    addWindDirectionMarker(event){
+        console.log("Added Wind Direction Marker");
+        this.map.addMarker("Some Text", -1, 0);
+        let lastMarker = this.map.currentTrail.marker[this.map.currentTrail.marker.length - 1];
+        let popover = this.popCtrl.create('WindmarkerOrientationPage', {marker: lastMarker});
+        popover.present({ev: event});
     }
 
 }

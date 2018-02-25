@@ -20,6 +20,7 @@
                 <button ion-fab (click)="centerMap()"><ion-icon name="locate"></ion-icon></button>
             </ion-fab>
         </div>
+
         <div #map class="map"></div>
     </div>
 
@@ -27,39 +28,65 @@
         <ion-slides>
             <ion-slide class="info-slide">
 
-                <ion-grid>
-                    <ion-label>Runner</ion-label>
-                    <ion-row *ngIf="hasTrails === true">
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>Distanz: {{runnerTrail.distance}}</ion-label>
-                            </ion-item>
-                        </ion-col>
+                <div class="loading" *ngIf="mapLoaded === false">
+                    <ion-spinner></ion-spinner>
+                </div>
 
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>Zeit: irgend eine Zeit</ion-label>
-                            </ion-item>
-                        </ion-col>
-                    </ion-row>
+                <div class="trail-info" *ngIf="mapLoaded === true">
 
-                    <ion-label>Hund</ion-label>
-                    <ion-row *ngIf="mapLoaded === true">
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>Distanz: {{dogTrail.distance}}</ion-label>
-                            </ion-item>
-                        </ion-col>
+                    <ion-grid>
 
-                        <ion-col>
-                            <ion-item class="force-color-black">
-                                <ion-label>Zeit:</ion-label>
-                                <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
-                            </ion-item>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
+                        <ion-label>Runner</ion-label>
+                        <ion-row *ngIf="isRunnerTrail === true">
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label>Distanz: {{runnerTrail.distance}}</ion-label>
+                                </ion-item>
+                            </ion-col>
 
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label>Zeit:</ion-label>
+                                    <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-row *ngIf="isRunnerTrail === false">
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label>Distanz: {{runnerTrail.distance}}</ion-label>
+                                </ion-item>
+                            </ion-col>
+
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label>Zeit:</ion-label>
+                                    <!--
+                                    <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
+                                    -->
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-label>Hund</ion-label>
+                        <ion-row *ngIf="isRunnerTrail === false">
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label>Distanz: {{dogTrail.distance}}</ion-label>
+                                </ion-item>
+                            </ion-col>
+
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label>Zeit:</ion-label>
+                                    <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+
+                </div>
 
             </ion-slide>
             <ion-slide class="function-slide">
@@ -82,7 +109,7 @@
                     <ion-row>
                         <ion-col>
                             <ion-item>
-                                <button ion-button (click)="addWindDirectionMarker()">Windrichtung</button>
+                                <button ion-button (click)="addWindDirectionMarker($event)">Windrichtung</button>
                             </ion-item>
                         </ion-col>
 
@@ -94,7 +121,8 @@
                     </ion-row>
                 </ion-grid>
             </ion-slide>
-            <ion-slide class="person-slide" *ngIf="showPerson === true">
+
+            <ion-slide class="person-slide">
                 <ion-grid>
                     <ion-row>
                         <ion-col>

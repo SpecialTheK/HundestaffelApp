@@ -60,13 +60,6 @@ export class Trail {
 	distance: number;
 
 	/**
-	 * Current direction of the trail.
-	 *
-	 * @since 1.0.0
-	 */
-	direction: number;
-
-	/**
 	 * Current speed of the trail.
 	 *
 	 * @since 1.0.0
@@ -109,8 +102,9 @@ export class Trail {
 	trailColor: string;
 
 
-	//NOTE(christian): schau wie man das anders machen kann
 	polyline: any;
+
+	isHidden: boolean;
 
 
 	constructor(id: number, trainer: string, dog: string){
@@ -125,6 +119,7 @@ export class Trail {
 		this.triangles = [];
 
 		this.trailColor = color[this.id];
+		this.isHidden = false;
 	}
 
 	/**
@@ -150,8 +145,8 @@ export class Trail {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	addMarker(title: string, markerSymbolID: number, lat: number, lng: number): Marker{
-		let mar = new Marker(this.marker.length, new Position(lat, lng), title, markerSymbolID);
+	addMarker(title: string, markerSymbolID: number, lat: number, lng: number, orientation?: number): Marker{
+		let mar = new Marker(this.marker.length, new Position(lat, lng), title, markerSymbolID, orientation);
 		this.marker.push(mar);
 
 		return mar;
@@ -168,8 +163,8 @@ export class Trail {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	addCircle(color: string, opacity: number, lat: number, lng: number): ColoredCircle{
-		let cir = new ColoredCircle(this.circles.length, new Position(lat, lng), color, opacity);
+	addCircle(opacity: number, lat: number, lng: number): ColoredCircle{
+		let cir = new ColoredCircle(this.circles.length, new Position(lat, lng), this.trailColor, opacity);
 		this.circles.push(cir);
 
 		return cir;
@@ -192,14 +187,52 @@ export class Trail {
 	}
 
 	/**
-	 * Method to hide or show this trail.
+	 * Method to hide this trail.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	hide(){
+		if(!this.isHidden){
+			if(this.polyline !== undefined){
+				this.polyline.setMap(null);
+			}
+			this.marker.forEach((mar) => {
+				mar.toggle(null);
+			});
+			this.circles.forEach((cir) => {
+				cir.toggle(null);
+			});
+			this.triangles.forEach((tri) => {
+				tri.toggle(null);
+			});
+			this.isHidden = true;
+		}
+	}
+
+	/**
+	 * Method to show this trail.
 	 *
 	 * @param map
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	toggleOnMap(map: any = null){
-		//NOTE (christian): wenn keine werte übergeben werden, dann wird der trail von der map entfernt. wenn google und map übergeben werden, dann wird der trail angezeigt!
+	show(map){
+		if(this.isHidden){
+			if(this.polyline !== undefined){
+				this.polyline.setMap(null);
+			}
+			this.marker.forEach((mar) => {
+				mar.toggle(map);
+			});
+			this.circles.forEach((cir) => {
+				cir.toggle(map);
+			});
+			this.triangles.forEach((tri) => {
+				tri.toggle(map);
+			});
+			this.isHidden = false;
+		}
 	}
 
 	/**
@@ -320,13 +353,13 @@ export class Trail {
 				}
 			}
 			for(let mar of data.marker){
-				let m = trail.addMarker(mar.title, mar.symbolID, mar.position.lat, mar.position.lng);
+				let m = trail.addMarker(mar.title, mar.symbolID, mar.position.lat, mar.position.lng, mar.orientation);
 				if(google != null && map != null) {
 					m.addToMap(google, map);
 				}
 			}
 			for(let cir of data.circles){
-				let c = trail.addCircle(cir.color, cir.opacity, cir.position.lat, cir.position.lng);
+				let c = trail.addCircle(cir.opacity, cir.position.lat, cir.position.lng);
 				if(google != null && map != null) {
 					c.addToMap(google, map);
 				}

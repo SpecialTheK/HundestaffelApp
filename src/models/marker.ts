@@ -18,23 +18,33 @@ export class Marker {
     position: Position;
     title: string;
     symbolID: number;
+    orientation: number = 0;
 
     //NOTE (christian): das ist der tatsächlich angezeigte marker!
     map_marker: any;
 
-    constructor(id: number, position: Position, title: string, symbolID: number){
+    constructor(id: number, position: Position, title: string, symbolID: number, orientation?: number){
         this.id = id;
         this.position = position;
         this.title = title;
         this.symbolID = symbolID;
+        this.orientation = orientation;
     }
 
     addToMap(google: any, map: any){
-        this.map_marker = new google.maps.Marker({
-            position: this.position.convertToSimpleObject(),
-            icon: {url: symbol_url[this.symbolID], anchor: new google.maps.Point(16, 16)},
-            title: this.title
-        });
+        if(this.symbolID !== -1){
+            this.map_marker = new google.maps.Marker({
+                position: this.position.convertToSimpleObject(),
+                icon: {url: symbol_url[this.symbolID], anchor: new google.maps.Point(16, 16)},
+                title: this.title
+            });
+        }else {
+            this.map_marker = new google.maps.Marker({
+                position: this.position.convertToSimpleObject(),
+                icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, rotation: this.orientation, scale: 4},
+                title: this.title
+            });
+        }
         this.map_marker.setDraggable(false);
         this.map_marker.addListener('dblclick', (f) => {
             if(this.map_marker.getDraggable() == false){
@@ -51,12 +61,13 @@ export class Marker {
         this.map_marker.setMap(map);
     }
 
-    toggle(map: any = null){
-        this.map_marker.setMap(map);
+    changeOrientation(orientation: number) {
+        this.map_marker.setIcon({path: 1, rotation: orientation, scale: 4});
+        this.orientation = orientation;
     }
 
-    highlight(){
-        //TODO (christian): highlight den marker
+    toggle(map: any = null){
+        this.map_marker.setMap(map);
     }
 
     convertToSimpleObject(): any{
@@ -64,7 +75,8 @@ export class Marker {
             id: this.id,
             position: this.position.convertToSimpleObject(),
             title: this.title,
-            symbolID: this.symbolID
+            symbolID: this.symbolID,
+            orientation: this.orientation
         };
     }
 }

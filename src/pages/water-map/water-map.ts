@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, ModalController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, ModalController, NavParams, ViewController, PopoverController } from 'ionic-angular';
 
 import { Trail } from '../../models/trail';
 import { TrailSet } from "../../models/trailSet";
@@ -27,21 +27,36 @@ export class WaterMapPage {
     @ViewChild('map') mapElement: ElementRef;
 
     trailSet: TrailSet;
+    dogTrail: Trail;
 
-    showPerson = false;
+    distanceToTargetMarker: number;
 
-    hasTrails = false;
+    startTime: Date;
+    deltaTime: Date;
+    runTime: string;
+    timeInterval: any;
 
-    constructor(public modalCtrl: ModalController, public navParams: NavParams, public viewCtrl: ViewController, public map: MapProvider, public storage: TrailStorageProvider) {
+    displayOpacityMin: number;
+
+    mapLoaded = false;
+
+    constructor(public modalCtrl: ModalController, public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
         this.trailSet = this.navParams.get('trailSet');
-        if(this.trailSet !== undefined){
-            this.showPerson = true;
-        }else {
-            this.hasTrails = true;
-        }
+
+        //TODO (christian): mit jonas klären, dass hunde ein array wird!
+        this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund1"));
+        this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund2"));
+        this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", "Hund3"));
+
+        this.distanceToTargetMarker = 0;
+        this.displayOpacityMin = 2;
+
+        this.startTime = new Date();
+        this.deltaTime = new Date();
+        this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
     }
 
 	/**
@@ -49,10 +64,41 @@ export class WaterMapPage {
 	 */
 	ionViewDidLoad() {
         this.map.initMapObject(this.mapElement);
-        if(this.hasTrails){
+        if(this.trailSet.trails.length > 0){
             this.map.importTrailSet(this.trailSet);
         }
-        this.map.startSession();
+        this.map.startSession(false);
+        this.map.getCurrentTrailSubject().subscribe((data) =>{
+            this.dogTrail = data;
+            this.mapLoaded = true;
+        });
+        this.map.getDistanceToTargetMarker().subscribe((data) =>{
+            this.distanceToTargetMarker = data;
+        });
+        this.startTimer();
+    }
+
+    /**
+    * Method that is called to stop the recording of a trail.
+    *
+    * @since 1.0.0
+    * @version 1.0.0
+    */
+    startTimer() {
+        this.timeInterval = setInterval((i) => {
+            this.deltaTime = new Date();
+            this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
+        }, 1000);
+    }
+
+    /**
+    * Method that is called to stop the timer.
+    *
+    * @since 1.0.0
+    * @version 1.0.0
+    */
+    endTimer() {
+      clearInterval(this.timeInterval);
     }
 
     /**
@@ -72,14 +118,19 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	endTrail() {
-        this.map.currentTrail.setEndTime();
-        this.trailSet.addTrailToSet(this.map.currentTrail);
+        this.dogTrail.setEndTime();
+        this.dogTrail.id = this.trailSet.trails.length;
+        this.dogTrail.dog = "Hunde";
+        this.dogTrail.trainer = "Trainer";
+
+        this.trailSet.addTrailToSet(this.dogTrail);
 
         console.log(this.trailSet);
 
         this.storage.addNewTrailSet(this.trailSet);
 
         this.map.endSession();
+        this.endTimer();
 
         this.viewCtrl.dismiss();
     }
@@ -90,9 +141,12 @@ export class WaterMapPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	addCircle() {
-        let cricleAdd = this.modalCtrl.create('AddColoredCirclePage', {map: this.map});
-        cricleAdd.present();
+	addCircle(event: any, index: number) {
+        this.map.setWaterDogTrail(this.trailSet.trails[index]);
+        let popover = this.popCtrl.create('AddColoredCirclePage', {map: this.map});
+        popover.present({
+            ev: event
+        });
     }
 
 	/**
@@ -111,7 +165,7 @@ export class WaterMapPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	addTriangle() {
+	addWindDirectionTriangle() {
         this.map.addTriangle();
     }
 
@@ -121,7 +175,15 @@ export class WaterMapPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	changeOpacity() {
-
+	changeDisplayOpacity() {
+        this.trailSet.trails.forEach((data) => {
+            data.circles.forEach((cir) => {
+                if(cir.opacity < (this.displayOpacityMin / 10)){
+                    cir.toggle(null);
+                }else {
+                    cir.toggle(this.map.mapObject);
+                }
+            });
+        });
     }
 }

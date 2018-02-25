@@ -106,10 +106,8 @@
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.1" />
     <plugin name="cordova-plugin-app-preferences" spec="^0.99.3" />
     <plugin name="com-darryncampbell-cordova-plugin-intent" spec="0.0.19" />
-<<<<<<< HEAD
     <plugin name="cordova-plugin-vibration" spec="^3.0.1" />
-=======
     <plugin name="cordova-custom-config" spec="^5.0.2" />
     <engine name="ios" spec="~4.5.4" />
->>>>>>> 626929b2a00c7c4503b0f8c3cef5b7e1c5165c47
+    <plugin name="cordova-plugin-device-orientation" spec="^1.0.7" />
 </widget>

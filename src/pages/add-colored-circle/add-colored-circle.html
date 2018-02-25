@@ -1,39 +1,29 @@
-<ion-header>
+<ion-content>
 
-  <ion-navbar>
-    <ion-title>{{'MAP_CIRCLE_ADD' | translate}}</ion-title>
-  </ion-navbar>
+    <ion-grid>
 
-</ion-header>
-
-<ion-content padding>
-    <ion-grid no-padding>
-        <ion-row class="color-row">
+        <ion-row>
             <ion-col>
-                <button ion-button="color-dot" class="color-dot-red" (click)="changeColor('#ff0000')"></button>
-            </ion-col>
-            <ion-col>
-                <button ion-button="color-dot" class="color-dot-green" (click)="changeColor('#00ff00')"></button>
-            </ion-col>
-            <ion-col>
-                <button ion-button="color-dot" class="color-dot-blue" (click)="changeColor('#0000ff')"></button>
-            </ion-col>
-            <ion-col>
-                <button ion-button="color-dot" class="color-dot-pink" (click)="changeColor('#ff00ff')"></button>
-            </ion-col>
-        </ion-row>
-        <ion-row class="opacity-row">
-            <ion-col>
-                <ion-range min="2" max="8" step="2" snaps="true" [(ngModel)]="circleOpacity">
-                    <ion-icon range-left small name="sunny"></ion-icon>
-                    <ion-icon range-right name="sunny"></ion-icon>
+                <ion-label>Windrichtung</ion-label>
+                <ion-range min="2" max="8" step="2" [(ngModel)]="circleOpacity" style="width: 50%">
                 </ion-range>
             </ion-col>
-        </ion-row>
-        <ion-row class="confirm-row">
+
             <ion-col>
-                <button ion-button (click)="addCircle()" >{{'CONFIRM' | translate}}</button>
+                <button ion-button (click)="addCircle()">Neuer Kreis</button>
             </ion-col>
         </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <button ion-button (click)="show()">Anzeigen</button>
+            </ion-col>
+
+            <ion-col>
+                <button ion-button (click)="hide()">Verbergen</button>
+            </ion-col>
+        </ion-row>
+
     </ion-grid>
+
 </ion-content>

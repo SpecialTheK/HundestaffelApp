@@ -22,7 +22,7 @@ export class ColoredCircle {
         this.position = new Position(position.lat, position.lng);
         this.color = color;
         this.opacity = opacity;
-        this.radius = 100;
+        this.radius = 50;
     }
 
     addToMap(google: any, map: any){
