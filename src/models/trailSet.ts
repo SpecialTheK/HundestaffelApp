@@ -42,7 +42,12 @@ export class TrailSet {
 	 * @since 1.0.0
 	 */
     situation: string;
-    
+
+	/**
+	 * describes the situation before the incident
+	 *
+	 * @since 1.0.0
+	 */
     preSituation: string;
 
 	/**
@@ -92,9 +97,9 @@ export class TrailSet {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	public addTrailToSet(newTrail: Trail){
+	public addTrailToSet(newTrail: Trail): number{
     	this.trails.push(newTrail);
-    	
+
     	return this.trails.length-1;
     }
 

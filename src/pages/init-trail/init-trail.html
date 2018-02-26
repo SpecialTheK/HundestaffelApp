@@ -30,12 +30,6 @@
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label>{{'MAP_WIND_DIRECTION' | translate}}</ion-label>
-            <ion-select (ionChange)="test($event)">
-                <ion-option *ngFor="let windDirection of weather_WindDirection" value="{{windDirection}}">{{windDirection}}</ion-option>
-            </ion-select>
-        </ion-item>
-        <ion-item>
             <ion-label>{{'MAP_TEMPERATURE' | translate}}</ion-label>
             <ion-input type="number" [(ngModel)]="weather_Temperature"></ion-input>
         </ion-item>

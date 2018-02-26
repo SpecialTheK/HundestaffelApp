@@ -32,7 +32,6 @@ export class InitTrailPage {
 	body: string[] = [];
 
     weather_Precipitation: string[] = [];
-    weather_WindDirection: string[] = [];
     weather_Temperature: number = 20;
 
     situation: string = "";
@@ -47,8 +46,6 @@ export class InitTrailPage {
         this.dogNames = [];
         this.dogNames.push("");
         this.translateVariables();
-	    this.person = new Person();
-        this.person.hairColor_choice = "123";
     }
 
 	/**
@@ -100,16 +97,6 @@ export class InitTrailPage {
 			this.translatedTerms["map_precipitation_sleet"],
 			this.translatedTerms["map_precipitation_hail"]
 		];
-		this.weather_WindDirection = [
-			this.translatedTerms["map_wind_n"],
-			this.translatedTerms["map_wind_ne"],
-			this.translatedTerms["map_wind_e"],
-			this.translatedTerms["map_wind_se"],
-			this.translatedTerms["map_wind_s"],
-			this.translatedTerms["map_wind_sw"],
-			this.translatedTerms["map_wind_w"],
-			this.translatedTerms["map_wind_nw"]
-		];
 	}
 
     takePicture(){
@@ -118,8 +105,8 @@ export class InitTrailPage {
             destinationType: this.camera.DestinationType.DATA_URL,
             encodingType: this.camera.EncodingType.JPEG,
             mediaType: this.camera.MediaType.PICTURE
-        }
-        this.camera.getPicture(options) .then((imageData) => {
+        };
+        this.camera.getPicture(options).then((imageData) => {
             let base64Img = 'data:image/jpeg;base64,' + imageData;
         }, (err) => {
             console.log(err);
