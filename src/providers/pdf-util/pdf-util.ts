@@ -85,13 +85,11 @@ export class PdfUtilProvider {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	private getDuration(startTime: Date, endTime: Date):string{
+	private getDuration(startTime: Date, endTime: Date):number{
 		let _startTime = moment(startTime);
 		let _endTime = moment(endTime);
 		
-		let totalTime = moment(_startTime.diff(_endTime)).toDate();
-		return totalTime.getHours()+" "+this.translate["hours"]+" "+totalTime.getMinutes()+
-			" "+this.translate["minutes"]+" "+" "+totalTime.getMinutes()+" "+this.translate["seconds"];
+		return moment(_endTime.diff(_startTime)).toDate().getTime();
 	}
 	
 	/**
