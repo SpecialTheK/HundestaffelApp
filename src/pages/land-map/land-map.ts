@@ -11,6 +11,7 @@ import {Flashlight} from "@ionic-native/flashlight";
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {BackgroundMode} from "@ionic-native/background-mode";
 import {DetailsFormComponent} from "../../components/details-form/details-form";
+import {ImagePopupComponent} from "../../components/image-popup/image-popup";
 
 
 /**
@@ -231,9 +232,9 @@ export class LandMapPage {
     public editDetails(){
     	let data:any = this.trailSet;
     	data.dogs = [this.dogName];
-	    let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: true});
-	    profileModal.present();
-	    profileModal.onDidDismiss((data) => {
+	    let detailModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: true});
+	    detailModal.present();
+	    detailModal.onDidDismiss((data) => {
 	    	this.dogName = data.dogs[0];
 	    	this.trailSet.precipitation = data.precipitation;
 	    	this.trailSet.temperature = data.temperature;
@@ -245,6 +246,8 @@ export class LandMapPage {
     }
     
     public showImage(){
-    
+    	console.log(this.trailSet.convertToSimpleObject());
+	    let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
+	    imageModal.present();
     }
 }

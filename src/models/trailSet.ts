@@ -125,8 +125,6 @@ export class TrailSet {
         });
         let _person = this.person.convertToSimpleObject();
 
-		console.log(_trails);
-
         return {
             creationID: this.creationID,
             isLandTrail: this.isLandTrail,

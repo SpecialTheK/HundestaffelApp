@@ -8,6 +8,7 @@ import {BackgroundMode} from "@ionic-native/background-mode";
 import {ComponentsModule} from "../../components/components.module";
 import {DetailsFormComponent} from "../../components/details-form/details-form";
 import {DogListComponent} from '../../components/dog-list/dog-list';
+import {ImagePopupComponent} from "../../components/image-popup/image-popup";
 
 @NgModule({
     declarations: [
@@ -23,6 +24,6 @@ import {DogListComponent} from '../../components/dog-list/dog-list';
 		AppPreferences,
 		BackgroundMode
 	],
-	entryComponents: [DetailsFormComponent,DogListComponent]
+	entryComponents: [DetailsFormComponent,DogListComponent, ImagePopupComponent]
 })
 export class WaterMapPageModule {}

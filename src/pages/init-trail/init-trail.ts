@@ -26,13 +26,17 @@ export class InitTrailPage {
 	    let profileModal = this.modalCtrl.create(DetailsFormComponent);
 	    profileModal.present();
 	    profileModal.onDidDismiss((data) => {
-	    	let trailSet: TrailSet = new TrailSet(this.isLandTrail, false, true, data.preSituation, data.situation, data.temperature, data.precipitation, data.risks, data.person);
-	    	if(this.isLandTrail){
-	    		console.log("LAND");
-			    this.navCtrl.push('LandMapPage', {trailSet: trailSet, dog: data.dogs[0]});
+	    	if(data.cancel !== undefined && data.cancel === true){
+	    		this.navCtrl.popToRoot();
 		    } else {
-	    		console.log("WASSER");
-			    this.navCtrl.push('WaterMapPage', {trailSet: trailSet, dogs: data.dogs});
+			    let trailSet: TrailSet = new TrailSet(this.isLandTrail, false, true, data.preSituation, data.situation, data.temperature, data.precipitation, data.risks, data.person);
+			    if(this.isLandTrail){
+				    console.log("LAND");
+				    this.navCtrl.push('LandMapPage', {trailSet: trailSet, dog: data.dogs[0]});
+			    } else {
+				    console.log("WASSER");
+				    this.navCtrl.push('WaterMapPage', {trailSet: trailSet, dogs: data.dogs});
+			    }
 		    }
 	    });
     }

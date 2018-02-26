@@ -7,6 +7,7 @@ import {Flashlight} from "@ionic-native/flashlight";
 import {BackgroundMode} from "@ionic-native/background-mode";
 import {ComponentsModule} from "../../components/components.module";
 import {DetailsFormComponent} from "../../components/details-form/details-form";
+import {ImagePopupComponent} from "../../components/image-popup/image-popup";
 
 @NgModule({
 	declarations: [
@@ -22,7 +23,7 @@ import {DetailsFormComponent} from "../../components/details-form/details-form";
 		AppPreferences,
 		BackgroundMode
 	],
-	entryComponents: [DetailsFormComponent]
+	entryComponents: [DetailsFormComponent, ImagePopupComponent]
 })
 export class LandMapPageModule {
 }

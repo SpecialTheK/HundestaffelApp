@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Person} from "../../models/person";
-import {NavParams, ViewController} from "ionic-angular";
+import {NavController, NavParams, ViewController} from "ionic-angular";
 import {TranslateService} from "@ngx-translate/core";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 
@@ -29,7 +29,7 @@ export class DetailsFormComponent {
 	precipitationOptions: string[] = [];
 	translatedTerms: string[] = [];
 
-	constructor(public navParams: NavParams, public viewCtrl: ViewController, public translateService: TranslateService, public camera: Camera) {
+	constructor(public navParams: NavParams, public navCtrl: NavController, public viewCtrl: ViewController, public translateService: TranslateService, public camera: Camera) {
 		let data = this.navParams.get('data');
 		this.multipleDogs = !this.navParams.get('isLandTrail');
 		if(data === undefined){
@@ -139,5 +139,9 @@ export class DetailsFormComponent {
 		data.preSituation = this.preSituation;
 		data.risks = this.risks;
 		this.viewCtrl.dismiss(data);
+	}
+	
+	dismiss(){
+		this.viewCtrl.dismiss({'cancel': true});
 	}
 }

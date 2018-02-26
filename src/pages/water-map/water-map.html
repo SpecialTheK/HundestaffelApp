@@ -153,7 +153,7 @@
                                 </ion-item>
                             </ion-col>
                             <ion-col>
-                                <ion-item>
+                                <ion-item *ngIf="trailSet.person.image !== ''">
                                     <button ion-button (click)="showImage()">{{'PERSON_IMAGE' | translate}}</button>
                                 </ion-item>
                             </ion-col>

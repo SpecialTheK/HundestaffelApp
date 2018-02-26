@@ -18,7 +18,7 @@
                 <button ion-fab (click)="centerMap()"><ion-icon name="locate"></ion-icon></button>
             </ion-fab>
             <ion-fab center right>
-                <button ion-fab (click)="toggleFlashlight()"><ion-icon name="sunny"></ion-icon></button>
+                <button ion-fab (click)="showImage()"><ion-icon name="sunny"></ion-icon></button>
             </ion-fab>
         </div>
 
@@ -166,7 +166,6 @@
                             </ion-item>
                         </ion-col>
                     </ion-row>
-
                     <ion-row>
                         <ion-col>
                             <ion-item>
@@ -174,7 +173,7 @@
                             </ion-item>
                         </ion-col>
                         <ion-col>
-                            <ion-item>
+                            <ion-item *ngIf="trailSet.person.image !== ''">
                                 <button ion-button (click)="showImage()">{{'PERSON_IMAGE' | translate}}</button>
                             </ion-item>
                         </ion-col>

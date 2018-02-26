@@ -13,6 +13,7 @@ import {BackgroundMode} from "@ionic-native/background-mode";
 import {DetailsFormComponent} from "../../components/details-form/details-form";
 
 import {DogListComponent} from '../../components/dog-list/dog-list';
+import {ImagePopupComponent} from "../../components/image-popup/image-popup";
 
 /**
  * Page that displays the map for water trailing.
@@ -267,6 +268,7 @@ export class WaterMapPage {
 	}
 	
 	public showImage(){
-	
+		let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
+		imageModal.present();
 	}
 }
