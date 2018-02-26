@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, NavController, PopoverController } from 'ionic-angular';
+import {IonicPage, NavParams, NavController, PopoverController, ModalController} from 'ionic-angular';
 
 import { TrailSet } from "../../models/trailSet";
 
@@ -10,6 +10,7 @@ import {Trail} from "../../models/trail";
 import {Flashlight} from "@ionic-native/flashlight";
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {BackgroundMode} from "@ionic-native/background-mode";
+import {DetailsFormComponent} from "../../components/details-form/details-form";
 
 
 /**
@@ -48,6 +49,7 @@ export class WaterMapPage {
 
     constructor(public navParams: NavParams,
                 public navCtrl: NavController,
+                public modalCtrl: ModalController,
                 public popCtrl: PopoverController,
                 public map: MapProvider,
                 public storage: TrailStorageProvider,
@@ -228,5 +230,10 @@ export class WaterMapPage {
 		if(this.flashlight.available()){
 			this.flashlight.toggle();
 		}
+	}
+	
+	public editDetails(){
+		let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: this.trailSet});
+		profileModal.present();
 	}
 }

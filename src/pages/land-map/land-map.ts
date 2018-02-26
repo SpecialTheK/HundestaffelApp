@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -10,6 +10,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {Flashlight} from "@ionic-native/flashlight";
 import {AppPreferences} from "@ionic-native/app-preferences";
 import {BackgroundMode} from "@ionic-native/background-mode";
+import {DetailsFormComponent} from "../../components/details-form/details-form";
 
 
 /**
@@ -52,6 +53,7 @@ export class LandMapPage {
 
     constructor(public navParams: NavParams,
                 public navCtrl: NavController,
+                public modalCtrl: ModalController,
                 public map: MapProvider,
                 public storage: TrailStorageProvider,
                 public translateService: TranslateService,
@@ -224,5 +226,10 @@ export class LandMapPage {
     	if(this.flashlight.available()){
     		this.flashlight.toggle();
 	    }
+    }
+    
+    public editDetails(){
+	    let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: this.trailSet});
+	    profileModal.present();
     }
 }

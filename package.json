@@ -95,6 +95,7 @@
       "cordova-plugin-flashlight": {},
       "cordova-plugin-background-mode": {},
       "cordova-plugin-mauron85-background-geolocation": {},
+      "cordova-plugin-compat": {},
       "cordova-plugin-camera": {}
     },
     "platforms": [
