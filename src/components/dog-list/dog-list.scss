@@ -1,32 +1,19 @@
 dog-list {
-
-    ion-list,
-    ion-item,
-    ion-row,
-    ion-label,
-    ion-checkbox{
-        margin: 0;
-        padding: 0;
+    ion-list.list-ios{
+	    margin: -1px 0 0;
     }
-
-    .scheissCheckbox{
-        margin: 0;
-        padding: 0;
-    }
-
-    .dog-row {
-        margin: 0;
-        padding: 0;
-        text-align: center;
-    }
-
+    
     .dot {
         height: 30px;
         width: 30px;
         border-radius: 50%;
-        margin: 10px auto;
+        margin: 5px 0 0 0;
         position: relative;
     }
+	
+	ion-checkbox.no-left-margin{
+		margin: 14px 5px 9px 4px !important;
+	}
 
     .dot-opacity-first{
         opacity: 0.8;
@@ -43,6 +30,4 @@ dog-list {
     .dot-opacity-fourth{
         opacity: 0.2;
     }
-
-
 }
