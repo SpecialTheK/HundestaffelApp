@@ -233,7 +233,23 @@ export class WaterMapPage {
 	}
 	
 	public editDetails(){
-		let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: this.trailSet});
+		let data: any = this.trailSet;
+		data.dogs = [];
+		for(let dog of this.trailSet.trails){
+			data.dogs.push(dog.dog);
+		}
+		let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: false});
 		profileModal.present();
+		profileModal.onDidDismiss((data) => {
+			this.trailSet.precipitation = data.precipitation;
+			this.trailSet.temperature = data.temperature;
+			this.trailSet.person = data.person;
+			this.trailSet.situation = data.situation;
+			this.trailSet.preSituation = data.preSituation;
+			this.trailSet.risks = data.risks;
+			for(let dogId in data.dogs){
+				this.trailSet.trails[dogId].dog = data.dogs[dogId];
+			}
+		});
 	}
 }

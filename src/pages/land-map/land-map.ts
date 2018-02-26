@@ -229,7 +229,18 @@ export class LandMapPage {
     }
     
     public editDetails(){
-	    let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: this.trailSet});
+    	let data:any = this.trailSet;
+    	data.dogs = [this.dogName];
+	    let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: true});
 	    profileModal.present();
+	    profileModal.onDidDismiss((data) => {
+	    	this.dogName = data.dogs[0];
+	    	this.trailSet.precipitation = data.precipitation;
+	    	this.trailSet.temperature = data.temperature;
+	    	this.trailSet.person = data.person;
+	    	this.trailSet.situation = data.situation;
+	    	this.trailSet.preSituation = data.preSituation;
+	    	this.trailSet.risks = data.risks;
+	    });
     }
 }

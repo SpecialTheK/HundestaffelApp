@@ -3,15 +3,16 @@
 export class Person {
     name: string;
     age: number;
-    glasses: boolean;
+    glasses: number;
     hair_choice: string;
     hairColor_choice: string;
     body_choice: string;
     allergies: string;
     illness: string;
     medication: string;
+    image: string;
 
-    constructor(name: string = "", age: number = 0, glasses: boolean = false, hair_choice: string = "", hairColor_choice: string = "",
+    constructor(name: string = "", age: number = 0, glasses: number = 0, hair_choice: string = "", hairColor_choice: string = "",
             body_choice: string = "", allergies: string = "Keine", illness: string = "Keine", medication: string = "Keine"){
         this.name = name;
         this.age = age;
@@ -71,6 +72,9 @@ export class Person {
             isPerson = false;
         }
         if(!person.hasOwnProperty('medication')){
+            isPerson = false;
+        }
+        if(!person.hasOwnProperty('image')){
             isPerson = false;
         }
         
