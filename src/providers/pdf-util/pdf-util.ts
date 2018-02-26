@@ -207,7 +207,7 @@ export class PdfUtilProvider {
 			this.initDirectory().then((answer) => {
 				this.createPdf(trailSet, map).then((answer) => {
 					loading.dismiss();
-					this.sharing.share(null, null, this.pdfDirectory+this.fileName, null).then((answer) => {
+					this.sharing.share(null, null, this.pdfDirectory+this.appName+'/'+this.fileName, null).then((answer) => {
 						resolve("Successfully shared");
 					}).catch((reason) => {
 						reject(reason);
