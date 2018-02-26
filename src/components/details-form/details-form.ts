@@ -9,26 +9,26 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 	templateUrl: 'details-form.html'
 })
 export class DetailsFormComponent {
-	
+
 	multipleDogs: boolean = true;
 	dogs: string[] = [];
-	
+
 	precipitation: string = "MAP_PRECIPITATION_0";
 	temperature: number = 20;
-	
+
 	person: Person;
 	photoExisting: boolean = false;
-	
+
 	situation: string = "";
 	preSituation: string = "";
 	risks: string = "";
-	
+
 	hairOptions: string[] = [];
 	hairColorOptions: string[] = [];
 	bodyOptions: string[] = [];
 	precipitationOptions: string[] = [];
 	translatedTerms: string[] = [];
-	
+
 	constructor(public navParams: NavParams, public viewCtrl: ViewController, public translateService: TranslateService, public camera: Camera) {
 		let data = this.navParams.get('data');
 		this.multipleDogs = !this.navParams.get('isLandTrail');
@@ -47,7 +47,7 @@ export class DetailsFormComponent {
 		}
 		this.translateVariables();
 	}
-	
+
 	/**
 	 * Method called to translate all variables needed for this page.
 	 *
@@ -61,14 +61,14 @@ export class DetailsFormComponent {
 				this.translatedTerms[term.toLowerCase()] = answer;
 			});
 		}
-		
+
 		this.hairOptions = [
 			this.translatedTerms["person_hair_0"],
 			this.translatedTerms["person_hair_1"],
 			this.translatedTerms["person_hair_2"],
 			this.translatedTerms["person_hair_3"],
 		];
-		
+
 		this.hairColorOptions = [
 			this.translatedTerms["person_hair_color_0"],
 			this.translatedTerms["person_hair_color_1"],
@@ -87,7 +87,7 @@ export class DetailsFormComponent {
 			this.translatedTerms["person_body_3"],
 			this.translatedTerms["person_body_4"],
 		];
-		
+
 		this.precipitationOptions = [
 			this.translatedTerms["map_precipitation_0"],
 			this.translatedTerms["map_precipitation_1"],
@@ -96,7 +96,7 @@ export class DetailsFormComponent {
 			this.translatedTerms["map_precipitation_4"]
 		];
 	}
-	
+
 	public takePicture(){
 		const options : CameraOptions = {
 			quality: 50, // picture quality
@@ -105,16 +105,16 @@ export class DetailsFormComponent {
 			mediaType: this.camera.MediaType.PICTURE
 		};
 		this.camera.getPicture(options).then((imageData) => {
-			let base64Img = 'data:image/jpeg;base64,' + imageData;
+			this.person.image = 'data:image/jpeg;base64,' + imageData;
 		}, (err) => {
 			console.log(err);
 		});
 	}
-	
+
 	public customTrackBy(index: number, obj: any): any {
 		return index;
 	}
-	
+
 	public addDogInput(event, index){
 		if(event.value === "" && this.dogs.length > 1){
 			this.dogs.splice(index, 1);
@@ -127,7 +127,7 @@ export class DetailsFormComponent {
 			}
 		}
 	}
-	
+
 	submitDetails(){
 		let data: any = {};
 		this.dogs.splice(this.dogs.length-1, 1);

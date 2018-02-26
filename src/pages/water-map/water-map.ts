@@ -33,6 +33,7 @@ export class WaterMapPage {
     @ViewChild('map') mapElement: ElementRef;
 
     trailSet: TrailSet;
+
     dogTrail: Trail;
 
     distanceToTargetMarker: number;
@@ -58,16 +59,21 @@ export class WaterMapPage {
                 public flashlight: Flashlight,
                 public backgroundMode: BackgroundMode,
                 appPreferences: AppPreferences) {
+
         this.trailSet = this.navParams.get('trailSet');
         let dogs = this.navParams.get('dogs') as string[];
 	    appPreferences.fetch('username').then((answer) => {
 		    dogs.forEach((dog) => {
-			    this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, answer, dog));
+                let dt = new Trail(this.trailSet.trails.length, answer, dog)
+                dt.setStartTime();
+                this.trailSet.addTrailToSet(dt);
 		    });
 	    }).catch((error) => {
 		    console.log("Error: "+error);
 		    dogs.forEach((dog) => {
-			    this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", dog));
+                let dt = new Trail(this.trailSet.trails.length, "Trainer", dog)
+                dt.setStartTime();
+                this.trailSet.addTrailToSet(dt);
 		    });
 	    });
 
@@ -170,6 +176,10 @@ export class WaterMapPage {
         this.dogTrail.dog = "Hunde";
         this.dogTrail.trainer = "Trainer";
 
+        this.trailSet.trails.forEach((data) =>{
+            data.setEndTime();
+        })
+
         this.trailSet.addTrailToSet(this.dogTrail);
 
         console.log(this.trailSet);
@@ -183,20 +193,6 @@ export class WaterMapPage {
 		    this.navCtrl.push('HistoryPage');
 	    });
     }
-
-	/**
-	 * Method that is called to add a circle to the map.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	addCircle(event: any, index: number) {
-        let popover = this.popCtrl.create(DogListComponent, {trails: this.trailSet.trails, map: this.map});
-        popover.present({
-            ev: event
-        });
-    }
-
 
     showDogOptions(event){
         let popover = this.popCtrl.create(DogListComponent, {trails: this.trailSet.trails, map: this.map});
