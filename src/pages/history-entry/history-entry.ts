@@ -131,7 +131,7 @@ export class HistoryEntryPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	ionViewWillLoad(){
+	ionViewDidLoad(){
 		if(this.trailSet.isTraining){
 			this.operationType = this.translatedTerms["trail_training"];
 		} else {

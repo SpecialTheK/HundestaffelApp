@@ -52,6 +52,7 @@ export class MapProvider {
     }
 
     initMapObject(mapElement: ElementRef){
+        console.log('CAllED: initMapObject()');
         this.mapObject = new google.maps.Map(mapElement.nativeElement, {
                 disableDoubleClickZoom: true,
                 disableDefaultUI: true,
@@ -59,6 +60,10 @@ export class MapProvider {
                 streetViewControl: false,
                 zoomControl: true,
                 zoom: 16
+        });
+
+        this.location.getCurrentPosition().then((pos) =>{
+            this.mapObject.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
         });
 
         this.mapObject.addListener('drag', (f) => {
@@ -79,6 +84,10 @@ export class MapProvider {
                 this.isClickedOnce = false;
             }
         });
+    }
+
+    killMap(){
+        this.mapObject = null;
     }
 
     setzeWindMarker(){
@@ -120,7 +129,9 @@ export class MapProvider {
             }
         );
 
-        this.positionSub = this.location.watchPosition().subscribe((pos) => {
+        this.positionSub = this.location.watchPosition({
+            enableHighAccuracy: true
+        }).subscribe((pos) => {
                 console.log(pos);
                 this.currentTrail.addToPath(pos.coords.latitude, pos.coords.longitude);
                 this.drawPath(pos.coords.latitude, pos.coords.longitude);

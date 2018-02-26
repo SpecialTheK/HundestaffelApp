@@ -22,7 +22,7 @@ export class MyApp {
 	@ViewChild('mainMenu') navCtrl: NavController;
 	rootPage: any = Home;
 	trails: TrailSet[] = [];
-	
+
 	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService, public webIntent: WebIntent, public storage: TrailStorageProvider, public ngZone: NgZone) {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
@@ -52,7 +52,7 @@ export class MyApp {
 			this.storage.addNewTrailSet(TrailSet.fromData(<any>dummy)).then((message) => {
 				console.log("Geklappt");
 			});*/
-			
+
 			translate.setDefaultLang('en');
 			if(platform.is('cordova')){
 				preferences.fetch('language').then((answer) => {
@@ -66,7 +66,7 @@ export class MyApp {
 			splashScreen.hide();
 		});
 	}
-	
+
 	openPage(name){
 		if(name == 'HomePage'){
 			this.navCtrl.popToRoot();
@@ -74,7 +74,7 @@ export class MyApp {
 			this.navCtrl.push(name);
 		}
 	}
-	
+
 	openEntry(trailSet: TrailSet){
 		this.navCtrl.push('HistoryEntryPage', {trailObject: trailSet});
 	}
