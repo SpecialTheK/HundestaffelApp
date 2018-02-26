@@ -5,6 +5,7 @@ import {FilterComponent} from "./filter/filter";
 import {CommonModule} from "@angular/common";
 import {TranslateModule} from "@ngx-translate/core";
 import {IonicModule} from "ionic-angular";
+import { DetailsFormComponent } from './details-form/details-form';
 
 /**
  * Module containing all components for lazyLoading purposes.
@@ -13,7 +14,8 @@ import {IonicModule} from "ionic-angular";
 	declarations: [
 		TrailListComponent,
 		TrailCardComponent,
-		FilterComponent
+		FilterComponent,
+        DetailsFormComponent
 	],
 	imports: [
 		IonicModule,
@@ -23,9 +25,10 @@ import {IonicModule} from "ionic-angular";
 	exports: [
 		TrailListComponent,
 		TrailCardComponent,
-		FilterComponent
+		FilterComponent,
+        DetailsFormComponent
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	entryComponents: [FilterComponent]
+	entryComponents: [FilterComponent,DetailsFormComponent]
 })
 export class ComponentsModule {}
