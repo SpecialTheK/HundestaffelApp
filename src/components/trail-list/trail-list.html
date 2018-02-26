@@ -2,7 +2,7 @@
 	<trail-card *ngFor="let trailSet of trails" [trail]="trailSet" (click)="cardClicked(trailSet)"></trail-card>
 </div>
 <div text-center *ngIf="trails.length <= 0">{{'HISTORY_NO_ENTRIES' | translate}}</div>
-<ion-fab bottom right *ngIf="showFilters">
+<ion-fab bottom right *ngIf="showFilters" style="position: fixed">
 	<button ion-fab icon-only (click)="openFilters($event)">
 		<ion-icon name="ios-funnel"></ion-icon>
 	</button>
