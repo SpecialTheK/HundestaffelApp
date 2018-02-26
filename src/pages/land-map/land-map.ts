@@ -246,7 +246,6 @@ export class LandMapPage {
     }
     
     public showImage(){
-    	console.log(this.trailSet.convertToSimpleObject());
 	    let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 	    imageModal.present();
     }
