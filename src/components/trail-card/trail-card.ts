@@ -128,13 +128,11 @@ export class TrailCardComponent {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	private getDuration(startTime: Date, endTime: Date):string{
+	private getDuration(startTime: Date, endTime: Date):number{
 		let _startTime = moment(startTime);
 		let _endTime = moment(endTime);
 		
-		let totalTime = moment(_startTime.diff(_endTime)).toDate();
-		return totalTime.getHours()+" "+this.translatedTerms["hours"]+" "+totalTime.getMinutes()+
-			" "+this.translatedTerms["minutes"]+" "+" "+totalTime.getMinutes()+" "+this.translatedTerms["seconds"];
+		return moment(_endTime.diff(_startTime)).toDate().getTime();
 	}
 	
 	/**
