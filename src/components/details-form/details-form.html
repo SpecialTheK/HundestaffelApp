@@ -1,3 +1,95 @@
-<ion-content>
-
+<ion-content padding>
+	<ion-list>
+		<ion-list-header>{{'TRAIL_DOG_NAME' | translate}}</ion-list-header>
+		<div  *ngIf="multipleDogs === true">
+			<ion-item *ngFor="let dog of dogs; let i = index; trackBy: customTrackBy">
+				<ion-input [(ngModel)]="dogs[i]" (ionChange)="addDogInput($event, i)" type="text" placeholder="{{'TRAIL_DOG_NAME' | translate}}"></ion-input>
+			</ion-item>
+		</div>
+		<div *ngIf="multipleDogs === false">
+			<ion-item>
+				<ion-input [(ngModel)]="dogs[0]" type="text" placeholder="{{'TRAIL_DOG_NAME' | translate}}"></ion-input>
+			</ion-item>
+		</div>
+	</ion-list>
+	<ion-list>
+		<ion-list-header>{{'MAP_PRECIPITATION' | translate}}</ion-list-header>
+		<ion-item>
+			<ion-label>{{'MAP_RAINFALL' | translate}}</ion-label>
+			<ion-select [(ngModel)]="precipitation">
+				<ion-option *ngFor="let precipitationOption of precipitationOptions; let i = index" value="MAP_PRECIPITATION_{{i}}">{{precipitationOption}}</ion-option>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'MAP_TEMPERATURE' | translate}}</ion-label>
+			<ion-input type="number" [(ngModel)]="temperature"></ion-input>
+		</ion-item>
+	</ion-list>
+	<ion-list>
+		<ion-list-header>{{'PERSON_DESCRIPTION' | translate}}</ion-list-header>
+		<ion-item>
+			<ion-label>{{'PERSON_NAME' | translate}}</ion-label>
+			<ion-input type="text" [(ngModel)]="person.name"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'PERSON_AGE' | translate}}</ion-label>
+			<ion-input type="number" [(ngModel)]="person.age"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'PERSON_GLASSES' | translate}}</ion-label>
+			<ion-select [(ngModel)]="person.glasses">
+				<ion-option value="1">{{'YES' | translate}}</ion-option>
+				<ion-option value="0">{{'NO' | translate}}</ion-option>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'PERSON_HAIR' | translate}}</ion-label>
+			<ion-select [(ngModel)]="person.hair_choice">
+				<ion-option *ngFor="let hairOption of hairOptions; let i = index" value="PERSON_HAIR_COLOR_{{i}}">{{hairOption}}</ion-option>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'PERSON_HAIR_COLOR' | translate}}</ion-label>
+			<ion-select [(ngModel)]="person.hairColor_choice">
+				<ion-option *ngFor="let hairColorOption of hairColorOptions; let i = index" value="PERSON_HAIR_{{i}}">{{hairColorOption}}</ion-option>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'PERSON_BODY_TYPE' | translate}}</ion-label>
+			<ion-select [(ngModel)]="person.body_choice">
+				<ion-option *ngFor="let bodyOption of bodyOptions; let i = index" value="PERSON_BODY_{{i}}">{{bodyOption}}</ion-option>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'PERSON_ALLERGIES' | translate}}</ion-label>
+			<ion-input type="text" [(ngModel)]="person.allergies"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'PERSON_ILLNESS' | translate}}</ion-label>
+			<ion-input type="text" [(ngModel)]="person.illness"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'PERSON_MEDICATION' | translate}}</ion-label>
+			<ion-input type="text" [(ngModel)]="person.medication"></ion-input>
+		</ion-item>
+		<ion-item *ngIf="photoExisting === false" (click)="takePicture()">
+			<ion-icon name="add">{{'PERSON_TAKE_PHOTO' | translate}}</ion-icon>
+		</ion-item>
+	</ion-list>
+	<ion-list>
+		<ion-list-header>{{'TRAIL_SITUATION' | translate}}</ion-list-header>
+		<ion-item>
+			<ion-label>{{'TRAIL_SITUATION_WHAT' | translate}}</ion-label>
+			<ion-input type="text" [(ngModel)]="situation"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'TRAIL_SITUATION_PRE' | translate}}</ion-label>
+			<ion-input type="text" [(ngModel)]="preSituation"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label>{{'TRAIL_SITUATION_RISKS' | translate}}</ion-label>
+			<ion-input type="text" [(ngModel)]="risks"></ion-input>
+		</ion-item>
+	</ion-list>
+	<button ion-button (click)="submitDetails()">{{'GO' | translate}}</button>
 </ion-content>
