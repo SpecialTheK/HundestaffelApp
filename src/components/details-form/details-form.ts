@@ -130,6 +130,7 @@ export class DetailsFormComponent {
 	
 	submitDetails(){
 		let data: any = {};
+		this.dogs.splice(this.dogs.length-1, 1);
 		data.dogs = this.dogs;
 		data.precipitation = this.precipitation;
 		data.temperature = this.temperature;
