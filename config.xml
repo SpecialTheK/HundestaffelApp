@@ -97,4 +97,5 @@
     <plugin name="cordova-plugin-flashlight" spec="^3.2.0" />
     <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
     <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^2.3.3" />
+    <plugin name="cordova-plugin-camera" spec="^4.0.2" />
 </widget>

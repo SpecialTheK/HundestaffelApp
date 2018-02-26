@@ -5,6 +5,8 @@ import { Person } from '../../models/person';
 import { TrailSet } from '../../models/trailSet';
 import {TranslateService} from "@ngx-translate/core";
 
+import {Camera, CameraOptions} from '@ionic-native/camera';
+
 /**
  * Page called before starting the recording of a new trail to set a few variables.
  *
@@ -24,7 +26,7 @@ export class InitTrailPage {
     translatedTerms: Array<string> = [];
 
     person: Person;
-	
+
 	hair: string[] = [];
 	hairColor: string[] = [];
 	body: string[] = [];
@@ -39,7 +41,7 @@ export class InitTrailPage {
 
     isLandTrail: boolean;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public translateService: TranslateService) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, public camera: Camera, public translateService: TranslateService) {
         this.isLandTrail = this.navParams.get('isLandTrail');
         this.person = new Person();
         this.dogNames = [];
@@ -65,7 +67,7 @@ export class InitTrailPage {
 				this.translatedTerms[term.toLowerCase()] = answer;
 			});
 		}
-		
+
 		this.hair = [
 			this.translatedTerms["person_hair_none"],
 			this.translatedTerms["person_hair_short"],
@@ -90,7 +92,7 @@ export class InitTrailPage {
 			this.translatedTerms["person_body_corpulent"],
 			this.translatedTerms["person_body_overweight"],
 		];
-		
+
 		this.weather_Precipitation = [
 			this.translatedTerms["map_precipitation_none"],
 			this.translatedTerms["map_precipitation_rain"],
@@ -109,6 +111,20 @@ export class InitTrailPage {
 			this.translatedTerms["map_wind_nw"]
 		];
 	}
+
+    takePicture(){
+        const options : CameraOptions = {
+            quality: 50, // picture quality
+            destinationType: this.camera.DestinationType.DATA_URL,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE
+        }
+        this.camera.getPicture(options) .then((imageData) => {
+            let base64Img = 'data:image/jpeg;base64,' + imageData;
+        }, (err) => {
+            console.log(err);
+        });
+    }
 
     customTrackBy(index: number, obj: any): any {
     	return index;
