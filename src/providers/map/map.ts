@@ -32,10 +32,12 @@ export class MapProvider {
     firstPos: any;
 
     currentTrail: Trail;
-    comparisonTrail: Trail;
-    waterDogTrail: Trail;
-
     currentTrailSubject: Subject<Trail>;
+
+    waterDogTrail: Trail;
+    waterDogTrailSubject: Subject<Trail>;
+
+    comparisonTrail: Trail;
 
     distanceToTargetMarker: Subject<number>;
 
@@ -49,6 +51,11 @@ export class MapProvider {
         this.isCentered = true;
         this.isWindDirectionMode = false;
         this.isClickedOnce = false;
+
+
+        this.distanceToTargetMarker = new Subject<number>();
+        this.currentTrailSubject = new Subject<Trail>();
+        this.waterDogTrailSubject = new Subject<Trail>();
     }
 
     initMapObject(mapElement: ElementRef){
@@ -100,9 +107,9 @@ export class MapProvider {
 
     startSession(isLandTrail: boolean, trainer = "Trainer", dog = "Hund"){
         this.isLandTrail = isLandTrail;
-        this.distanceToTargetMarker = new Subject<number>();
-        this.currentTrailSubject = new Subject<Trail>();
+
         this.currentTrail = new Trail(0, trainer, dog);
+
         this.currentTrail.setStartTime();
 
         this.polyline = new google.maps.Polyline({
@@ -232,6 +239,10 @@ export class MapProvider {
 
     getCurrentTrailSubject(): Subject<Trail>{
         return this.currentTrailSubject;
+    }
+
+    getWaterDogTrailSubject(): Subject<Trail>{
+        return this.waterDogTrailSubject;
     }
 
     getDistanceToTargetMarker(): Subject<number>{

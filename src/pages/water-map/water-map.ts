@@ -12,6 +12,7 @@ import {AppPreferences} from "@ionic-native/app-preferences";
 import {BackgroundMode} from "@ionic-native/background-mode";
 import {DetailsFormComponent} from "../../components/details-form/details-form";
 
+import {DogListComponent} from '../../components/dog-list/dog-list';
 
 /**
  * Page that displays the map for water trailing.
@@ -104,14 +105,23 @@ export class WaterMapPage {
             this.map.importTrailSet(this.trailSet);
         }
         this.map.startSession(false);
+
         this.backgroundMode.enable();
+
         this.map.getCurrentTrailSubject().subscribe((data) =>{
             this.dogTrail = data;
             this.mapLoaded = true;
         });
-        this.map.getDistanceToTargetMarker().subscribe((data) =>{
-            this.distanceToTargetMarker = data;
-        });
+
+        if(!this.trailSet.isLandTrail){
+            this.map.getDistanceToTargetMarker().subscribe((data) =>{
+                this.distanceToTargetMarker = data;
+            });
+            this.map.getWaterDogTrailSubject().subscribe((data) => {
+                this.trailSet.trails[data.id] = data;
+            });
+        }
+
         this.startTimer();
     }
 
@@ -181,8 +191,15 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	addCircle(event: any, index: number) {
-        this.map.setWaterDogTrail(this.trailSet.trails[index]);
-        let popover = this.popCtrl.create('AddColoredCirclePage', {map: this.map});
+        let popover = this.popCtrl.create(DogListComponent, {trails: this.trailSet.trails, map: this.map});
+        popover.present({
+            ev: event
+        });
+    }
+
+
+    showDogOptions(event){
+        let popover = this.popCtrl.create(DogListComponent, {trails: this.trailSet.trails, map: this.map});
         popover.present({
             ev: event
         });
@@ -225,13 +242,13 @@ export class WaterMapPage {
             });
         });
     }
-	
+
 	public toggleFlashlight(){
 		if(this.flashlight.available()){
 			this.flashlight.toggle();
 		}
 	}
-	
+
 	public editDetails(){
 		let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: this.trailSet});
 		profileModal.present();

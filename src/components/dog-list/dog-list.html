@@ -1,0 +1,21 @@
+<ion-content>
+
+    <ion-list>
+        <ion-item *ngFor="let trail of trails, let i = index">
+
+            <div item-content class="dog-row">
+                <ion-row>
+                    <ion-checkbox class="scheissCheckbox" [(ngModel)]="!trail.isHidden"></ion-checkbox>
+
+                    <ion-label>{{trail.dog}}</ion-label>
+
+                    <button ion-button="dot" class="dot-opacity-first" [ngStyle]="{'background-color': trail.trailColor}"></button>
+                    <button ion-button="dot" class="dot-opacity-second" [ngStyle]="{'background-color': trail.trailColor}"></button>
+                    <button ion-button="dot" class="dot-opacity-thrid" [ngStyle]="{'background-color': trail.trailColor}"></button>
+                    <button ion-button="dot" class="dot-opacity-fourth" [ngStyle]="{'background-color': trail.trailColor}"></button>
+                </ion-row>
+            </div>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

@@ -6,6 +6,7 @@ import {CommonModule} from "@angular/common";
 import {TranslateModule} from "@ngx-translate/core";
 import {IonicModule} from "ionic-angular";
 import { DetailsFormComponent } from './details-form/details-form';
+import { DogListComponent } from './dog-list/dog-list';
 
 /**
  * Module containing all components for lazyLoading purposes.
@@ -15,7 +16,8 @@ import { DetailsFormComponent } from './details-form/details-form';
 		TrailListComponent,
 		TrailCardComponent,
 		FilterComponent,
-        DetailsFormComponent
+        DetailsFormComponent,
+    	DogListComponent
 	],
 	imports: [
 		IonicModule,
@@ -26,9 +28,10 @@ import { DetailsFormComponent } from './details-form/details-form';
 		TrailListComponent,
 		TrailCardComponent,
 		FilterComponent,
-        DetailsFormComponent
+        DetailsFormComponent,
+    	DogListComponent
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	entryComponents: [FilterComponent,DetailsFormComponent]
+	entryComponents: [FilterComponent,DetailsFormComponent,DogListComponent]
 })
 export class ComponentsModule {}
