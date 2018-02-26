@@ -265,4 +265,8 @@ export class WaterMapPage {
 			}
 		});
 	}
+	
+	public showImage(){
+	
+	}
 }

@@ -243,4 +243,8 @@ export class LandMapPage {
 	    	this.trailSet.risks = data.risks;
 	    });
     }
+    
+    public showImage(){
+    
+    }
 }
