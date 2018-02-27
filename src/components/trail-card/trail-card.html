@@ -1,5 +1,5 @@
 <ion-card [ngClass]="classes">
-	<ion-card-header>{{operationType}}: {{startTime}}</ion-card-header>
+	<ion-card-header>{{operationType}}: {{startTime | date : 'dd. LLL yyyy HH:mm'}}</ion-card-header>
 	<ion-card-content>
 		<p>{{'TRAIL_MAP_TYPE' | translate}}: {{mapType}}</p>
 		<p>{{trails}} {{'TRAIL_STAGES' | translate}} {{'WITH' | translate}}:</p>
