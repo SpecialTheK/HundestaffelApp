@@ -1,15 +1,20 @@
 <ion-header>
-    <ion-navbar color="landMapColor" hideBackButton="true">
-        <ion-title>{{'MAP_LAND' | translate}}</ion-title>
-        <ion-buttons end>
-            <button ion-button icon-only (click)="editDetails()">
-        	    <ion-icon name="create"></ion-icon>
-            </button>
-            <button ion-button icon-only (click)="endTrail()">
-                <ion-icon name="done-all"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-navbar>
+  <ion-navbar color="landMapColor" hideBackButton="true">
+  <ion-buttons>
+	  <button ion-button icon-only (click)="dismissTrail()">
+		  <ion-icon name="close"></ion-icon>
+	  </button>
+  </ion-buttons>
+    <ion-title>{{'MAP_LAND' | translate}}</ion-title>
+    <ion-buttons end>
+	    <button ion-button icon-only (click)="editDetails()">
+		    <ion-icon name="create"></ion-icon>
+	    </button>
+        <button ion-button icon-only (click)="endTrail()">
+            <ion-icon name="done-all"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
 </ion-header>
 <ion-content>
     <div class="map-container">

@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import {Events, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, Events, IonicPage, ModalController, NavController, NavParams, Platform} from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -50,18 +50,20 @@ export class LandMapPage {
     isRunnerTrail = false;
 
     translatedTerms: Array<string> = [];
-
-
+	backButtonAction;
+	
     constructor(public navParams: NavParams,
                 public navCtrl: NavController,
                 public modalCtrl: ModalController,
+                public alertCtrl: AlertController,
                 public map: MapProvider,
                 public storage: TrailStorageProvider,
                 public translateService: TranslateService,
                 public flashlight: Flashlight,
                 public backgroundMode: BackgroundMode,
                 public events: Events,
-                appPreferences: AppPreferences) {
+                appPreferences: AppPreferences,
+                platform: Platform) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
@@ -76,8 +78,20 @@ export class LandMapPage {
 
         this.startTime = new Date();
         this.deltaTime = new Date();
+	
+	    this.backButtonAction = platform.registerBackButtonAction(() => {
+		    this.dismissTrail();
+	    }, 10);
+	    
         this.translateVariables();
     }
+	
+	/**
+	 * Unregister the backButtonAction for this site on leave
+	 */
+	ionViewWillLeave() {
+		this.backButtonAction && this.backButtonAction();
+	}
 
 	/**
 	 * Ionic lifecycle event that is called after the page is loaded to initialize the map.
@@ -123,7 +137,7 @@ export class LandMapPage {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("MAP_MARKER_END", "MAP_MARKER_INTEREST");
+		let translateTerms = Array("YES","NO","TRAIL_ABORT","TRAIL_ABORT_MESSAGE");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translatedTerms[term.toLowerCase()] = answer;
@@ -247,4 +261,27 @@ export class LandMapPage {
 	    let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 	    imageModal.present();
     }
+	
+	public dismissTrail(){
+		let alert = this.alertCtrl.create({
+			title: this.translatedTerms["trail_abort"],
+			subTitle: this.translatedTerms["trail_abort_message"],
+			buttons: [
+				{
+					text: this.translatedTerms["no"],
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				},
+				{
+					text: this.translatedTerms["yes"],
+					handler: () => {
+						this.navCtrl.popToRoot();
+					}
+				}
+			]
+		});
+		alert.present();
+	}
 }

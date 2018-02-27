@@ -98,6 +98,8 @@
 	"SETTINGS_ONLINE_NAME_PLACEHOLDER"      : "Votre nom",
 	"SETTINGS_STORAGE_CLEAR"                : "Efface tout le tracés",
 
+	"TRAIL_ABORT"                           : "Casse tracé",
+	"TRAIL_ABORT_MESSAGE"                   : "Tu es sûr?",
 	"TRAIL_DELETE"                          : "efface tracé",
 	"TRAIL_DELETE_MESSAGE"                  : "Tu es sûr?",
 	"TRAIL_DOG"                             : "Nom",

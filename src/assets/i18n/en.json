@@ -98,6 +98,8 @@
 	"SETTINGS_ONLINE_NAME_PLACEHOLDER"      : "Your name",
 	"SETTINGS_STORAGE_CLEAR"                : "Delete all trails (DEBUG)",
 
+	"TRAIL_ABORT"                           : "Abort search",
+	"TRAIL_ABORT_MESSAGE"                   : "Are your sure you want to abort this search?",
 	"TRAIL_DELETE"                          : "Remove search",
 	"TRAIL_DELETE_MESSAGE"                  : "Are you sure you want to remove this search?",
 	"TRAIL_DOG"                             : "Dog",

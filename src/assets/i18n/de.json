@@ -98,6 +98,8 @@
 	"SETTINGS_ONLINE_NAME_PLACEHOLDER"      : "Dein Name",
 	"SETTINGS_STORAGE_CLEAR"                : "Alle Suchen löschen (DEBUG)",
 
+	"TRAIL_ABORT"                           : "Suche abbrechen",
+	"TRAIL_ABORT_MESSAGE"                   : "Möchtest du die Suche wirklich abbrechen?",
 	"TRAIL_DELETE"                          : "Suche löschen",
 	"TRAIL_DELETE_MESSAGE"                  : "Suche wirklich löschen?",
 	"TRAIL_DOG"                             : "Hund",
