@@ -61,5 +61,9 @@ page-land-map {
         height: 30%;
         width: 100%;
     }
-
+    
+    div.slide-zoom{
+        overflow-y: auto;
+        height: 100%;
+    }
 }
