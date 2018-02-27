@@ -86,9 +86,6 @@ export class HistoryEntryPage {
 
 	constructor(public viewCtrl: ViewController, public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
 		this.trailSet = navParams.get('trailObject');
-		if(this.trailSet.trails.length > 0){
-			this.trailDate = this.trailSet.trails[0].startTime;
-		}
 		this.translateVariables();
 	}
 
@@ -208,6 +205,8 @@ export class HistoryEntryPage {
 					handler: () => {
 						this.trailStorage.removeTrailSet(this.trailSet.creationID).then((answer) => {
 							this.navCtrl.pop();
+						}).catch((error) => {
+							console.log("Message: "+error);
 						})
 					}
 				}

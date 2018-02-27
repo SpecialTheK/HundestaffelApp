@@ -156,6 +156,7 @@ export class TrailSet {
 			    data.person.hairColor_choice, data.person.body_choice, data.person.allergies, data.person.illness,
 			    data.person.medication);
 		    let trailSet = new TrailSet(data.isLandTrail, data.isSharedTrail, data.isTraining, data.preSituation, data.situation, data.temperature, data.precipitation, data.risks, _person);
+		    trailSet.creationID = data.creationID;
 		    for(let trail of data.trails){
 			    trailSet.trails.push(Trail.fromData(trail, google, map));
 		    }
