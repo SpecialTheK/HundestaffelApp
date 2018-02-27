@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {Person} from "../../models/person";
-import {NavController, NavParams, ViewController} from "ionic-angular";
+import {Events, NavController, NavParams} from "ionic-angular";
 import {TranslateService} from "@ngx-translate/core";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 
@@ -10,6 +10,8 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 })
 export class DetailsFormComponent {
 
+	@Output() formSubmitted = new EventEmitter();
+	
 	multipleDogs: boolean = true;
 	dogs: string[] = [];
 
@@ -29,7 +31,7 @@ export class DetailsFormComponent {
 	precipitationOptions: string[] = [];
 	translatedTerms: string[] = [];
 
-	constructor(public navParams: NavParams, public navCtrl: NavController, public viewCtrl: ViewController, public translateService: TranslateService, public camera: Camera) {
+	constructor(public navParams: NavParams, public navCtrl: NavController, public translateService: TranslateService, public camera: Camera, public events: Events) {
 		let data = this.navParams.get('data');
 		this.multipleDogs = !this.navParams.get('isLandTrail');
 		if(data === undefined){
@@ -130,7 +132,9 @@ export class DetailsFormComponent {
 
 	submitDetails(){
 		let data: any = {};
-		this.dogs.splice(this.dogs.length-1, 1);
+		if(this.multipleDogs){
+			this.dogs.splice(this.dogs.length-1, 1);
+		}
 		data.dogs = this.dogs;
 		data.precipitation = this.precipitation;
 		data.temperature = this.temperature;
@@ -138,10 +142,8 @@ export class DetailsFormComponent {
 		data.situation = this.situation;
 		data.preSituation = this.preSituation;
 		data.risks = this.risks;
-		this.viewCtrl.dismiss(data);
-	}
-	
-	dismiss(){
-		this.viewCtrl.dismiss({'cancel': true});
+		
+		this.events.publish('detailsForm:editSubmitted', data);
+		this.formSubmitted.emit(data);
 	}
 }

@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
+import {Events, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -60,17 +60,14 @@ export class LandMapPage {
                 public translateService: TranslateService,
                 public flashlight: Flashlight,
                 public backgroundMode: BackgroundMode,
+                public events: Events,
                 appPreferences: AppPreferences) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
         this.trailSet = TrailSet.fromData(this.navParams.get('trailSet'));
 		this.dogName = this.navParams.get('dog');
-        if(this.trailSet.trails.length === 0 && this.trailSet.isTraining){
-            this.isRunnerTrail = true;
-        } else{
-            this.isRunnerTrail = false;
-        }
+        this.isRunnerTrail = this.trailSet.trails.length === 0 && this.trailSet.isTraining;
         appPreferences.fetch('username').then((answer) => {
         	this.trainerName = answer;
         }).catch((error) => {
@@ -234,7 +231,8 @@ export class LandMapPage {
     	data.dogs = [this.dogName];
 	    let detailModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: true});
 	    detailModal.present();
-	    detailModal.onDidDismiss((data) => {
+	
+	    this.events.subscribe('detailsForm:editSubmitted', (date) => {
 	    	this.dogName = data.dogs[0];
 	    	this.trailSet.precipitation = data.precipitation;
 	    	this.trailSet.temperature = data.temperature;
@@ -242,6 +240,7 @@ export class LandMapPage {
 	    	this.trailSet.situation = data.situation;
 	    	this.trailSet.preSituation = data.preSituation;
 	    	this.trailSet.risks = data.risks;
+	    	detailModal.dismiss();
 	    });
     }
     
