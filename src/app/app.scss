@@ -23,3 +23,20 @@ div.toolbar-background {
 ion-content {
 	background-color: map-get($colors, backgroundColor) !important;
 }
+
+button.alert-button{
+	color: map-get($colors, dark) !important;
+}
+
+
+button[aria-checked="true"] .alert-radio-label{
+	color: map-get($colors, headerColorBackground) !important;
+}
+
+.alert-radio-icon{
+	border-color: map-get($colors, headerColorBackground) !important;
+	
+	.alert-radio-inner{
+		background-color: map-get($colors, headerColorBackground) !important;
+	}
+}

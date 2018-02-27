@@ -1,4 +1,5 @@
 <ion-content padding>
+	<div class="spacer"></div>
 	<ion-list>
 		<ion-list-header>{{'TRAIL_DOG_NAME' | translate}}</ion-list-header>
 		<div  *ngIf="multipleDogs === true">
@@ -91,5 +92,5 @@
 			<ion-input type="text" [(ngModel)]="risks"></ion-input>
 		</ion-item>
 	</ion-list>
-	<button ion-button (click)="submitDetails()">{{'GO' | translate}}</button>
+	<button ion-button class="submit-details-form" (click)="submitDetails()">{{'GO' | translate}}</button>
 </ion-content>
