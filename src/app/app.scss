@@ -1,3 +1,5 @@
+
+@import "../theme/variables.scss";
 // http://ionicframework.com/docs/theming/
 
 
@@ -14,3 +16,10 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+div.toolbar-background {
+	background-color: map-get($colors, headerColorBackground) !important;
+}
+
+ion-content {
+	background-color: map-get($colors, backgroundColor) !important;
+}

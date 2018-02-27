@@ -1,18 +1,26 @@
 trail-card {
-	ion-card.land-activity{
-		border: 1px solid #008800;
-		box-shadow: 0 0 4px 2px #008800;
-		background-color: #008800;
-	}
-	
-	ion-card.water-activity{
-		border: 1px solid #4B54D7;
-		box-shadow: 0 0 4px 2px #4B54D7;
-		background-color: #4B54D7;
-	}
-	
-	ion-card.operation{
-		border: 1px solid rgba(200,0,0,1) !important;
-		box-shadow: 0 0 4px 2px rgba(200,0,0,1) !important;
+	ion-card {
+		background-color: #323232 !important;
+		border: 1px solid #242424 !important;
+		border-radius: 4px !important;
+		position: relative;
+		
+		i.type-icon {
+			background-color: #FEDC00;
+			right: 0;
+			position: absolute;
+		}
+			
+		.landTrail{
+			//mask-image: url();
+		}
+		
+		.waterTrail{
+			//mask-image: url();
+		}
+		
+		.operationTrail{
+			//mask-image: url();
+		}
 	}
 }
