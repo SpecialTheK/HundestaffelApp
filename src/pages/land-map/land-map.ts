@@ -44,7 +44,7 @@ export class LandMapPage {
 
     startTime: Date;
     deltaTime: Date;
-    runTime: string;
+    runTime: number;
     timeInterval: any;
 
     isRunnerTrail = false;
@@ -143,7 +143,7 @@ export class LandMapPage {
     startTimer() {
         this.timeInterval = setInterval((i) => {
             this.deltaTime = new Date();
-            this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
+            this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).getTime();
         }, 1000);
     }
 
@@ -222,13 +222,13 @@ export class LandMapPage {
         //this.map.addMarker("Some Text", -1, 0);
         this.map.setzeWindMarker();
     }
-    
+
     public toggleFlashlight(){
     	if(this.flashlight.available()){
     		this.flashlight.toggle();
 	    }
     }
-    
+
     public editDetails(){
     	let data:any = this.trailSet;
     	data.dogs = [this.dogName];
@@ -244,7 +244,7 @@ export class LandMapPage {
 	    	this.trailSet.risks = data.risks;
 	    });
     }
-    
+
     public showImage(){
 	    let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 	    imageModal.present();

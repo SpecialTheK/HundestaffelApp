@@ -13,12 +13,25 @@ page-land-map {
         align-self: flex-start;
     }
 
-    .force-color-black{
-        color: black !important;
+    .loading {
+        width: 100%;
+        height: 100%;
+        margin: auto;
     }
 
-    ::-webkit-scrollbar {
-        display: none;
+    .loaded {
+        width: 100%;
+        height: 100%;
+    }
+
+    .runner-slide{
+        width: 100%;
+        height: 100%;
+    }
+
+    .dog-slide{
+        width: 100%;
+        height: 100%;
     }
 
     .map-container{
