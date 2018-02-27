@@ -78,9 +78,12 @@
     </platform>
     <allow-navigation href="http://10.170.148.64:8101" />
     <allow-navigation href="https://maps.googleapis.com/maps/api/*" />
+    <engine name="android" spec="~6.3.0" />
+    <engine name="ios" spec="~4.5.4" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Getting your location" />
     </plugin>
+    <plugin name="cordova-plugin-compat" spec="^1.2.0" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.2.1" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
@@ -95,6 +98,5 @@
     <plugin name="cordova-plugin-device-orientation" spec="^1.0.7" />
     <plugin name="cordova-plugin-flashlight" spec="^3.2.0" />
     <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
-    <plugin name="cordova-plugin-compat" spec="^1.2.0" />
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
 </widget>

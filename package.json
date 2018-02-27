@@ -37,7 +37,6 @@
     "@ngx-translate/core": "^9.1.1",
     "@ngx-translate/http-loader": "^2.0.1",
     "com-darryncampbell-cordova-plugin-intent": "0.0.19",
-    "cordova-ios": "4.5.4",
     "cordova-multidex": "git+https://github.com/jwall149/cordova-multidex.git",
     "cordova-plugin-app-preferences": "^0.99.3",
     "cordova-plugin-background-mode": "^0.7.2",
@@ -64,7 +63,9 @@
     "pdfmake": "^0.1.35",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.18"
+    "zone.js": "0.8.18",
+    "cordova-android": "~6.3.0",
+    "cordova-ios": "~4.5.4"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.8",
@@ -76,6 +77,7 @@
       "cordova-plugin-geolocation": {
         "GEOLOCATION_USAGE_DESCRIPTION": "Getting your location"
       },
+      "cordova-plugin-compat": {},
       "cordova-plugin-file": {},
       "cordova-sqlite-storage": {},
       "ionic-plugin-keyboard": {},
@@ -90,9 +92,11 @@
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-flashlight": {},
       "cordova-plugin-background-mode": {},
-      "cordova-plugin-compat": {},
       "cordova-plugin-camera": {}
     },
-    "platforms": []
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }
