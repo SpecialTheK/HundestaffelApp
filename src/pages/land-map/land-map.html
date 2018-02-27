@@ -22,12 +22,12 @@
                 <button ion-fab mini (click)="toggleFlashlight()"><ion-icon name="sunny"></ion-icon></button>
             </ion-fab>
 
-            <ion-fab top right >
+            <ion-fab top right>
                 <button ion-fab>Share</button>
                 <ion-fab-list side="bottom">
-                    <button ion-fab>Ausgeschlossen</button>
-                    <button ion-fab>Interesse</button>
-                    <button ion-fab>Windrichtung</button>
+                    <button ion-fab (click)="addEndMarker()">Ausgeschlossen</button>
+                    <button ion-fab (click)="addInterestMarker()">Interesse</button>
+                    <button ion-fab (click)="addWindDirectionMarker()">Windrichtung</button>
                 </ion-fab-list>
             </ion-fab>
         </div>

@@ -1,5 +1,5 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import {Subject} from "rxjs";
 import {Vibration} from '@ionic-native/vibration';
@@ -47,7 +47,7 @@ export class MapProvider {
 
     isLandTrail: boolean;
 
-    constructor(public location: Geolocation, public navParams: NavParams, public vibration: Vibration, public deviceOrientation: DeviceOrientation){
+    constructor(public location: Geolocation, public toastCtrl: ToastController, public vibration: Vibration, public deviceOrientation: DeviceOrientation){
         this.isCentered = true;
         this.isWindDirectionMode = false;
         this.isClickedOnce = false;
@@ -59,7 +59,6 @@ export class MapProvider {
     }
 
     initMapObject(mapElement: ElementRef){
-        console.log('CAllED: initMapObject()');
         this.mapObject = new google.maps.Map(mapElement.nativeElement, {
                 disableDoubleClickZoom: true,
                 disableDefaultUI: true,
@@ -78,7 +77,6 @@ export class MapProvider {
         });
         this.mapObject.addListener('click', (f) => {
             if(this.isWindDirectionMode && !this.isClickedOnce){
-                console.log("1 click");
                 this.firstPos = f.latLng;
                 this.isClickedOnce = true;
             }else if(this.isWindDirectionMode && this.isClickedOnce){
@@ -93,11 +91,13 @@ export class MapProvider {
         });
     }
 
-    killMap(){
-        this.mapObject = null;
-    }
-
-    setzeWindMarker(){
+    activateWindMarkerMode(){
+        let toast = this.toastCtrl.create({
+          message: 'Tippe zwei Mal auf die Map, um die Windrichtung einzuzeichnen!',
+          duration: 4000,
+          position: 'top'
+        });
+        toast.present();
         this.isWindDirectionMode = true;
     }
 
@@ -149,6 +149,7 @@ export class MapProvider {
                     this.currentTrail.speed = pos.coords.speed;
                 }
                 if(this.headingMap !== null){
+                    console.log(this.headingMap);
                     this.mapObject.setHeading(this.headingMap.magneticHeading);
                 }
                 if(this.isCentered){

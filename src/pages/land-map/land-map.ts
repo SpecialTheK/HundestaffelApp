@@ -216,8 +216,7 @@ export class LandMapPage {
      */
     addWindDirectionMarker(event){
         console.log("Added Wind Direction Marker");
-        //this.map.addMarker("Some Text", -1, 0);
-        this.map.setzeWindMarker();
+        this.map.activateWindMarkerMode();
     }
 
     public toggleFlashlight(){
@@ -231,7 +230,7 @@ export class LandMapPage {
     	data.dogs = [this.dogName];
 	    let detailModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: true});
 	    detailModal.present();
-	
+
 	    this.events.subscribe('detailsForm:editSubmitted', (date) => {
 	    	this.dogName = data.dogs[0];
 	    	this.trailSet.precipitation = data.precipitation;
