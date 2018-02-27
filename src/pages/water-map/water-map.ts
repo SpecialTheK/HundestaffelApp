@@ -36,6 +36,7 @@ export class WaterMapPage {
     trailSet: TrailSet;
 
     dogTrail: Trail;
+    dogTrailTrainer: string;
 
     distanceToTargetMarker: number;
 
@@ -63,15 +64,18 @@ export class WaterMapPage {
 
         this.trailSet = this.navParams.get('trailSet');
         let dogs = this.navParams.get('dogs') as string[];
-	    appPreferences.fetch('username').then((answer) => {
-		    dogs.forEach((dog) => {
+
+        appPreferences.fetch('username').then((answer) => {
+            this.dogTrailTrainer = answer;
+            dogs.forEach((dog) => {
                 let dt = new Trail(this.trailSet.trails.length, answer, dog)
                 dt.setStartTime();
                 this.trailSet.addTrailToSet(dt);
 		    });
 	    }).catch((error) => {
 		    console.log("Error: "+error);
-		    dogs.forEach((dog) => {
+            this.dogTrailTrainer = "Trainer";
+            dogs.forEach((dog) => {
                 let dt = new Trail(this.trailSet.trails.length, "Trainer", dog)
                 dt.setStartTime();
                 this.trailSet.addTrailToSet(dt);
@@ -119,15 +123,12 @@ export class WaterMapPage {
             this.dogTrail = data;
             this.mapLoaded = true;
         });
-
-        if(!this.trailSet.isLandTrail){
-            this.map.getDistanceToTargetMarker().subscribe((data) =>{
-                this.distanceToTargetMarker = data;
-            });
-            this.map.getWaterDogTrailSubject().subscribe((data) => {
-                this.trailSet.trails[data.id] = data;
-            });
-        }
+        this.map.getDistanceToTargetMarker().subscribe((data) =>{
+            this.distanceToTargetMarker = data;
+        });
+        this.map.getWaterDogTrailSubject().subscribe((data) => {
+            this.trailSet.trails[data.id] = data;
+        });
 
         this.startTimer();
     }
@@ -156,35 +157,13 @@ export class WaterMapPage {
     }
 
     /**
-	 * Method to set the map back in centered mode.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-    centerMap(){
-        this.map.centerMap();
-    }
-
-    /**
 	 * Method that is called to stop the recording of a trail.
 	 *
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
 	endTrail() {
-        this.dogTrail.setEndTime();
-        this.dogTrail.id = this.trailSet.trails.length;
-        this.dogTrail.dog = "Hunde";
-        this.dogTrail.trainer = "Trainer";
-
-        this.trailSet.trails.forEach((data) =>{
-            data.setEndTime();
-        })
-
-        this.trailSet.addTrailToSet(this.dogTrail);
-
-        console.log(this.trailSet);
-
+        this.finalizeTrails();
         this.storage.addNewTrailSet(this.trailSet);
 
         this.map.endSession();
@@ -193,6 +172,33 @@ export class WaterMapPage {
 	    this.navCtrl.popToRoot().then((answer) => {
 		    this.navCtrl.push('HistoryPage');
 	    });
+    }
+
+    /**
+     * Method that is called to finalize the trails for the storage.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     */
+    finalizeTrails(){
+        this.dogTrail.id = this.trailSet.trails.length;
+        this.dogTrail.trainer = this.dogTrailTrainer;
+        this.dogTrail.dog = "Hunde";
+
+        this.trailSet.addTrailToSet(this.dogTrail);
+        this.trailSet.trails.forEach((data) =>{
+            data.setEndTime();
+        });
+    }
+
+    /**
+	 * Method to set the map back in centered mode.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+    centerMap(){
+        this.map.centerMap();
     }
 
     showDogOptions(event){
@@ -266,7 +272,7 @@ export class WaterMapPage {
 			}
 		});
 	}
-	
+
 	public showImage(){
 		let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 		imageModal.present();

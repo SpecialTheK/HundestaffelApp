@@ -14,11 +14,21 @@
 <ion-content>
     <div class="map-container">
         <div class="map-buttons">
-            <ion-fab top right>
+            <ion-fab top left>
                 <button ion-fab (click)="centerMap()"><ion-icon name="locate"></ion-icon></button>
             </ion-fab>
-            <ion-fab center right>
-                <button ion-fab (click)="toggleFlashlight()"><ion-icon name="sunny"></ion-icon></button>
+
+            <ion-fab middle left>
+                <button ion-fab mini (click)="toggleFlashlight()"><ion-icon name="sunny"></ion-icon></button>
+            </ion-fab>
+
+            <ion-fab top right >
+                <button ion-fab>Share</button>
+                <ion-fab-list side="bottom">
+                    <button ion-fab>Ausgeschlossen</button>
+                    <button ion-fab>Interesse</button>
+                    <button ion-fab>Windrichtung</button>
+                </ion-fab-list>
             </ion-fab>
         </div>
 
