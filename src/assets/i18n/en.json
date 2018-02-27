@@ -38,6 +38,7 @@
 	"MAP_CIRCLE"                            : "Circle",
 	"MAP_CIRCLE_ADD"                        : "Add circle",
 	"MAP_DISTANCE"                          : "Distance",
+	"MAP_DOG_REQUIRED"                      : "You have to enter at least one dog name",
 	"MAP_ENDPOINT"                          : "Objective",
 	"MAP_INFO"                              : "Info",
 	"MAP_LAND"                              : "Land map",
@@ -54,6 +55,7 @@
 	"MAP_TEMPERATURE"                       : "Temperature",
 	"MAP_WATER"                             : "Water map",
 	"MAP_WIND_DIRECTION"                    : "Wind direction",
+	"MAP_WIND_DIRECTION_MESSAGE"            : "Tip two times on the map to choose a heading!",
 
 	"MENU"                                  : "Menu",
 	"MENU_LAST_TRAILS"                      : "Last trails",

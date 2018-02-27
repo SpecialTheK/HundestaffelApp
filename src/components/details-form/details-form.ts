@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {Person} from "../../models/person";
-import {Events, NavController, NavParams} from "ionic-angular";
+import {Events, NavController, NavParams, ToastController} from "ionic-angular";
 import {TranslateService} from "@ngx-translate/core";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 
@@ -31,7 +31,12 @@ export class DetailsFormComponent {
 	precipitationOptions: string[] = [];
 	translatedTerms: string[] = [];
 
-	constructor(public navParams: NavParams, public navCtrl: NavController, public translateService: TranslateService, public camera: Camera, public events: Events) {
+	constructor(public navParams: NavParams,
+	            public navCtrl: NavController,
+	            public toastCtrl: ToastController,
+	            public translateService: TranslateService,
+	            public camera: Camera,
+	            public events: Events) {
 		let data = this.navParams.get('data');
 		this.multipleDogs = !this.navParams.get('isLandTrail');
 		if(data === undefined){
@@ -57,7 +62,7 @@ export class DetailsFormComponent {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("MAP_PRECIPITATION_0", "MAP_PRECIPITATION_1", "MAP_PRECIPITATION_2", "MAP_PRECIPITATION_3", "MAP_PRECIPITATION_4", "PERSON_HAIR_0", "PERSON_HAIR_1", "PERSON_HAIR_2", "PERSON_HAIR_3", "PERSON_HAIR_COLOR_0", "PERSON_HAIR_COLOR_1", "PERSON_HAIR_COLOR_2", "PERSON_HAIR_COLOR_3", "PERSON_HAIR_COLOR_4", "PERSON_HAIR_COLOR_5", "PERSON_HAIR_COLOR_6", "PERSON_HAIR_COLOR_7", "PERSON_HAIR_COLOR_8", "PERSON_BODY_0", "PERSON_BODY_1", "PERSON_BODY_2", "PERSON_BODY_3", "PERSON_BODY_4");
+		let translateTerms = Array("MAP_PRECIPITATION_0", "MAP_PRECIPITATION_1", "MAP_PRECIPITATION_2", "MAP_PRECIPITATION_3", "MAP_PRECIPITATION_4", "PERSON_HAIR_0", "PERSON_HAIR_1", "PERSON_HAIR_2", "PERSON_HAIR_3", "PERSON_HAIR_COLOR_0", "PERSON_HAIR_COLOR_1", "PERSON_HAIR_COLOR_2", "PERSON_HAIR_COLOR_3", "PERSON_HAIR_COLOR_4", "PERSON_HAIR_COLOR_5", "PERSON_HAIR_COLOR_6", "PERSON_HAIR_COLOR_7", "PERSON_HAIR_COLOR_8", "PERSON_BODY_0", "PERSON_BODY_1", "PERSON_BODY_2", "PERSON_BODY_3", "PERSON_BODY_4", "MAP_DOG_REQUIRED");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translatedTerms[term.toLowerCase()] = answer;
@@ -134,6 +139,15 @@ export class DetailsFormComponent {
 		let data: any = {};
 		if(this.multipleDogs){
 			this.dogs.splice(this.dogs.length-1, 1);
+		}
+		if(this.multipleDogs && this.dogs.length < 1){
+			let toast = this.toastCtrl.create({
+				message: this.translatedTerms["map_dog_required"],
+				duration: 4000,
+				position: 'top'
+			});
+			toast.present();
+			return;
 		}
 		data.dogs = this.dogs;
 		data.precipitation = this.precipitation;

@@ -38,6 +38,7 @@
 	"MAP_CIRCLE"                            : "Kreis",
 	"MAP_CIRCLE_ADD"                        : "Kreis hinzufügen",
 	"MAP_DISTANCE"                          : "Distanz",
+	"MAP_DOG_REQUIRED"                      : "Du musst mindestens einen Hundenamen eingeben",
 	"MAP_ENDPOINT"                          : "Zielpunkt",
 	"MAP_INFO"                              : "Info",
 	"MAP_LAND"                              : "Landkarte",
@@ -54,6 +55,7 @@
 	"MAP_TEMPERATURE"                       : "Temperatur",
 	"MAP_WATER"                             : "Wasserkarte",
 	"MAP_WIND_DIRECTION"                    : "Windrichtung",
+	"MAP_WIND_DIRECTION_MESSAGE"            : "Tippe zwei Mal auf die Map, um die Windrichtung einzuzeichnen!",
 
 	"MENU"                                  : "Menü",
 	"MENU_LAST_TRAILS"                      : "Letzte Suchen",

@@ -7,6 +7,7 @@ import {DeviceOrientation, DeviceOrientationCompassHeading} from '@ionic-native/
 
 import { Trail } from '../../models/trail';
 import { TrailSet } from '../../models/trailSet';
+import {TranslateService} from "@ngx-translate/core";
 
 declare let google: any;
 
@@ -46,17 +47,33 @@ export class MapProvider {
     polyline: any;
 
     isLandTrail: boolean;
+    
+    translatedTerms: string[] = [];
 
-    constructor(public location: Geolocation, public toastCtrl: ToastController, public vibration: Vibration, public deviceOrientation: DeviceOrientation){
+    constructor(public location: Geolocation, public toastCtrl: ToastController, public vibration: Vibration, public deviceOrientation: DeviceOrientation, public translateService: TranslateService){
         this.isCentered = true;
         this.isWindDirectionMode = false;
         this.isClickedOnce = false;
-
-
         this.distanceToTargetMarker = new Subject<number>();
         this.currentTrailSubject = new Subject<Trail>();
         this.waterDogTrailSubject = new Subject<Trail>();
+        this.translateVariables();
     }
+	
+	/**
+	 * Method called to translate all terms used in this template.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	private translateVariables(){
+		let translateTerms = Array("MAP_WIND_DIRECTION_MESSAGE");
+		for(let term of translateTerms){
+			this.translateService.get(term).subscribe((answer) => {
+				this.translatedTerms[term.toLowerCase()] = answer;
+			});
+		}
+	}
 
     initMapObject(mapElement: ElementRef){
         this.mapObject = new google.maps.Map(mapElement.nativeElement, {
@@ -93,7 +110,7 @@ export class MapProvider {
 
     activateWindMarkerMode(){
         let toast = this.toastCtrl.create({
-          message: 'Tippe zwei Mal auf die Map, um die Windrichtung einzuzeichnen!',
+          message: this.translatedTerms["map_wind_direction_message"],
           duration: 4000,
           position: 'top'
         });
@@ -253,13 +270,4 @@ export class MapProvider {
     setWaterDogTrail(trail: Trail){
         this.waterDogTrail = trail;
     }
-
-    toggleWaterDogTrail(hide: boolean){
-        if(hide){
-            this.waterDogTrail.hide();
-        }else {
-            this.waterDogTrail.show(this.mapObject);
-        }
-    }
-
 }

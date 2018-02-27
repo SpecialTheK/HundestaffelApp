@@ -38,6 +38,7 @@
 	"MAP_CIRCLE"                            : "Cercle",
 	"MAP_CIRCLE_ADD"                        : "Ajoute cercle",
 	"MAP_DISTANCE"                          : "Distance",
+	"MAP_DOG_REQUIRED"                      : "Vous devez entrer au moins un nom",
 	"MAP_ENDPOINT"                          : "Destination",
 	"MAP_INFO"                              : "Info",
 	"MAP_LAND"                              : "carte",
@@ -54,6 +55,7 @@
 	"MAP_TEMPERATURE"                       : "Température",
 	"MAP_WATER"                             : "carte",
 	"MAP_WIND_DIRECTION"                    : "Direction du vent",
+	"MAP_WIND_DIRECTION_MESSAGE"            : "Appuyez deux fois sur la carte pour dessiner la direction du vent!",
 
 	"MENU"                                  : "Menu",
 	"MENU_LAST_TRAILS"                      : "Dernière tracés",
