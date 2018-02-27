@@ -1,5 +1,10 @@
 <ion-header>
-	<ion-navbar color="landMapColor">
+	<ion-navbar color="landMapColor" hideBackButton="true">
+		<ion-buttons start>
+			<button ion-button icon-only (click)="dismissTrail()">
+				<ion-icon name="close"></ion-icon>
+			</button>
+		</ion-buttons>
 		<ion-title>{{'MAP_LAND' | translate}}</ion-title>
 		<ion-buttons end>
 			<button ion-button icon-only (click)="editDetails()">
