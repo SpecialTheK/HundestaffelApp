@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import {Events, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, Events, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -55,6 +55,7 @@ export class LandMapPage {
     constructor(public navParams: NavParams,
                 public navCtrl: NavController,
                 public modalCtrl: ModalController,
+                public alertCtrl: AlertController,
                 public map: MapProvider,
                 public storage: TrailStorageProvider,
                 public translateService: TranslateService,
@@ -248,4 +249,27 @@ export class LandMapPage {
 	    let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 	    imageModal.present();
     }
+	
+	public dismissTrail(){
+		let alert = this.alertCtrl.create({
+			title: this.translatedTerms["trail_abort"],
+			subTitle: this.translatedTerms["trail_abort_message"],
+			buttons: [
+				{
+					text: this.translatedTerms["no"],
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				},
+				{
+					text: this.translatedTerms["yes"],
+					handler: () => {
+						this.navCtrl.popToRoot();
+					}
+				}
+			]
+		});
+		alert.present();
+	}
 }

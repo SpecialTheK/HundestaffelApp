@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import {IonicPage, NavParams, NavController, PopoverController, ModalController} from 'ionic-angular';
+import {IonicPage, NavParams, NavController, PopoverController, ModalController, AlertController} from 'ionic-angular';
 
 import { TrailSet } from "../../models/trailSet";
 
@@ -55,6 +55,7 @@ export class WaterMapPage {
                 public navCtrl: NavController,
                 public modalCtrl: ModalController,
                 public popCtrl: PopoverController,
+                public alertCtrl: AlertController,
                 public map: MapProvider,
                 public storage: TrailStorageProvider,
                 public translateService: TranslateService,
@@ -276,5 +277,28 @@ export class WaterMapPage {
 	public showImage(){
 		let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 		imageModal.present();
+	}
+	
+	public dismissTrail(){
+		let alert = this.alertCtrl.create({
+			title: this.translatedTerms["trail_abort"],
+			subTitle: this.translatedTerms["trail_abort_message"],
+			buttons: [
+				{
+					text: this.translatedTerms["no"],
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				},
+				{
+					text: this.translatedTerms["yes"],
+					handler: () => {
+						this.navCtrl.popToRoot();
+					}
+				}
+			]
+		});
+		alert.present();
 	}
 }
