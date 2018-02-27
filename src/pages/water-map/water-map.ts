@@ -1,5 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import {IonicPage, NavParams, NavController, PopoverController, ModalController, AlertController} from 'ionic-angular';
+import {
+	IonicPage, NavParams, NavController, PopoverController, ModalController, AlertController,
+	Platform
+} from 'ionic-angular';
 
 import { TrailSet } from "../../models/trailSet";
 
@@ -50,6 +53,7 @@ export class WaterMapPage {
     mapLoaded = false;
 
     translatedTerms:Array<string> = [];
+    backButtonAction;
 
     constructor(public navParams: NavParams,
                 public navCtrl: NavController,
@@ -61,8 +65,8 @@ export class WaterMapPage {
                 public translateService: TranslateService,
                 public flashlight: Flashlight,
                 public backgroundMode: BackgroundMode,
-                appPreferences: AppPreferences) {
-
+                appPreferences: AppPreferences,
+                platform: Platform) {
         this.trailSet = this.navParams.get('trailSet');
         let dogs = this.navParams.get('dogs') as string[];
 
@@ -89,7 +93,10 @@ export class WaterMapPage {
         this.startTime = new Date();
         this.deltaTime = new Date();
         this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
-
+	    this.backButtonAction = platform.registerBackButtonAction(() => {
+		    this.dismissTrail();
+	    }, 10);
+	    
         this.translateVariables();
     }
 
@@ -100,12 +107,19 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("MAP_MARKER_END");
+		let translateTerms = Array("YES","NO","TRAIL_ABORT","TRAIL_ABORT_MESSAGE");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translatedTerms[term.toLowerCase()] = answer;
 			});
 		}
+	}
+	
+	/**
+	 * Unregister the backButtonAction for this site on leave
+	 */
+	ionViewWillLeave() {
+		this.backButtonAction && this.backButtonAction();
 	}
 
 	/**
