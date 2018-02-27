@@ -85,11 +85,13 @@ export class PdfUtilProvider {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	private getDuration(startTime: Date, endTime: Date):number{
+	private getDuration(startTime: Date, endTime: Date):string{
 		let _startTime = moment(startTime);
 		let _endTime = moment(endTime);
+		let date = new Date(moment(_endTime.diff(_startTime)).toDate().getTime());
+		let transitionedDate = new Date( date.valueOf() + date.getTimezoneOffset() * 60000);
 		
-		return moment(_endTime.diff(_startTime)).toDate().getTime();
+		return transitionedDate.getHours()+" "+this.translate["hours"]+" "+transitionedDate.getMinutes()+" "+this.translate["minutes"]+" "+transitionedDate.getSeconds()+" "+this.translate["seconds"];
 	}
 	
 	/**
