@@ -64,8 +64,8 @@ export class MapProvider {
                 disableDefaultUI: true,
                 fullscreenControl: false,
                 streetViewControl: false,
-                zoomControl: true,
-                zoom: 16
+                zoomControl: false,
+                zoom: 18
         });
 
         this.location.getCurrentPosition().then((pos) =>{

@@ -1,3 +1,5 @@
+@import '../../theme/variables.scss';
+
 page-water-map {
 
     ion-content {
@@ -34,6 +36,7 @@ page-water-map {
     }
 
     .function-container{
+        background-color: map-get($colors, waterMapColorLight);
         height: 30%;
         width: 100%;
     }

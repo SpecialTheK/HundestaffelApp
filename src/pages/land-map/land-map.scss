@@ -1,3 +1,5 @@
+@import '../../theme/variables.scss';
+
 page-land-map {
 
     ion-content {
@@ -51,6 +53,7 @@ page-land-map {
     }
 
     .function-container{
+        background-color: map-get($colors, landMapColorLight);
         height: 30%;
         width: 100%;
     }

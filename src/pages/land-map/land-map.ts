@@ -37,6 +37,7 @@ export class LandMapPage {
 
     trailSet: TrailSet;
     runnerTrail: Trail;
+    runnerTrailTime: number;
     dogTrail: Trail;
 	dogName: string;
 	trainerName: string = "";
@@ -51,7 +52,7 @@ export class LandMapPage {
 
     translatedTerms: Array<string> = [];
 	backButtonAction;
-	
+
     constructor(public navParams: NavParams,
                 public navCtrl: NavController,
                 public modalCtrl: ModalController,
@@ -78,14 +79,14 @@ export class LandMapPage {
 
         this.startTime = new Date();
         this.deltaTime = new Date();
-	
+
 	    this.backButtonAction = platform.registerBackButtonAction(() => {
 		    this.dismissTrail();
 	    }, 10);
-	    
+
         this.translateVariables();
     }
-	
+
 	/**
 	 * Unregister the backButtonAction for this site on leave
 	 */
@@ -119,6 +120,7 @@ export class LandMapPage {
             this.map.importTrailSet(this.trailSet);
             //NOTE (christian): dies kann sich im verlauf des Trails ändern, wenn ein anderer Trail im auswahlmenu gewählt wird
             this.runnerTrail = this.trailSet.trails[0];
+            this.runnerTrailTime = this.runnerTrail.endTime.getTime() - this.runnerTrail.startTime.getTime();
             this.map.startSession(true, this.trainerName, this.dogName);
             this.map.toggleVirtualTrainer(this.runnerTrail);
             this.map.getCurrentTrailSubject().subscribe((data) => {
@@ -261,7 +263,7 @@ export class LandMapPage {
 	    let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 	    imageModal.present();
     }
-	
+
 	public dismissTrail(){
 		let alert = this.alertCtrl.create({
 			title: this.translatedTerms["trail_abort"],

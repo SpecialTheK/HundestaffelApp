@@ -15,23 +15,31 @@
 	<div class="map-container">
 		<div class="map-buttons">
 			<ion-fab top left>
-				<button ion-fab (click)="centerMap()">
+				<button ion-fab color="landMapColor" (click)="centerMap()">
 					<ion-icon name="locate"></ion-icon>
 				</button>
 			</ion-fab>
 
 			<ion-fab middle left>
-				<button ion-fab mini (click)="toggleFlashlight()">
+				<button ion-fab color="landMapColor" mini (click)="toggleFlashlight()">
 					<ion-icon name="sunny"></ion-icon>
 				</button>
 			</ion-fab>
 
 			<ion-fab top right>
-				<button ion-fab>Share</button>
+				<button ion-fab color="landMapColor">
+                    <ion-icon name='pin'></ion-icon>
+                </button>
 				<ion-fab-list side="bottom">
-					<button ion-fab (click)="addEndMarker()">Ausgeschlossen</button>
-					<button ion-fab (click)="addInterestMarker()">Interesse</button>
-					<button ion-fab (click)="addWindDirectionMarker()">Windrichtung</button>
+					<button ion-fab (click)="addEndMarker()">
+                        <ion-icon name='close'></ion-icon>
+                    </button>
+					<button ion-fab (click)="addInterestMarker()">
+                        <ion-icon name='bulb'></ion-icon>
+                    </button>
+					<button ion-fab (click)="addWindDirectionMarker()">
+                        <ion-icon name='navigate'></ion-icon>
+                    </button>
 				</ion-fab-list>
 			</ion-fab>
 		</div>
@@ -97,7 +105,7 @@
 									<ion-list>
 										<ion-list-header>{{'TIME' | translate}}:</ion-list-header>
 										<ion-item>
-											<ion-label>{{runTime | date: 'HH:mm:ss' : '+0000'}}</ion-label>
+											<ion-label>{{runnerTrailTime | date: 'HH:mm:ss' : '+0000'}}</ion-label>
 										</ion-item>
 									</ion-list>
 								</ion-col>
