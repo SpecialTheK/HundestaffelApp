@@ -3,6 +3,4 @@
 		<ion-title>{{'TRAIL_INIT' | translate}}</ion-title>
 	</ion-navbar>
 </ion-header>
-<ion-content padding>
-	<ion-spinner></ion-spinner>
-</ion-content>
+<details-form (formSubmitted)="gotoMap($event)"></details-form>
