@@ -41,7 +41,7 @@ page-water-map {
         overflow-y: auto;
         height: 100%;
     }
-	
+
 	div.loaded{
 		height: 100%;
 	}
@@ -49,6 +49,16 @@ page-water-map {
     .top-edge{
         margin: 0;
         background-color: map-get($colors, headerColorBackground);
-	    border: 3px solid map-get($colors, headerColorBackground);
+        border: 3px solid map-get($colors, headerColorBackground);
+    }
+
+    .sep-line{
+        height: 0px;
+        margin: 0;
+        margin-top: 7px;
+        background-color: lightgrey;
+        border-style: solid;
+        border-width: 1px;
+        border-color: lightgrey;
     }
 }
