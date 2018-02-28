@@ -4,6 +4,6 @@
 	<ion-card-content>
 		<p>{{'TRAIL_MAP_TYPE' | translate}}: {{mapType}}</p>
 		<p>{{trails}} {{'TRAIL_STAGES' | translate}} {{'WITH' | translate}}:</p>
-		<p *ngFor="let dog of dogs">{{dog.name}} {{'FOR' | translate}} {{dog.duration | date: 'HH:mm:ss' : '+0000'}}</p>
+		<p *ngFor="let dog of dogs" class="dogList">{{dog.name}} {{'FOR' | translate}} {{dog.duration | date: 'HH:mm:ss' : '+0000'}}</p>
 	</ion-card-content>
 </ion-card>
