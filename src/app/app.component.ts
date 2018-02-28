@@ -52,13 +52,12 @@ export class MyApp {
 			this.storage.addNewTrailSet(TrailSet.fromData(<any>dummy)).then((message) => {
 				console.log("Geklappt");
 			});*/
-
-			translate.setDefaultLang('en');
-			if(platform.is('cordova')){
-				preferences.fetch('language').then((answer) => {
-					translate.use(answer);
-				});
-			}
+			
+			preferences.fetch('language').then((answer) => {
+				translate.use(answer);
+			}).catch((error) =>{
+				translate.setDefaultLang('en');
+			});
 			this.storage.getLatestTrailSets(5).subscribe((value:TrailSet) => {
 				this.trails.push(value);
 			});
