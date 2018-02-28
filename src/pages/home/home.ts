@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
+import {Diagnostic} from "@ionic-native/diagnostic";
 
 /**
  * Page first called when the app is loaded. Just use for navigating
@@ -14,8 +15,23 @@ import { IonicPage, NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-    constructor(public navCtrl: NavController) {
+    constructor(public navCtrl: NavController, public diagnostic: Diagnostic) {
+    	this.getPermission();
     }
+	
+	private getPermission() {
+		this.diagnostic.getLocationAuthorizationStatus().then((status) => {
+			if(this.diagnostic.permissionStatus.NOT_REQUESTED == status || this.diagnostic.motionStatus.NOT_DETERMINED== status){
+				this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS).catch((error) => {
+					console.log("Location authorization status not granted: "+error);
+				});
+			} else {
+				console.log("Location authorization granted");
+			}
+		}).catch((error) => {
+			console.log("Location authorization status not granted: "+error);
+		});
+	}
 
 	/**
 	 * Method to visit the map page for land trailing.

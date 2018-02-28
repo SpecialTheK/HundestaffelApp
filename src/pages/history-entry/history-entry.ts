@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
 import {Trail} from "../../models/trail";
 import {TranslateService} from "@ngx-translate/core";
 import {SocialSharing} from "@ionic-native/social-sharing";
@@ -9,6 +9,7 @@ import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 import {TrailSet} from "../../models/trailSet";
 import moment from "moment";
+import {Diagnostic} from "@ionic-native/diagnostic";
 
 /**
  * Page to display a single entry from the history.
@@ -77,7 +78,17 @@ export class HistoryEntryPage {
 	 */
 	translatedTerms: Array<string> = [];
 
-	constructor(public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
+	constructor(public platform: Platform,
+	            public navCtrl: NavController,
+	            navParams: NavParams,
+	            public alertCtrl: AlertController,
+	            public trailStorage: TrailStorageProvider,
+	            public translateService: TranslateService,
+	            public map: MapProvider,
+	            public social: SocialSharing,
+	            public share: ShareTrailProvider,
+	            public pdf: PdfUtilProvider,
+	            public diagnostic: Diagnostic) {
 		this.trailSet = navParams.get('trailObject');
 		this.translateVariables();
 	}
@@ -160,7 +171,21 @@ export class HistoryEntryPage {
 	 * @version 1.0.0
 	 */
 	shareAsJSON(){
-		this.share.shareTrail(this.trailSet);
+		if(this.platform.is('android')){
+			this.diagnostic.isExternalStorageAuthorized().then((answer) => {
+				if(!answer){
+					this.diagnostic.requestExternalStorageAuthorization().then((answer) => {
+						if(answer == this.diagnostic.permissionStatus.GRANTED){
+							this.share.shareTrail(this.trailSet);
+						}
+					});
+				} else {
+					this.share.shareTrail(this.trailSet);
+				}
+			});
+		} else {
+			this.share.shareTrail(this.trailSet);
+		}
 	}
 
 	/**
@@ -170,9 +195,27 @@ export class HistoryEntryPage {
 	 * @version 1.0.0
 	 */
 	shareAsPdf(){
-		this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
-			console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
-		});
+		if(this.platform.is('android')){
+			this.diagnostic.isExternalStorageAuthorized().then((answer) => {
+				if(!answer){
+					this.diagnostic.requestExternalStorageAuthorization().then((answer) => {
+						if(answer == this.diagnostic.permissionStatus.GRANTED){
+							this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
+								console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+							});
+						}
+					});
+				} else {
+					this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
+						console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+					});
+				}
+			});
+		} else {
+			this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
+				console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+			});
+		}
 	}
 
 	/**
