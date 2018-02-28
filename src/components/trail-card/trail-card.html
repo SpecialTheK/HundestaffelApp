@@ -1,5 +1,5 @@
 <ion-card>
-	<i class="type-icon landTrail"></i>
+	<i class="type-icon" [ngClass]="iconClass"></i>
 	<ion-card-header>{{operationType}}: {{startTime | date : 'dd. LLL yyyy HH:mm'}}</ion-card-header>
 	<ion-card-content>
 		<p>{{'TRAIL_MAP_TYPE' | translate}}: {{mapType}}</p>
