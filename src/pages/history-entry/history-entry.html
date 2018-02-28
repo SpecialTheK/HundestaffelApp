@@ -12,6 +12,6 @@
 	<div id="map" #map></div>
 	<p>{{trails}} {{'TRAIL_STAGES' | translate}} {{'WITH' | translate}}:</p>
 	<p *ngFor="let dog of dogs">{{dog.name}} {{'FOR' | translate}} {{dog.duration | date: 'HH:mm:ss' : '+0000'}}</p>
-	<p><button ion-button (click)="gotoMap()">{{'TRAIL_USE' | translate}}</button></p>
-	<p><button ion-button (click)="shareAsPdf()">{{'TRAIL_EXPORT_PDF' |translate }}</button></p>
+	<p><button ion-button (click)="gotoMap()" class="submitButton">{{'TRAIL_USE' | translate}}</button></p>
+	<p><button ion-button (click)="shareAsPdf()" class="submitButton">{{'TRAIL_EXPORT_PDF' |translate }}</button></p>
 </ion-content>
