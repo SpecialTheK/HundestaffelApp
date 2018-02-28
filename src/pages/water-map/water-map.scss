@@ -15,10 +15,6 @@ page-water-map {
         align-self: flex-start;
     }
 
-    ::-webkit-scrollbar {
-        display: none;
-    }
-
     .map-container{
         height: 70%;
         width: 100%;
@@ -40,9 +36,17 @@ page-water-map {
         height: 30%;
         width: 100%;
     }
-    
+
     div.slide-zoom{
         overflow-y: auto;
         height: 100%;
+    }
+
+    .top-edge{
+        margin: 0;
+        background-color: map-get($colors, headerColorBackground);
+        border-style: solid;
+        border-width: 3px;
+        border-color: map-get($colors, headerColorBackground);
     }
 }

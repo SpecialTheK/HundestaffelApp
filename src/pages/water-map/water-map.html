@@ -19,24 +19,32 @@
 <ion-content>
 	<div class="map-container">
 		<div class="map-buttons">
-			<ion-fab top right>
+			<ion-fab top left>
 				<button ion-fab (click)="centerMap()">
 					<ion-icon name="locate"></ion-icon>
 				</button>
 			</ion-fab>
-			<ion-fab center right>
-				<button ion-fab (click)="toggleFlashlight()">
+			<ion-fab left middle>
+				<button ion-fab mini (click)="toggleFlashlight()">
 					<ion-icon name="sunny"></ion-icon>
 				</button>
 			</ion-fab>
-			<ion-fab center left>
+			<ion-fab top right>
 				<button ion-fab (click)="showDogOptions($event)">
-					<ion-icon name="sunny"></ion-icon>
+					<ion-icon name="tennisball"></ion-icon>
+				</button>
+			</ion-fab>
+			<ion-fab right middle>
+				<button ion-fab (click)="addTargetMarker()">
+					<ion-icon name="pin"></ion-icon>
 				</button>
 			</ion-fab>
 		</div>
 		<div #map class="map"></div>
 	</div>
+
+	<hr class="top-edge">
+
 	<div class="function-container">
 		<div class="loading" *ngIf="mapLoaded === false">
 			<ion-spinner></ion-spinner>
@@ -46,22 +54,17 @@
 			<ion-slides>
 				<ion-slide class="info-slide">
 					<ion-grid>
-						<ion-label>{{'MAP_DISTANCE' | translate}}:</ion-label>
 						<ion-row>
-							<ion-col>
-								<ion-item>
-									<ion-label>{{distanceToTargetMarker}} m</ion-label>
-								</ion-item>
-							</ion-col>
+							<!-- TODO: übersetzung-->
+							<ion-col>Water info</ion-col>
 						</ion-row>
 						<ion-row>
-							<ion-col>
-								<ion-item>
-									<ion-label>{{'TIME' | translate}}:</ion-label>
-									<ion-datetime disabled displayFormat="HH:mm:ss"
-									              [(ngModel)]="runTime"></ion-datetime>
-								</ion-item>
-							</ion-col>
+							<ion-col>{{'MAP_DISTANCE' | translate}}:</ion-col>
+							<ion-col>{{'TIME' | translate}}:</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col>{{distanceToTargetMarker}} m</ion-col>
+							<ion-col>{{runTime | date: 'HH:mm:ss' : '+0000'}}</ion-col>
 						</ion-row>
 					</ion-grid>
 				</ion-slide>

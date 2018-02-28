@@ -61,9 +61,27 @@ page-land-map {
         height: 30%;
         width: 100%;
     }
-    
+
     div.slide-zoom{
         overflow-y: auto;
         height: 100%;
+    }
+
+    .top-edge{
+        margin: 0;
+        background-color: map-get($colors, headerColorBackground);
+        border-style: solid;
+        border-width: 3px;
+        border-color: map-get($colors, headerColorBackground);
+    }
+
+    .sep-line{
+        height: 0px;
+        margin: 0;
+        margin-top: 7px;
+        background-color: lightgrey;
+        border-style: solid;
+        border-width: 1px;
+        border-color: lightgrey;
     }
 }
