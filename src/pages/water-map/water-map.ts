@@ -96,7 +96,7 @@ export class WaterMapPage {
 	    this.backButtonAction = platform.registerBackButtonAction(() => {
 		    this.dismissTrail();
 	    }, 10);
-	    
+
         this.translateVariables();
     }
 
@@ -114,11 +114,12 @@ export class WaterMapPage {
 			});
 		}
 	}
-	
+
 	/**
 	 * Unregister the backButtonAction for this site on leave
 	 */
 	ionViewWillLeave() {
+		this.map.endSession();
 		this.backButtonAction && this.backButtonAction();
 	}
 
@@ -234,16 +235,6 @@ export class WaterMapPage {
     }
 
 	/**
-	 * Method that is called to add a triangle to the map.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	addWindDirectionTriangle() {
-        this.map.addTriangle();
-    }
-
-	/**
 	 * Method that is called to change the opacity of an object.
 	 *
 	 * @since 1.0.0
@@ -292,7 +283,7 @@ export class WaterMapPage {
 		let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 		imageModal.present();
 	}
-	
+
 	public dismissTrail(){
 		let alert = this.alertCtrl.create({
 			title: this.translatedTerms["trail_abort"],

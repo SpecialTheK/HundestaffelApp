@@ -91,6 +91,7 @@ export class LandMapPage {
 	 * Unregister the backButtonAction for this site on leave
 	 */
 	ionViewWillLeave() {
+        this.map.endSession();
 		this.backButtonAction && this.backButtonAction();
 	}
 
@@ -101,11 +102,10 @@ export class LandMapPage {
 	 * @version 1.0.0
 	 */
     ionViewDidLoad() {
-        console.log(this.isRunnerTrail);
-
         this.map.initMapObject(this.mapElement);
         if(this.isRunnerTrail){
             this.map.startSession(true, this.trainerName, this.dogName);
+            console.log("TEST");
             this.map.getCurrentTrailSubject().subscribe((data) => {
                 this.runnerTrail = data;
                 this.mapLoaded = true;
@@ -118,7 +118,6 @@ export class LandMapPage {
             });
         } else {
             this.map.importTrailSet(this.trailSet);
-            //NOTE (christian): dies kann sich im verlauf des Trails ändern, wenn ein anderer Trail im auswahlmenu gewählt wird
             this.runnerTrail = this.trailSet.trails[0];
             this.runnerTrailTime = this.runnerTrail.endTime.getTime() - this.runnerTrail.startTime.getTime();
             this.map.startSession(true, this.trainerName, this.dogName);

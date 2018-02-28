@@ -47,7 +47,7 @@ export class MapProvider {
     polyline: any;
 
     isLandTrail: boolean;
-    
+
     translatedTerms: string[] = [];
 
     constructor(public location: Geolocation, public toastCtrl: ToastController, public vibration: Vibration, public deviceOrientation: DeviceOrientation, public translateService: TranslateService){
@@ -59,7 +59,7 @@ export class MapProvider {
         this.waterDogTrailSubject = new Subject<Trail>();
         this.translateVariables();
     }
-	
+
 	/**
 	 * Method called to translate all terms used in this template.
 	 *
@@ -137,6 +137,8 @@ export class MapProvider {
         this.polyline.setMap(this.mapObject);
 
         this.watchCurrentPosition();
+
+        console.log("session started");
     }
 
     endSession(){
@@ -145,6 +147,8 @@ export class MapProvider {
     }
 
     watchCurrentPosition(){
+        console.log("watching current position");
+
         this.headingSub = this.deviceOrientation.watchHeading().subscribe(
             (data: DeviceOrientationCompassHeading) => {this.headingMap = data;},
             (error: any) => {
@@ -180,6 +184,7 @@ export class MapProvider {
                 }
 
                 this.currentTrailSubject.next(this.currentTrail);
+                console.log("current trail next()");
             });
     }
 
