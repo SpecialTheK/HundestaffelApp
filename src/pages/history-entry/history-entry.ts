@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Trail} from "../../models/trail";
 import {TranslateService} from "@ngx-translate/core";
 import {SocialSharing} from "@ionic-native/social-sharing";
@@ -64,17 +64,10 @@ export class HistoryEntryPage {
 	/**
 	 * Array containing all dogs and their duration that were part of this trailSet.
 	 *
-	 * @type {any[]}
+	 * @type {Object[]}
 	 * @since 1.0.0
 	 */
 	dogs: Array<Object> = [];
-
-	/**
-	 * Day of the activity
-	 *
-	 * @since 1.0.0
-	 */
-	trailDate: Date = new Date();
 
 	/**
 	 * Array containing all terms to insert into the template after translating them.
@@ -84,7 +77,7 @@ export class HistoryEntryPage {
 	 */
 	translatedTerms: Array<string> = [];
 
-	constructor(public viewCtrl: ViewController, public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
+	constructor(public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
 		this.trailSet = navParams.get('trailObject');
 		this.translateVariables();
 	}
