@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import { TrailSet } from '../../models/trailSet';
 
 /**
@@ -16,7 +16,7 @@ import { TrailSet } from '../../models/trailSet';
 export class InitTrailPage {
     isLandTrail: boolean;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
+    constructor(public navCtrl: NavController, public navParams: NavParams) {
         this.isLandTrail = this.navParams.get('isLandTrail');
     }
     

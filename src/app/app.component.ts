@@ -23,12 +23,19 @@ export class MyApp {
 	rootPage: any = Home;
 	trails: TrailSet[] = [];
 
-	constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, preferences: AppPreferences, translate: TranslateService, public webIntent: WebIntent, public storage: TrailStorageProvider, public ngZone: NgZone) {
+	constructor(platform: Platform,
+	            statusBar: StatusBar,
+	            splashScreen: SplashScreen,
+	            preferences: AppPreferences,
+	            translate: TranslateService,
+	            webIntent: WebIntent,
+	            storage: TrailStorageProvider,
+	            ngZone: NgZone) {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
 			if(platform.is('android')) {
-				this.webIntent.getIntent().then((answer) => {
+				webIntent.getIntent().then((answer) => {
 					if(answer != null && answer.data !== undefined){
 						this.navCtrl.push('ImportPage', {source: answer.data});
 					}
@@ -41,7 +48,7 @@ export class MyApp {
 					// this context is called outside of angular zone!
 					setTimeout(() => {
 						// so we need to get back into the zone..
-						this.ngZone.run(() => {
+						ngZone.run(() => {
 							// this is in the zone again..
 							this.navCtrl.push('ImportPage', {source: url});
 						});
@@ -59,7 +66,7 @@ export class MyApp {
 			}).catch((error) =>{
 				console.log("No cordova platform: "+error);
 			});
-			this.storage.getLatestTrailSets(5).subscribe((value:TrailSet) => {
+			storage.getLatestTrailSets(5).subscribe((value:TrailSet) => {
 				this.trails.push(value);
 			});
 			statusBar.styleDefault();
