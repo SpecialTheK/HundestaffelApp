@@ -24,7 +24,7 @@ export class TrailCardComponent {
 	 * @type {string} The class names.
 	 * @since 1.0.0
 	 */
-	classes: string = "";
+	iconClass: string = "";
 	
 	/**
 	 * Defines the type of an operation.
@@ -60,7 +60,7 @@ export class TrailCardComponent {
 	/**
 	 * Array containing all dogs and their duration in this trailSet.
 	 *
-	 * @type {any[]}
+	 * @type {string[]}
 	 * @since 1.0.0
 	 */
 	dogs: any = [];
@@ -143,25 +143,25 @@ export class TrailCardComponent {
 	 */
 	setClasses(){
 		if(this.trail.isTraining){
-			this.classes = this.classes + ' training';
 			this.translate.get('TRAIL_TRAINING').subscribe(value => {
 				this.operationType = value;
 			});
+			if(this.trail.isLandTrail){
+				this.iconClass = "landTrail";
+				this.translate.get('TRAIL_LAND').subscribe(value => {
+					this.mapType = value;
+				});
+				
+			} else {
+				this.iconClass = "waterTrail";
+				this.translate.get('TRAIL_WATER').subscribe(value => {
+					this.mapType = value;
+				});
+			}
 		} else {
-			this.classes = this.classes + ' operation';
+			this.iconClass = "operationTrail";
 			this.translate.get('TRAIL_OPERATION').subscribe(value => {
 				this.operationType = value;
-			});
-		}
-		if(this.trail.isLandTrail){
-			this.classes = this.classes + ' land-activity';
-			this.translate.get('TRAIL_LAND').subscribe(value => {
-				this.mapType = value;
-			});
-		} else {
-			this.classes = this.classes + ' water-activity';
-			this.translate.get('TRAIL_WATER').subscribe(value => {
-				this.mapType = value;
 			});
 		}
 	}

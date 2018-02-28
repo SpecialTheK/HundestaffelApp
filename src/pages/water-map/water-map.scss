@@ -33,7 +33,7 @@ page-water-map {
 
     .function-container{
         background-color: map-get($colors, waterMapColorLight);
-        height: 30%;
+        height: calc(30%- 7px);
         width: 100%;
     }
 
@@ -41,12 +41,14 @@ page-water-map {
         overflow-y: auto;
         height: 100%;
     }
+	
+	div.loaded{
+		height: 100%;
+	}
 
     .top-edge{
         margin: 0;
         background-color: map-get($colors, headerColorBackground);
-        border-style: solid;
-        border-width: 3px;
-        border-color: map-get($colors, headerColorBackground);
+	    border: 3px solid map-get($colors, headerColorBackground);
     }
 }
