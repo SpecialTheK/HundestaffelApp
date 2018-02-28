@@ -11,7 +11,7 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 export class DetailsFormComponent {
 
 	@Output() formSubmitted = new EventEmitter();
-	
+
 	multipleDogs: boolean = true;
 	dogs: string[] = [];
 
@@ -137,9 +137,6 @@ export class DetailsFormComponent {
 
 	submitDetails(){
 		let data: any = {};
-		if(this.multipleDogs){
-			this.dogs.splice(this.dogs.length-1, 1);
-		}
 		if(this.multipleDogs && this.dogs.length < 1){
 			let toast = this.toastCtrl.create({
 				message: this.translatedTerms["map_dog_required"],
@@ -149,6 +146,9 @@ export class DetailsFormComponent {
 			toast.present();
 			return;
 		}
+		if(this.multipleDogs){
+			this.dogs.splice(this.dogs.length-1, 1);
+		}
 		data.dogs = this.dogs;
 		data.precipitation = this.precipitation;
 		data.temperature = this.temperature;
@@ -156,7 +156,7 @@ export class DetailsFormComponent {
 		data.situation = this.situation;
 		data.preSituation = this.preSituation;
 		data.risks = this.risks;
-		
+
 		this.events.publish('detailsForm:editSubmitted', data);
 		this.formSubmitted.emit(data);
 	}
