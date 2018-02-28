@@ -58,16 +58,32 @@ page-land-map {
 
     .function-container{
         background-color: map-get($colors, landMapColorLight);
-        height: 30%;
+        height: calc(30% - 7px);
         width: 100%;
     }
-    
+
     div.slide-zoom{
         overflow-y: auto;
         height: 100%;
     }
     
-    div.loaded{
-        height: 100%;
+    div.loaded {
+	    height: 100%;
+    }
+
+    .top-edge{
+        margin: 0;
+        background-color: map-get($colors, headerColorBackground);
+	    border: 3px solid map-get($colors, headerColorBackground);
+    }
+
+    .sep-line{
+        height: 0px;
+        margin: 0;
+        margin-top: 7px;
+        background-color: lightgrey;
+        border-style: solid;
+        border-width: 1px;
+        border-color: lightgrey;
     }
 }
