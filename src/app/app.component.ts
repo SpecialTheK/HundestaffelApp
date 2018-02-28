@@ -53,10 +53,11 @@ export class MyApp {
 				console.log("Geklappt");
 			});*/
 			
+			translate.setDefaultLang('en');
 			preferences.fetch('language').then((answer) => {
 				translate.use(answer);
 			}).catch((error) =>{
-				translate.setDefaultLang('en');
+				console.log("No cordova platform: "+error);
 			});
 			this.storage.getLatestTrailSets(5).subscribe((value:TrailSet) => {
 				this.trails.push(value);
