@@ -11,6 +11,13 @@ import {TranslateService} from "@ngx-translate/core";
 
 declare let google: any;
 
+/*
+
+    NOTE (christian): Das hier ist immer noch work-in-progress und muss für das fertige Produkt nochmal
+                überarbeitet werden.
+
+*/
+
 /**
  * Provider that handles displaying the map.
  *
@@ -147,8 +154,6 @@ export class MapProvider {
     }
 
     watchCurrentPosition(){
-        console.log("watching current position");
-
         this.headingSub = this.deviceOrientation.watchHeading().subscribe(
             (data: DeviceOrientationCompassHeading) => {this.headingMap = data;},
             (error: any) => {
@@ -184,7 +189,6 @@ export class MapProvider {
                 }
 
                 this.currentTrailSubject.next(this.currentTrail);
-                console.log("current trail next()");
             });
     }
 

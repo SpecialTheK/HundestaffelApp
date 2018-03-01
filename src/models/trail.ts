@@ -101,9 +101,18 @@ export class Trail {
 	 */
 	trailColor: string;
 
-
+	/**
+	 * Polyline of the trail path.
+	 *
+	 * @since 1.0.0
+	 */
 	polyline: any;
 
+	/**
+	 * Is the trail hidden or not.
+	 *
+	 * @since 1.0.0
+	 */
 	isHidden: boolean;
 
 

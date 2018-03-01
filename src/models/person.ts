@@ -1,5 +1,3 @@
-//NOTE (christian): vielleicht ist diese klasse etwas overkill?
-
 export class Person {
     name: string;
     age: number;

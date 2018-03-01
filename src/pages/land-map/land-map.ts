@@ -234,12 +234,24 @@ export class LandMapPage {
         this.map.activateWindMarkerMode();
     }
 
+    /**
+	 * Method that is used to toggle the flashlight.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
     public toggleFlashlight(){
     	if(this.flashlight.available()){
     		this.flashlight.toggle();
 	    }
     }
 
+    /**
+	 * Method that is used for opening a modal with which the user can edit the details.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
     public editDetails(){
     	let data:any = this.trailSet;
     	data.dogs = [this.dogName];
@@ -258,11 +270,23 @@ export class LandMapPage {
 	    });
     }
 
+    /**
+	 * Method that is called to show the image.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
     public showImage(){
 	    let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
 	    imageModal.present();
     }
 
+    /**
+	 * Method that is called if the user wants to dismiss the current trail.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
 	public dismissTrail(){
 		let alert = this.alertCtrl.create({
 			title: this.translatedTerms["trail_abort"],
