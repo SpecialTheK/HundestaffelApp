@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import {
 	IonicPage, NavParams, NavController, PopoverController, ModalController, AlertController,
-	Platform
+	Platform, Events
 } from 'ionic-angular';
 
 import { TrailSet } from "../../models/trailSet";
@@ -65,6 +65,7 @@ export class WaterMapPage {
                 public translateService: TranslateService,
                 public flashlight: Flashlight,
                 public backgroundMode: BackgroundMode,
+                public events: Events,
                 appPreferences: AppPreferences,
                 platform: Platform) {
         this.trailSet = this.navParams.get('trailSet');
@@ -282,18 +283,19 @@ export class WaterMapPage {
 		for(let dog of this.trailSet.trails){
 			data.dogs.push(dog.dog);
 		}
-		let profileModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: false});
-		profileModal.present();
-		profileModal.onDidDismiss((data) => {
+		let detailModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: false});
+		detailModal.present();
+		this.events.subscribe('detailsForm:editSubmitted', (date) => {
+			for(let dogId in data.dogs){
+				this.trailSet.trails[dogId].dog = data.dogs[dogId];
+			}
 			this.trailSet.precipitation = data.precipitation;
 			this.trailSet.temperature = data.temperature;
 			this.trailSet.person = data.person;
 			this.trailSet.situation = data.situation;
 			this.trailSet.preSituation = data.preSituation;
 			this.trailSet.risks = data.risks;
-			for(let dogId in data.dogs){
-				this.trailSet.trails[dogId].dog = data.dogs[dogId];
-			}
+			detailModal.dismiss();
 		});
 	}
 

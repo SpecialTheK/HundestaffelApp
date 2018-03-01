@@ -139,6 +139,7 @@ export class ImportPage {
 	 */
 	mergeWith(event){
 		let counter = 0;
+		console.log("Merging with: "+event.creationID);
 		this.trailSet.trails.forEach((value) => {
 			this.storage.addTrailToSet(event.creationID, value, true).then((answer) => {
 				++counter;
