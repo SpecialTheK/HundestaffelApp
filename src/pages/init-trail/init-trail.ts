@@ -21,35 +21,37 @@ export class InitTrailPage {
 	constructor(public navCtrl: NavController, public navParams: NavParams, diagnostic: Diagnostic, platform: Platform, alertCtrl: AlertController, locationAccuracy: LocationAccuracy) {
 		this.isLandTrail = this.navParams.get('isLandTrail');
 		
-		diagnostic.isLocationEnabled().then((status) => {
-			if (!status) {
-				locationAccuracy.canRequest().then((request) => {
-					if(request) {
-						locationAccuracy.request(locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).catch((error) => {
-							console.log('Error requesting location permissions', error)
-						});
-					} else {
-						let alert = alertCtrl.create({
-							title: 'Low battery',
-							subTitle: '10% of battery remaining',
-							buttons: ['Dismiss']
-						});
-						alert.present();
-					}
-				});
-			}
-		});
-		diagnostic.isCameraAuthorized().then((request) => {
-			if(!request){
-				diagnostic.requestCameraAuthorization(true).catch((error) => {
-					console.log("Camera authorization status not granted: "+error);
-				})
-			} else {
-				console.log("Camera authorization granted");
-			}
-		}).catch((error) => {
-			console.log("Camera authorization status not granted: "+error);
-		});
+		if(platform.is('cordova')){
+			diagnostic.isLocationEnabled().then((status) => {
+				if (!status) {
+					locationAccuracy.canRequest().then((request) => {
+						if(request) {
+							locationAccuracy.request(locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).catch((error) => {
+								console.log('Error requesting location permissions', error)
+							});
+						} else {
+							let alert = alertCtrl.create({
+								title: 'Low battery',
+								subTitle: '10% of battery remaining',
+								buttons: ['Dismiss']
+							});
+							alert.present();
+						}
+					});
+				}
+			});
+			diagnostic.isCameraAuthorized().then((request) => {
+				if(!request){
+					diagnostic.requestCameraAuthorization(true).catch((error) => {
+						console.log("Camera authorization status not granted: "+error);
+					})
+				} else {
+					console.log("Camera authorization granted");
+				}
+			}).catch((error) => {
+				console.log("Camera authorization status not granted: "+error);
+			});
+		}
 	}
 	
 	gotoMap(data) {
