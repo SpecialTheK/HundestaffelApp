@@ -135,6 +135,7 @@ export class PdfUtilProvider {
 						let utf8 = new Uint8Array(buffer);
 						let binaryArray = utf8.buffer;
 						let blob = new Blob([binaryArray], {type: 'application/pdf'});
+						console.log("Content generated, writing...");
 						this.fileSystem.writeFile(this.pdfDirectory+this.appName+'/', this.fileName, blob).then((reason) => {
 							resolve("File created");
 						}).catch((reason) => {
