@@ -137,7 +137,7 @@ export class DetailsFormComponent {
 
 	submitDetails(){
 		let data: any = {};
-		if(this.multipleDogs && this.dogs.length < 1){
+		if((this.multipleDogs && this.dogs.length < 1) || (this.multipleDogs && this.dogs.length == 1 && this.dogs[0] == "")){
 			let toast = this.toastCtrl.create({
 				message: this.translatedTerms["map_dog_required"],
 				duration: 4000,

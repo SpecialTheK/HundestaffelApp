@@ -102,12 +102,13 @@ export class TrailSet {
 	 * Method to add a new trail to this trailSet.
 	 *
 	 * @param {Trail} newTrail
+	 *
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
 	public addTrailToSet(newTrail: Trail): number{
+		newTrail.id = this.trails.length;
     	this.trails.push(newTrail);
-
     	return this.trails.length-1;
     }
 
