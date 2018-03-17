@@ -1,16 +1,46 @@
+@import "../../theme/variables.scss";
+
 trail-card {
-	ion-card.land-activity{
-		border: 1px solid rgba(0,150,0,1);
-		box-shadow: 0 0 4px 2px rgba(0,150,0,1);
-	}
-	
-	ion-card.water-activity{
-		border: 1px solid rgba(0,100,200,1);
-		box-shadow: 0 0 4px 2px rgba(0,100,200,1);
-	}
-	
-	ion-card.operation{
-		border: 1px solid rgba(200,0,0,1) !important;
-		box-shadow: 0 0 4px 2px rgba(200,0,0,1) !important;
+	ion-card {
+		background-color: #323232 !important;
+		border: 1px solid #242424 !important;
+		border-radius: 4px !important;
+		box-shadow: 0 0 2px 1px #323232 !important;
+		position: relative;
+		
+		ion-card-header{
+			color: map-get($colors, headerColor) !important;
+		}
+		
+		ion-card-content p{
+			color: map-get($colors, headerColor) !important;
+		}
+		
+		i.type-icon {
+			background-repeat: no-repeat;
+			background-size: contain;
+			display: block;
+			height: 25px;
+			position: absolute;
+			right: 15px;
+			top: 15px;
+			width: 25px;
+		}
+			
+		.landTrail{
+			background-image: url(../assets/imgs/trailcardicons/land.svg);
+		}
+		
+		.waterTrail{
+			background-image: url(../assets/imgs/trailcardicons/water.svg);
+		}
+		
+		.operationTrail{
+			background-image: url(../assets/imgs/trailcardicons/star.svg);
+		}
+		
+		p.dogList{
+			margin-left: 15px;
+		}
 	}
 }

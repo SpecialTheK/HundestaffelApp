@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
 import {Trail} from "../../models/trail";
 import {TranslateService} from "@ngx-translate/core";
 import {SocialSharing} from "@ionic-native/social-sharing";
@@ -9,6 +9,7 @@ import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 import {TrailSet} from "../../models/trailSet";
 import moment from "moment";
+import {Diagnostic} from "@ionic-native/diagnostic";
 
 /**
  * Page to display a single entry from the history.
@@ -64,17 +65,10 @@ export class HistoryEntryPage {
 	/**
 	 * Array containing all dogs and their duration that were part of this trailSet.
 	 *
-	 * @type {any[]}
+	 * @type {Object[]}
 	 * @since 1.0.0
 	 */
 	dogs: Array<Object> = [];
-
-	/**
-	 * Day of the activity
-	 *
-	 * @since 1.0.0
-	 */
-	trailDate: Date = new Date();
 
 	/**
 	 * Array containing all terms to insert into the template after translating them.
@@ -84,11 +78,18 @@ export class HistoryEntryPage {
 	 */
 	translatedTerms: Array<string> = [];
 
-	constructor(public viewCtrl: ViewController, public navCtrl: NavController, navParams: NavParams, public alertCtrl: AlertController, public trailStorage: TrailStorageProvider, public translateService: TranslateService, public map: MapProvider, public social: SocialSharing, public share: ShareTrailProvider, public pdf: PdfUtilProvider) {
+	constructor(public platform: Platform,
+	            public navCtrl: NavController,
+	            navParams: NavParams,
+	            public alertCtrl: AlertController,
+	            public trailStorage: TrailStorageProvider,
+	            public translateService: TranslateService,
+	            public map: MapProvider,
+	            public social: SocialSharing,
+	            public share: ShareTrailProvider,
+	            public pdf: PdfUtilProvider,
+	            public diagnostic: Diagnostic) {
 		this.trailSet = navParams.get('trailObject');
-		if(this.trailSet.trails.length > 0){
-			this.trailDate = this.trailSet.trails[0].startTime;
-		}
 		this.translateVariables();
 	}
 
@@ -99,7 +100,7 @@ export class HistoryEntryPage {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("TRAIL_DELETE", "DELETE", "TRAIL_DELETE_MESSAGE", "ABORT", "TRAIL_TRAINING", "TRAIL_OPERATION", "TRAIL_LAND", "TRAIL_WATER");
+		let translateTerms = Array("TRAIL_DELETE", "DELETE", "TRAIL_DELETE_MESSAGE", "ABORT", "TRAIL_TRAINING", "TRAIL_OPERATION", "TRAIL_LAND", "TRAIL_WATER","MINUTES","HOURS","SECONDS");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translatedTerms[term.toLowerCase()] = answer;
@@ -116,13 +117,11 @@ export class HistoryEntryPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	private getDuration(startTime: Date, endTime: Date):string{
+	private getDuration(startTime: Date, endTime: Date):number{
 		let _startTime = moment(startTime);
 		let _endTime = moment(endTime);
 
-		let totalTime = moment(_startTime.diff(_endTime)).toDate();
-		return totalTime.getHours()+" "+this.translatedTerms["hours"]+" "+totalTime.getMinutes()+
-			" "+this.translatedTerms["minutes"]+" "+" "+totalTime.getMinutes()+" "+this.translatedTerms["seconds"];
+		return moment(_endTime.diff(_startTime)).toDate().getTime();
 	}
 
 	/**
@@ -131,7 +130,7 @@ export class HistoryEntryPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	ionViewWillLoad(){
+	ionViewDidLoad(){
 		if(this.trailSet.isTraining){
 			this.operationType = this.translatedTerms["trail_training"];
 		} else {
@@ -172,7 +171,21 @@ export class HistoryEntryPage {
 	 * @version 1.0.0
 	 */
 	shareAsJSON(){
-		this.share.shareTrail(this.trailSet);
+		if(this.platform.is('android')){
+			this.diagnostic.isExternalStorageAuthorized().then((answer) => {
+				if(!answer){
+					this.diagnostic.requestExternalStorageAuthorization().then((answer) => {
+						if(answer == this.diagnostic.permissionStatus.GRANTED){
+							this.share.shareTrail(this.trailSet);
+						}
+					});
+				} else {
+					this.share.shareTrail(this.trailSet);
+				}
+			});
+		} else {
+			this.share.shareTrail(this.trailSet);
+		}
 	}
 
 	/**
@@ -182,9 +195,27 @@ export class HistoryEntryPage {
 	 * @version 1.0.0
 	 */
 	shareAsPdf(){
-		this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
-			console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
-		});
+		if(this.platform.is('android')){
+			this.diagnostic.isExternalStorageAuthorized().then((answer) => {
+				if(!answer){
+					this.diagnostic.requestExternalStorageAuthorization().then((answer) => {
+						if(answer == this.diagnostic.permissionStatus.GRANTED){
+							this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
+								console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+							});
+						}
+					});
+				} else {
+					this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
+						console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+					});
+				}
+			});
+		} else {
+			this.pdf.sharePdf(this.trailSet, this.mapElement).catch((error) => {
+				console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+			});
+		}
 	}
 
 	/**
@@ -210,6 +241,8 @@ export class HistoryEntryPage {
 					handler: () => {
 						this.trailStorage.removeTrailSet(this.trailSet.creationID).then((answer) => {
 							this.navCtrl.pop();
+						}).catch((error) => {
+							console.log("Message: "+error);
 						})
 					}
 				}

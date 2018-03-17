@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from "@ionic-native/geolocation";
 import {Vibration} from '@ionic-native/vibration';
 import {DeviceOrientation} from '@ionic-native/device-orientation';
+import {Camera} from '@ionic-native/camera';
 
 import {MyApp} from './app.component';
 
@@ -42,6 +43,7 @@ import {ComponentsModule} from "../components/components.module";
 	],
 	providers: [
         Geolocation,
+		Camera,
         StatusBar,
         SplashScreen,
         AppPreferences,

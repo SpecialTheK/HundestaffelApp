@@ -1,5 +1,11 @@
 import {Position} from './position';
 
+/*
+
+    NOTE (christian): Funktionalität für spätere Version
+
+*/
+
 /**
  * Class defining the triangle objects.
  *

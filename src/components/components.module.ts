@@ -5,6 +5,9 @@ import {FilterComponent} from "./filter/filter";
 import {CommonModule} from "@angular/common";
 import {TranslateModule} from "@ngx-translate/core";
 import {IonicModule} from "ionic-angular";
+import { DetailsFormComponent } from './details-form/details-form';
+import { DogListComponent } from './dog-list/dog-list';
+import { ImagePopupComponent } from './image-popup/image-popup';
 
 /**
  * Module containing all components for lazyLoading purposes.
@@ -13,7 +16,10 @@ import {IonicModule} from "ionic-angular";
 	declarations: [
 		TrailListComponent,
 		TrailCardComponent,
-		FilterComponent
+		FilterComponent,
+        DetailsFormComponent,
+    	DogListComponent,
+        ImagePopupComponent
 	],
 	imports: [
 		IonicModule,
@@ -23,9 +29,12 @@ import {IonicModule} from "ionic-angular";
 	exports: [
 		TrailListComponent,
 		TrailCardComponent,
-		FilterComponent
+		FilterComponent,
+        DetailsFormComponent,
+    	DogListComponent,
+        ImagePopupComponent
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	entryComponents: [FilterComponent]
+	entryComponents: [FilterComponent,DetailsFormComponent,DogListComponent,ImagePopupComponent]
 })
 export class ComponentsModule {}

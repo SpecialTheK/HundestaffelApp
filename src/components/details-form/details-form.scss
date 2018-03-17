@@ -1,0 +1,36 @@
+@import "../../theme/variables.scss";
+
+details-form {
+	.submit-details-form{
+		background-color: map-get($colors, headerColorBackground);
+		color: map-get($colors, primary);
+		padding: 10px 0;
+		width: 100%;
+	}
+
+	.spacer{
+		margin-top: 50px;
+	}
+
+	.list-md + ion-list ion-list-header{
+		margin-top: 0 !important;
+	}
+
+	.list-header-md{
+		margin-bottom: 0 !important;
+	}
+
+	.photo-btn{
+		text-align: center;
+		margin: 0;
+		margin-bottom: 2px;
+		width: 100%;
+
+		background-color: map-get($colors, headerColorBackground);
+		color: map-get($colors, primary);
+
+		ion-icon{
+			margin-right: 5px;
+		}
+	}
+}

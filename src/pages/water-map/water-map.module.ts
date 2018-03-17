@@ -1,7 +1,14 @@
 import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
+import {IonicPageModule} from 'ionic-angular';
 import { WaterMapPage } from './water-map';
 import {TranslateModule} from "@ngx-translate/core";
+import {Flashlight} from "@ionic-native/flashlight";
+import {AppPreferences} from "@ionic-native/app-preferences";
+import {BackgroundMode} from "@ionic-native/background-mode";
+import {ComponentsModule} from "../../components/components.module";
+import {DetailsFormComponent} from "../../components/details-form/details-form";
+import {DogListComponent} from '../../components/dog-list/dog-list';
+import {ImagePopupComponent} from "../../components/image-popup/image-popup";
 
 @NgModule({
     declarations: [
@@ -9,7 +16,14 @@ import {TranslateModule} from "@ngx-translate/core";
     ],
     imports: [
         IonicPageModule.forChild(WaterMapPage),
-        TranslateModule.forChild()
+        TranslateModule.forChild(),
+	    ComponentsModule
     ],
+	providers: [
+		Flashlight,
+		AppPreferences,
+		BackgroundMode
+	],
+	entryComponents: [DetailsFormComponent,DogListComponent, ImagePopupComponent]
 })
 export class WaterMapPageModule {}

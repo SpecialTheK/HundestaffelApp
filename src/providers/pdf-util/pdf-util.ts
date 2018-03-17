@@ -1,4 +1,3 @@
-///<reference path="../../../node_modules/ionic-angular/navigation/view-controller.d.ts"/>
 import {Injectable} from '@angular/core';
 import {LoadingController, Platform} from "ionic-angular";
 import {File} from "@ionic-native/file";
@@ -89,10 +88,10 @@ export class PdfUtilProvider {
 	private getDuration(startTime: Date, endTime: Date):string{
 		let _startTime = moment(startTime);
 		let _endTime = moment(endTime);
+		let date = new Date(moment(_endTime.diff(_startTime)).toDate().getTime());
+		let transitionedDate = new Date( date.valueOf() + date.getTimezoneOffset() * 60000);
 		
-		let totalTime = moment(_startTime.diff(_endTime)).toDate();
-		return totalTime.getHours()+" "+this.translate["hours"]+" "+totalTime.getMinutes()+
-			" "+this.translate["minutes"]+" "+" "+totalTime.getMinutes()+" "+this.translate["seconds"];
+		return transitionedDate.getHours()+" "+this.translate["hours"]+" "+transitionedDate.getMinutes()+" "+this.translate["minutes"]+" "+transitionedDate.getSeconds()+" "+this.translate["seconds"];
 	}
 	
 	/**
@@ -136,6 +135,7 @@ export class PdfUtilProvider {
 						let utf8 = new Uint8Array(buffer);
 						let binaryArray = utf8.buffer;
 						let blob = new Blob([binaryArray], {type: 'application/pdf'});
+						console.log("Content generated, writing...");
 						this.fileSystem.writeFile(this.pdfDirectory+this.appName+'/', this.fileName, blob).then((reason) => {
 							resolve("File created");
 						}).catch((reason) => {
@@ -176,7 +176,7 @@ export class PdfUtilProvider {
 				
 				resolve({
 					content: [
-						{text: this.translate["trail_from"]+' '+trailSet[0].startTime, fontSize: 18, alignment: 'center'},
+						{text: this.translate["trail_from"]+' '+trailSet.trails[0].startTime, fontSize: 18, alignment: 'center'},
 						{text: '\n'+this.translate["trail_duration"]+' '+this.getDuration(trailSet.trails[0].startTime, trailSet.trails[trailSet.trails.length-1].endTime), fontSize: 13, alignment: 'center'},
 						{text: '\n\n\n\n'+this.translate["trail_type"]+ ' '+training+", "+activity+'\n\n', fontSize: 13},
 						{image: map, width: 400, alignment: 'center'},
@@ -208,7 +208,7 @@ export class PdfUtilProvider {
 			this.initDirectory().then((answer) => {
 				this.createPdf(trailSet, map).then((answer) => {
 					loading.dismiss();
-					this.sharing.share(null, null, this.pdfDirectory+this.fileName, null).then((answer) => {
+					this.sharing.share(null, null, this.pdfDirectory+this.appName+'/'+this.fileName, null).then((answer) => {
 						resolve("Successfully shared");
 					}).catch((reason) => {
 						reject(reason);

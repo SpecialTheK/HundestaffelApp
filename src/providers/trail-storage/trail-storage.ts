@@ -55,7 +55,7 @@ export class TrailStorageProvider {
 	public addTrailToSet(key: string, trail:Trail, sharedActivity: boolean = false):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.getTrailSet(key).then((answer) => {
-				let trailSet:TrailSet = answer;
+				let trailSet:TrailSet = TrailSet.fromData(answer);
 				trailSet.addTrailToSet(trail);
 				if(sharedActivity){
 					trailSet.isSharedTrail = true;

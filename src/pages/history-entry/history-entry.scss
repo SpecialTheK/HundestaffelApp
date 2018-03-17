@@ -1,7 +1,23 @@
+@import "../../theme/variables.scss";
+
 page-history-entry {
 
     #map {
         height: 50%;
     }
 
+    button.submitButton{
+        background-color: map-get($colors, headerColorBackground);
+        color: map-get($colors, primary);
+        padding: 10px 0;
+        width: 100%;
+    }
+	
+	p.dogList{
+		margin-left: 15px;
+	}
+	
+	h2{
+		font-size: 20px;
+	}
 }

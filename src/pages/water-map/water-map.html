@@ -1,158 +1,174 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>{{'MAP_WATER' | translate}}</ion-title>
-    <ion-buttons end>
-        <button ion-button icon-only (click)="endTrail()">
-            <ion-icon name="done-all"></ion-icon>
-        </button>
-    </ion-buttons>
-  </ion-navbar>
+	<ion-navbar color="waterMapColor" hideBackButton="true">
+		<ion-buttons start>
+			<button ion-button icon-only (click)="dismissTrail()">
+				<ion-icon name="close"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>{{'MAP_WATER' | translate}}</ion-title>
+		<ion-buttons end>
+			<button ion-button icon-only (click)="editDetails()">
+				<ion-icon name="create"></ion-icon>
+			</button>
+			<button ion-button icon-only (click)="endTrail()">
+				<ion-icon name="done-all"></ion-icon>
+			</button>
+		</ion-buttons>
+	</ion-navbar>
 </ion-header>
 <ion-content>
-    <div class="map-container">
-        <div class="map-buttons">
-            <ion-fab top right>
-                <button ion-fab (click)="centerMap()"><ion-icon name="locate"></ion-icon></button>
-            </ion-fab>
-        </div>
-        <div #map class="map"></div>
-    </div>
-    <div class="function-container">
-        <div class="loading" *ngIf="mapLoaded === false">
-            <ion-spinner></ion-spinner>
-        </div>
+	<div class="map-container">
+		<div class="map-buttons">
+			<ion-fab top left>
+				<button ion-fab (click)="centerMap()">
+					<ion-icon name="locate"></ion-icon>
+				</button>
+			</ion-fab>
+			<ion-fab left middle>
+				<button ion-fab mini (click)="toggleFlashlight()">
+					<ion-icon name="sunny"></ion-icon>
+				</button>
+			</ion-fab>
+			<ion-fab top right>
+				<button ion-fab (click)="showDogOptions($event)">
+					<ion-icon name="tennisball"></ion-icon>
+				</button>
+			</ion-fab>
+			<ion-fab right middle>
+				<button ion-fab (click)="addTargetMarker()">
+					<ion-icon name="pin"></ion-icon>
+				</button>
+			</ion-fab>
+		</div>
+		<div #map class="map"></div>
+	</div>
 
-        <div class="loaded" *ngIf="mapLoaded === true">
-            <ion-slides >
-                <ion-slide class="info-slide">
+	<hr class="top-edge">
 
-                    <ion-grid>
-                        <ion-label>{{'MAP_DISTANCE' | translate}}:</ion-label>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{distanceToTargetMarker}} m</ion-label>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
+	<div class="function-container">
+		<div class="loading" *ngIf="mapLoaded === false">
+			<ion-spinner></ion-spinner>
+		</div>
+		<div class="loaded" *ngIf="mapLoaded === true">
 
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'TIME' | translate}}:</ion-label>
-                                    <ion-datetime disabled displayFormat="HH:mm:ss" [(ngModel)]="runTime"></ion-datetime>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
+			<ion-slides pager="true">
+				<ion-slide class="info-slide">
+					<ion-grid>
+						<ion-row>
+							<!-- TODO: übersetzung-->
+							<ion-col>Water info</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col>{{'MAP_DISTANCE' | translate}}:</ion-col>
+							<ion-col>{{'TIME' | translate}}:</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col>{{distanceToTargetMarker}} m</ion-col>
+							<ion-col>{{runTime | date: 'HH:mm:ss' : '+0000'}}</ion-col>
+						</ion-row>
+					</ion-grid>
+				</ion-slide>
 
-
-                </ion-slide>
-                <ion-slide class="function-slide">
-                    <ion-label>{{'MAP_MARKER' | translate}}</ion-label>
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <button ion-button (click)="addTargetMarker()">{{'MAP_ENDPOINT' | translate}}</button>
-                                </ion-item>
-                            </ion-col>
-
-                            <ion-col>
-                                <ion-item>
-                                    <button ion-button (click)="addWindDirectionTriangle()">{{'MAP_WIND_DIRECTION' | translate}}</button>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-range min="2" max="8" step="2" [(ngModel)]="displayOpacityMin" (ionChange)="changeDisplayOpacity()">
-                                    </ion-range>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-
-                        <ion-row>
-                            <ion-col>
-                                <ion-item *ngFor="let trail of trailSet.trails; let i = index" (click)="addCircle($event, i)">
-                                    <ion-label>{{trail.dog}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-
-                    </ion-grid>
-                </ion-slide>
-                <ion-slide class="person-slide">
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_NAME' | translate}}: {{trailSet.person.name}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_GLASSES' | translate}}: {{trailSet.person.glasses}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_AGE' | translate}}: {{trailSet.person.age}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_HAIR' | translate}}: {{trailSet.person.hair_choice}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_ALLERGIES' | translate}}: {{trailSet.person.allergies}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_HAIR_COLOR' | translate}}: {{trailSet.person.hairColor_choice}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_ILLNESS' | translate}}: {{trailSet.person.illness}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_BODY_TYPE' | translate}}: {{trailSet.person.body_choice}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label>{{'PERSON_MEDICATION' | translate}}: {{trailSet.person.medication}}</ion-label>
-                                </ion-item>
-                            </ion-col>
-                            <ion-col>
-                                <ion-item>
-                                    <button ion-button>{{'PERSON_IMAGE' | translate}}</button>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                </ion-slide>
-            </ion-slides>
-        </div>
-    </div>
+				<div class="person-slide">
+					<ion-slide class="person-slide-inner">
+						<!-- PERSON-SLIDE -->
+						<ion-scroll scrollX="true" scrollY="true" style="width: 100%; height: 100%">
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col>
+	                                    <ion-row>
+		                                    <ion-col text-left>{{'PERSON_NAME' | translate}}:</ion-col>
+		                                    <ion-col text-right>{{trailSet.person.name}}</ion-col>
+	                                    </ion-row>
+                                    </ion-col>
+                                </ion-row>
+								<hr class="sep-line">
+                                <ion-row>
+                                    <ion-col>
+	                                    <ion-row>
+		                                    <ion-col text-left>{{'PERSON_AGE' | translate}}:</ion-col>
+		                                    <ion-col text-right>{{trailSet.person.age}}</ion-col>
+	                                    </ion-row>
+                                    </ion-col>
+	                                <ion-col>
+		                                <ion-row>
+			                                <ion-col text-left>{{'PERSON_GLASSES' | translate}}:</ion-col>
+			                                <ion-col text-right *ngIf="trailSet.person.glasses === false">{{'NO' | translate}}</ion-col>
+			                                <ion-col text-right *ngIf="trailSet.person.glasses === true">{{'YES' | translate}}</ion-col>
+		                                </ion-row>
+	                                </ion-col>
+                                </ion-row>
+								<hr class="sep-line">
+	                            <ion-row>
+		                            <ion-col>
+			                            <ion-row>
+				                            <ion-col text-left>{{'PERSON_HAIR' | translate}}:</ion-col>
+				                            <ion-col text-right>{{trailSet.person.hair_choice}}</ion-col>
+			                            </ion-row>
+		                            </ion-col>
+	                            </ion-row>
+								<hr class="sep-line">
+	                            <ion-row>
+		                            <ion-col>
+			                            <ion-row>
+				                            <ion-col text-left>{{'PERSON_HAIR_COLOR' | translate}}:</ion-col>
+				                            <ion-col text-right>{{trailSet.person.hairColor_choice}}</ion-col>
+			                            </ion-row>
+		                            </ion-col>
+	                            </ion-row>
+								<hr class="sep-line">
+	                            <ion-row>
+		                            <ion-col>
+			                            <ion-row>
+				                            <ion-col text-left>{{'PERSON_BODY_TYPE' | translate}}:</ion-col>
+				                            <ion-col text-right>{{trailSet.person.body_choice}}</ion-col>
+			                            </ion-row>
+		                            </ion-col>
+	                            </ion-row>
+								<hr class="sep-line">
+	                            <ion-row>
+		                            <ion-col>
+			                            <ion-row>
+				                            <ion-col text-left>{{'PERSON_ILLNESS' | translate}}:</ion-col>
+				                            <ion-col text-right>{{trailSet.person.illness}}</ion-col>
+			                            </ion-row>
+		                            </ion-col>
+	                            </ion-row>
+								<hr class="sep-line">
+	                            <ion-row>
+		                            <ion-col>
+			                            <ion-row>
+				                            <ion-col text-left>{{'PERSON_MEDICATION' | translate}}:</ion-col>
+				                            <ion-col text-right>{{trailSet.person.medication}}</ion-col>
+			                            </ion-row>
+		                            </ion-col>
+	                            </ion-row>
+								<hr class="sep-line">
+                                <ion-row>
+	                                <ion-col>
+		                                <ion-row>
+			                                <ion-col text-left>{{'PERSON_ALLERGIES' | translate}}:</ion-col>
+			                                <ion-col text-right>{{trailSet.person.allergies}}</ion-col>
+		                                </ion-row>
+	                                </ion-col>
+                                </ion-row>
+								<hr class="sep-line">
+	                            <ion-row>
+		                            <ion-col>
+			                            <ion-row>
+				                            <ion-col>
+					                            <div *ngIf="trailSet.person.image !== ''">
+						                            <button ion-button (click)="showImage()">{{'PERSON_IMAGE' | translate}}</button>
+					                            </div>
+				                            </ion-col>
+			                            </ion-row>
+		                            </ion-col>
+	                            </ion-row>
+                            </ion-grid>
+                        </ion-scroll>
+					</ion-slide>
+				</div>
+			</ion-slides>
+		</div>
+	</div>
 </ion-content>

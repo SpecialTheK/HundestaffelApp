@@ -137,29 +137,35 @@ export class ImportPage {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	mergeWith(event){
+	async mergeWith(event){
+		let alreadyShown = false;
 		let counter = 0;
-		this.trailSet.trails.forEach((value) => {
-			this.storage.addTrailToSet(event.creationID, value, true).then((answer) => {
-				++counter;
-				if(counter == this.trailSet.trails.length){
+		for(let trail of this.trailSet.trails) {
+			let result = await this.storage.getTrailSet(event.trailObject.creationID).then(async (_trailSet) => {
+				let result = await this.storage.addTrailToSet(_trailSet.creationID, trail, true).then((answer) => {
+					++counter;
+					if (counter == this.trailSet.trails.length - 1) {
+						let alert = this.alertCtrl.create({
+							title: this.translatedTerms["import_ok"],
+							subTitle: this.translatedTerms["import_ok_message"],
+							buttons: [this.translatedTerms["ok"]]
+						});
+						alert.present();
+						this.navCtrl.pop();
+					}
+				}).catch((error) => {
 					let alert = this.alertCtrl.create({
-						title: this.translatedTerms["import_ok"],
-						subTitle: this.translatedTerms["import_ok_message"],
+						title: this.translatedTerms["import_failed"],
+						subTitle: this.translatedTerms["import_failed_message"] + '<br>' + error,
 						buttons: [this.translatedTerms["ok"]]
 					});
-					alert.present();
-					this.navCtrl.pop();
-				}
-			}).catch((error) => {
-				let alert = this.alertCtrl.create({
-					title: this.translatedTerms["import_failed"],
-					subTitle: this.translatedTerms["import_failed_message"]+'<br>'+error,
-					buttons: [this.translatedTerms["ok"]]
+					if (!alreadyShown) {
+						alreadyShown = true;
+						alert.present();
+						this.navCtrl.pop();
+					}
 				});
-				alert.present();
-				this.navCtrl.pop();
 			});
-		});
+		}
 	}
 }

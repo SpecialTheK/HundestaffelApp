@@ -12,12 +12,16 @@ page-home {
 		right: 0;
 	}
 	
+	.scroll-content{
+		margin-top: 50px !important;
+	}
+	
 	ion-card.card-ios, ion-card.card-md {
-		height: 27%;
-		margin-top: 10%;
+		height: calc(96%/3);
+		margin-top: 2%;
 		position: relative;
 		
-		ion-card-title.card-title-ios, ion-card-title.card-title-md {
+		ion-card-title {
 			background-color: rgba(0, 0, 0, 0.7);
 			bottom: 0;
 			color: map-get($colors, light);

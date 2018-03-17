@@ -63,7 +63,7 @@ export class ShareTrailProvider {
 	 */
 	private createFile(trailSet: TrailSet):Promise<string> {
 		return new Promise((resolve, reject) => {
-			this.fileName = 'trail_'+trailSet.creationID+'.xri';
+			this.fileName = 'trail_'+trailSet.creationID+'.wny';
 			this.fileSystem.checkFile(this.filePath, this.fileName).then((reason) => {
 				resolve("File already existing");
 			}).catch((reason) => {

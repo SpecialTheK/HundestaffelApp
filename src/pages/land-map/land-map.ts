@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, ViewController, PopoverController } from 'ionic-angular';
+import {AlertController, Events, IonicPage, ModalController, NavController, NavParams, Platform} from 'ionic-angular';
 
 import { TrailSet } from '../../models/trailSet';
 import { Trail } from '../../models/trail';
@@ -7,6 +7,11 @@ import { Trail } from '../../models/trail';
 import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
 import {TranslateService} from "@ngx-translate/core";
+import {Flashlight} from "@ionic-native/flashlight";
+import {AppPreferences} from "@ionic-native/app-preferences";
+import {BackgroundMode} from "@ionic-native/background-mode";
+import {DetailsFormComponent} from "../../components/details-form/details-form";
+import {ImagePopupComponent} from "../../components/image-popup/image-popup";
 
 
 /**
@@ -32,36 +37,63 @@ export class LandMapPage {
 
     trailSet: TrailSet;
     runnerTrail: Trail;
+    runnerTrailTime: number;
     dogTrail: Trail;
-
+	dogName: string;
+	trainerName: string = "";
     mapLoaded = false;
 
     startTime: Date;
     deltaTime: Date;
-    runTime: string;
+    runTime: number;
     timeInterval: any;
 
     isRunnerTrail = false;
 
     translatedTerms: Array<string> = [];
+	backButtonAction;
 
-  
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
+    constructor(public navParams: NavParams,
+                public navCtrl: NavController,
+                public modalCtrl: ModalController,
+                public alertCtrl: AlertController,
+                public map: MapProvider,
+                public storage: TrailStorageProvider,
+                public translateService: TranslateService,
+                public flashlight: Flashlight,
+                public backgroundMode: BackgroundMode,
+                public events: Events,
+                appPreferences: AppPreferences,
+                platform: Platform) {
         /*
             NOTE: Unterscheiden in Training und Einsatzt. Die Anzeigen ändern sich.
         */
         this.trailSet = TrailSet.fromData(this.navParams.get('trailSet'));
-
-        if(this.trailSet.trails.length === 0 && this.trailSet.isTraining){
-            this.isRunnerTrail = true;
-        } else{
-            this.isRunnerTrail = false;
-        }
+		this.dogName = this.navParams.get('dog');
+        this.isRunnerTrail = this.trailSet.trails.length === 0 && this.trailSet.isTraining;
+        appPreferences.fetch('username').then((answer) => {
+        	this.trainerName = answer;
+        }).catch((error) => {
+        	console.log("Error: "+error);
+        });
 
         this.startTime = new Date();
         this.deltaTime = new Date();
+
+	    this.backButtonAction = platform.registerBackButtonAction(() => {
+		    this.dismissTrail();
+	    }, 10);
+
         this.translateVariables();
     }
+
+	/**
+	 * Unregister the backButtonAction for this site on leave
+	 */
+	ionViewWillLeave() {
+        this.map.endSession();
+		this.backButtonAction && this.backButtonAction();
+	}
 
 	/**
 	 * Ionic lifecycle event that is called after the page is loaded to initialize the map.
@@ -70,35 +102,35 @@ export class LandMapPage {
 	 * @version 1.0.0
 	 */
     ionViewDidLoad() {
-        console.log(this.isRunnerTrail);
-
         this.map.initMapObject(this.mapElement);
         if(this.isRunnerTrail){
-            this.map.startSession(true);
+            this.map.startSession(true, this.trainerName, this.dogName);
+            console.log("TEST");
             this.map.getCurrentTrailSubject().subscribe((data) => {
                 this.runnerTrail = data;
                 this.mapLoaded = true;
             });
         } else if(!this.trailSet.isTraining){
-            this.map.startSession(true);
+            this.map.startSession(true, this.trainerName, this.dogName);
             this.map.getCurrentTrailSubject().subscribe((data) => {
                 this.dogTrail = data;
                 this.mapLoaded = true;
             });
         } else {
             this.map.importTrailSet(this.trailSet);
-            //NOTE (christian): dies kann sich im verlauf des Trails ändern, wenn ein anderer Trail im auswahlmenu gewählt wird
             this.runnerTrail = this.trailSet.trails[0];
-            this.map.startSession(true);
+            this.runnerTrailTime = this.runnerTrail.endTime.getTime() - this.runnerTrail.startTime.getTime();
+            this.map.startSession(true, this.trainerName, this.dogName);
             this.map.toggleVirtualTrainer(this.runnerTrail);
             this.map.getCurrentTrailSubject().subscribe((data) => {
                 this.dogTrail = data;
                 this.mapLoaded = true;
             });
         }
+        this.backgroundMode.enable();
         this.startTimer();
     }
-	
+
 	/**
 	 * Method called to translate all variables needed for this page.
 	 *
@@ -106,7 +138,7 @@ export class LandMapPage {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("MAP_MARKER_END", "MAP_MARKER_INTEREST");
+		let translateTerms = Array("YES","NO","TRAIL_ABORT","TRAIL_ABORT_MESSAGE");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translatedTerms[term.toLowerCase()] = answer;
@@ -123,7 +155,7 @@ export class LandMapPage {
     startTimer() {
         this.timeInterval = setInterval((i) => {
             this.deltaTime = new Date();
-            this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
+            this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).getTime();
         }, 1000);
     }
 
@@ -153,8 +185,10 @@ export class LandMapPage {
 
         this.map.endSession();
         this.endTimer();
-
-        this.viewCtrl.dismiss();
+		this.backgroundMode.disable();
+		this.navCtrl.popToRoot().then((answer) => {
+			this.navCtrl.push('HistoryPage');
+		});
     }
 
     /**
@@ -175,7 +209,7 @@ export class LandMapPage {
 	 */
     addEndMarker(){
         console.log("Added End Marker");
-        this.map.addMarker(this.translatedTerms["map_marker_end"], 0);
+        this.map.addMarker(0);
     }
 
     /**
@@ -186,7 +220,7 @@ export class LandMapPage {
      */
     addInterestMarker(){
         console.log("Added Interest Marker");
-        this.map.addMarker(this.translatedTerms["map_marker_interest"], 1);
+        this.map.addMarker(1);
     }
 
     /**
@@ -197,10 +231,82 @@ export class LandMapPage {
      */
     addWindDirectionMarker(event){
         console.log("Added Wind Direction Marker");
-        this.map.addMarker("Some Text", -1, 0);
-        let lastMarker = this.map.currentTrail.marker[this.map.currentTrail.marker.length - 1];
-        let popover = this.popCtrl.create('WindmarkerOrientationPage', {marker: lastMarker});
-        popover.present({ev: event});
+        this.map.activateWindMarkerMode();
     }
 
+    /**
+	 * Method that is used to toggle the flashlight.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+    public toggleFlashlight(){
+    	if(this.flashlight.available()){
+    		this.flashlight.toggle();
+	    }
+    }
+
+    /**
+	 * Method that is used for opening a modal with which the user can edit the details.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+    public editDetails(){
+    	let data:any = this.trailSet;
+    	data.dogs = [this.dogName];
+	    let detailModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: true});
+	    detailModal.present();
+
+	    this.events.subscribe('detailsForm:editSubmitted', (date) => {
+	    	this.dogName = data.dogs[0];
+	    	this.trailSet.precipitation = data.precipitation;
+	    	this.trailSet.temperature = data.temperature;
+	    	this.trailSet.person = data.person;
+	    	this.trailSet.situation = data.situation;
+	    	this.trailSet.preSituation = data.preSituation;
+	    	this.trailSet.risks = data.risks;
+	    	detailModal.dismiss();
+	    });
+    }
+
+    /**
+	 * Method that is called to show the image.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+    public showImage(){
+	    let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
+	    imageModal.present();
+    }
+
+    /**
+	 * Method that is called if the user wants to dismiss the current trail.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	public dismissTrail(){
+		let alert = this.alertCtrl.create({
+			title: this.translatedTerms["trail_abort"],
+			subTitle: this.translatedTerms["trail_abort_message"],
+			buttons: [
+				{
+					text: this.translatedTerms["no"],
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				},
+				{
+					text: this.translatedTerms["yes"],
+					handler: () => {
+						this.navCtrl.popToRoot();
+					}
+				}
+			]
+		});
+		alert.present();
+	}
 }

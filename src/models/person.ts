@@ -1,18 +1,17 @@
-//NOTE (christian): vielleicht ist diese klasse etwas overkill?
-
 export class Person {
     name: string;
     age: number;
-    glasses: boolean;
+    glasses: number;
     hair_choice: string;
     hairColor_choice: string;
     body_choice: string;
     allergies: string;
     illness: string;
     medication: string;
+    image: string;
 
-    constructor(name: string = "", age: number = 0, glasses: boolean = false, hair_choice: string = "", hairColor_choice: string = "",
-            body_choice: string = "", allergies: string = "Keine", illness: string = "Keine", medication: string = "Keine"){
+    constructor(name: string = "", age: number = 0, glasses: number = 0, hair_choice: string = "", hairColor_choice: string = "",
+            body_choice: string = "", allergies: string = "Keine", illness: string = "Keine", medication: string = "Keine", image: string = ""){
         this.name = name;
         this.age = age;
         this.glasses = glasses;
@@ -22,6 +21,7 @@ export class Person {
         this.allergies= allergies;
         this.illness = illness;
         this.medication = medication;
+        this.image = image;
     }
 
     convertToSimpleObject(){
@@ -34,7 +34,8 @@ export class Person {
             body_choice: this.body_choice,
             allergies: this.allergies,
             illness: this.illness,
-            medication: this.medication
+            medication: this.medication,
+            image: this.image
         };
     }
 
@@ -73,7 +74,10 @@ export class Person {
         if(!person.hasOwnProperty('medication')){
             isPerson = false;
         }
-        
+        if(!person.hasOwnProperty('image')){
+            isPerson = false;
+        }
+
         return isPerson;
     }
 }

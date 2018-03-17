@@ -1,5 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavParams, ViewController, PopoverController } from 'ionic-angular';
+import {
+	IonicPage, NavParams, NavController, PopoverController, ModalController, AlertController,
+	Platform, Events
+} from 'ionic-angular';
 
 import { TrailSet } from "../../models/trailSet";
 
@@ -7,7 +10,13 @@ import { MapProvider } from '../../providers/map/map';
 import { TrailStorageProvider } from '../../providers/trail-storage/trail-storage';
 import {TranslateService} from "@ngx-translate/core";
 import {Trail} from "../../models/trail";
+import {Flashlight} from "@ionic-native/flashlight";
+import {AppPreferences} from "@ionic-native/app-preferences";
+import {BackgroundMode} from "@ionic-native/background-mode";
+import {DetailsFormComponent} from "../../components/details-form/details-form";
 
+import {DogListComponent} from '../../components/dog-list/dog-list';
+import {ImagePopupComponent} from "../../components/image-popup/image-popup";
 
 /**
  * Page that displays the map for water trailing.
@@ -28,7 +37,9 @@ export class WaterMapPage {
     @ViewChild('map') mapElement: ElementRef;
 
     trailSet: TrailSet;
+
     dogTrail: Trail;
+    dogTrailTrainer: string;
 
     distanceToTargetMarker: number;
 
@@ -42,14 +53,40 @@ export class WaterMapPage {
     mapLoaded = false;
 
     translatedTerms:Array<string> = [];
+    backButtonAction;
 
-    constructor(public navParams: NavParams, public viewCtrl: ViewController, public popCtrl: PopoverController, public map: MapProvider, public storage: TrailStorageProvider, public translateService: TranslateService) {
+    constructor(public navParams: NavParams,
+                public navCtrl: NavController,
+                public modalCtrl: ModalController,
+                public popCtrl: PopoverController,
+                public alertCtrl: AlertController,
+                public map: MapProvider,
+                public storage: TrailStorageProvider,
+                public translateService: TranslateService,
+                public flashlight: Flashlight,
+                public backgroundMode: BackgroundMode,
+                public events: Events,
+                appPreferences: AppPreferences,
+                platform: Platform) {
         this.trailSet = this.navParams.get('trailSet');
-
         let dogs = this.navParams.get('dogs') as string[];
-        dogs.forEach((dog) => {
-            this.trailSet.addTrailToSet(new Trail(this.trailSet.trails.length, "Trainer", dog));
-        });
+
+        appPreferences.fetch('username').then((answer) => {
+            this.dogTrailTrainer = answer;
+            dogs.forEach((dog) => {
+                let dt = new Trail(this.trailSet.trails.length, answer, dog)
+                dt.setStartTime();
+                this.trailSet.addTrailToSet(dt);
+		    });
+	    }).catch((error) => {
+		    console.log("Error: "+error);
+            this.dogTrailTrainer = "Trainer";
+            dogs.forEach((dog) => {
+                let dt = new Trail(this.trailSet.trails.length, "Trainer", dog)
+                dt.setStartTime();
+                this.trailSet.addTrailToSet(dt);
+		    });
+	    });
 
         this.distanceToTargetMarker = 0;
         this.displayOpacityMin = 2;
@@ -57,6 +94,9 @@ export class WaterMapPage {
         this.startTime = new Date();
         this.deltaTime = new Date();
         this.runTime = new Date(this.deltaTime.getTime() - this.startTime.getTime()).toISOString();
+	    this.backButtonAction = platform.registerBackButtonAction(() => {
+		    this.dismissTrail();
+	    }, 10);
 
         this.translateVariables();
     }
@@ -68,12 +108,20 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("MAP_MARKER_END");
+		let translateTerms = Array("YES","NO","TRAIL_ABORT","TRAIL_ABORT_MESSAGE");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translatedTerms[term.toLowerCase()] = answer;
 			});
 		}
+	}
+
+	/**
+	 * Unregister the backButtonAction for this site on leave
+	 */
+	ionViewWillLeave() {
+		this.map.endSession();
+		this.backButtonAction && this.backButtonAction();
 	}
 
 	/**
@@ -85,6 +133,9 @@ export class WaterMapPage {
             this.map.importTrailSet(this.trailSet);
         }
         this.map.startSession(false);
+
+        this.backgroundMode.enable();
+
         this.map.getCurrentTrailSubject().subscribe((data) =>{
             this.dogTrail = data;
             this.mapLoaded = true;
@@ -92,6 +143,10 @@ export class WaterMapPage {
         this.map.getDistanceToTargetMarker().subscribe((data) =>{
             this.distanceToTargetMarker = data;
         });
+        this.map.getWaterDogTrailSubject().subscribe((data) => {
+            this.trailSet.trails[data.id] = data;
+        });
+
         this.startTimer();
     }
 
@@ -119,6 +174,41 @@ export class WaterMapPage {
     }
 
     /**
+	 * Method that is called to stop the recording of a trail.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	endTrail() {
+        this.finalizeTrails();
+        this.storage.addNewTrailSet(this.trailSet);
+
+        this.map.endSession();
+        this.endTimer();
+		this.backgroundMode.disable();
+	    this.navCtrl.popToRoot().then((answer) => {
+		    this.navCtrl.push('HistoryPage');
+	    });
+    }
+
+    /**
+     * Method that is called to finalize the trails for the storage.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     */
+    finalizeTrails(){
+        this.dogTrail.id = this.trailSet.trails.length;
+        this.dogTrail.trainer = this.dogTrailTrainer;
+        this.dogTrail.dog = "Hunde";
+
+        this.trailSet.addTrailToSet(this.dogTrail);
+        this.trailSet.trails.forEach((data) =>{
+            data.setEndTime();
+        });
+    }
+
+    /**
 	 * Method to set the map back in centered mode.
 	 *
 	 * @since 1.0.0
@@ -128,39 +218,14 @@ export class WaterMapPage {
         this.map.centerMap();
     }
 
-    /**
-	 * Method that is called to stop the recording of a trail.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	endTrail() {
-        this.dogTrail.setEndTime();
-        this.dogTrail.id = this.trailSet.trails.length;
-        this.dogTrail.dog = "Hunde";
-        this.dogTrail.trainer = "Trainer";
-
-        this.trailSet.addTrailToSet(this.dogTrail);
-
-        console.log(this.trailSet);
-
-        this.storage.addNewTrailSet(this.trailSet);
-
-        this.map.endSession();
-        this.endTimer();
-
-        this.viewCtrl.dismiss();
-    }
-
 	/**
-	 * Method that is called to add a circle to the map.
+	 * Method that is called to show the available dog options.
 	 *
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	addCircle(event: any, index: number) {
-        this.map.setWaterDogTrail(this.trailSet.trails[index]);
-        let popover = this.popCtrl.create('AddColoredCirclePage', {map: this.map});
+    showDogOptions(event){
+        let popover = this.popCtrl.create(DogListComponent, {trails: this.trailSet.trails, map: this.map});
         popover.present({
             ev: event
         });
@@ -173,17 +238,7 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	addTargetMarker() {
-        this.map.addMarker(this.translatedTerms["map_marker_end"], 0);
-    }
-
-	/**
-	 * Method that is called to add a triangle to the map.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	addWindDirectionTriangle() {
-        this.map.addTriangle();
+        this.map.addMarker(0);
     }
 
 	/**
@@ -203,4 +258,84 @@ export class WaterMapPage {
             });
         });
     }
+
+	/**
+	 * Method that is used to toggle the flashlight.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	public toggleFlashlight(){
+		if(this.flashlight.available()){
+			this.flashlight.toggle();
+		}
+	}
+
+	/**
+	 * Method that is used for opening a modal with which the user can edit the details.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	public editDetails(){
+		let data: any = this.trailSet;
+		data.dogs = [];
+		for(let dog of this.trailSet.trails){
+			data.dogs.push(dog.dog);
+		}
+		let detailModal = this.modalCtrl.create(DetailsFormComponent, {data: data, isLandTrail: false});
+		detailModal.present();
+		this.events.subscribe('detailsForm:editSubmitted', (date) => {
+			for(let dogId in data.dogs){
+				this.trailSet.trails[dogId].dog = data.dogs[dogId];
+			}
+			this.trailSet.precipitation = data.precipitation;
+			this.trailSet.temperature = data.temperature;
+			this.trailSet.person = data.person;
+			this.trailSet.situation = data.situation;
+			this.trailSet.preSituation = data.preSituation;
+			this.trailSet.risks = data.risks;
+			detailModal.dismiss();
+		});
+	}
+
+	/**
+	 * Method that is called to show the image.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	public showImage(){
+		let imageModal = this.modalCtrl.create(ImagePopupComponent, {source: this.trailSet.person.image});
+		imageModal.present();
+	}
+
+	/**
+	 * Method that is called if the user wants to dismiss the current trail.
+	 *
+	 * @since 1.0.0
+	 * @version 1.0.0
+	 */
+	public dismissTrail(){
+		let alert = this.alertCtrl.create({
+			title: this.translatedTerms["trail_abort"],
+			subTitle: this.translatedTerms["trail_abort_message"],
+			buttons: [
+				{
+					text: this.translatedTerms["no"],
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				},
+				{
+					text: this.translatedTerms["yes"],
+					handler: () => {
+						this.navCtrl.popToRoot();
+					}
+				}
+			]
+		});
+		alert.present();
+	}
 }

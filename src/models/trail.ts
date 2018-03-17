@@ -101,9 +101,18 @@ export class Trail {
 	 */
 	trailColor: string;
 
-
+	/**
+	 * Polyline of the trail path.
+	 *
+	 * @since 1.0.0
+	 */
 	polyline: any;
 
+	/**
+	 * Is the trail hidden or not.
+	 *
+	 * @since 1.0.0
+	 */
 	isHidden: boolean;
 
 
@@ -145,8 +154,8 @@ export class Trail {
 	 * @since 1.0.0
 	 * @version 1.0.0
 	 */
-	addMarker(title: string, markerSymbolID: number, lat: number, lng: number, orientation?: number): Marker{
-		let mar = new Marker(this.marker.length, new Position(lat, lng), title, markerSymbolID, orientation);
+	addMarker(markerSymbolID: number, lat: number, lng: number, orientation?: number): Marker{
+		let mar = new Marker(this.marker.length, new Position(lat, lng), markerSymbolID, orientation);
 		this.marker.push(mar);
 
 		return mar;
@@ -353,7 +362,7 @@ export class Trail {
 				}
 			}
 			for(let mar of data.marker){
-				let m = trail.addMarker(mar.title, mar.symbolID, mar.position.lat, mar.position.lng, mar.orientation);
+				let m = trail.addMarker(mar.symbolID, mar.position.lat, mar.position.lng, mar.orientation);
 				if(google != null && map != null) {
 					m.addToMap(google, map);
 				}
