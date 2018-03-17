@@ -16,6 +16,7 @@ import {TrailSet} from "../../models/trailSet";
 export class TrailListComponent {
 	/**
 	 * Defines if the user should be able to filter the cards or not.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
@@ -23,6 +24,7 @@ export class TrailListComponent {
 	
 	/**
 	 * Emits the trail object of the clicked card back to the component.
+	 *
 	 * @type {EventEmitter<any>}
 	 * @since 1.0.0
 	 */
@@ -30,6 +32,7 @@ export class TrailListComponent {
 	
 	/**
 	 * Array containing all currently displayed trailSets.
+	 *
 	 * @type {Trail[][]}
 	 * @since 1.0.0
 	 */
@@ -37,6 +40,7 @@ export class TrailListComponent {
 	
 	/**
 	 * Array containing all existing trailSets.
+	 *
 	 * @type {Trail[][]}
 	 * @since 1.0.0
 	 */
@@ -44,6 +48,7 @@ export class TrailListComponent {
 	
 	/**
 	 * Filter parameter whether trainings should be displayed.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
@@ -51,6 +56,7 @@ export class TrailListComponent {
 	
 	/**
 	 * Filter parameter whether operations should be displayed.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
@@ -58,17 +64,27 @@ export class TrailListComponent {
 	
 	/**
 	 * Filter parameter whether water trailSets should be displayed.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
 	showWaterTrails: boolean = true;
 	
 	/**
-	 * Filter whether whether land trailSets should be displayed.
+	 * Filter parameter whether land trailSets should be displayed.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
 	showLandTrails: boolean = true;
+	
+	/**
+	 * Filter parameter whether shared trailSets should be displayed.
+	 *
+	 * @type {boolean}
+	 * @since 1.0.0
+	 */
+	showSharedTrails: boolean = true;
 	
 	constructor(public navCtrl: NavController, public storage: TrailStorageProvider, public translate: TranslateService, public popoverCtrl: PopoverController) {
 		this.storage.getLatestTrailSets().subscribe((value:TrailSet) => {
@@ -86,7 +102,7 @@ export class TrailListComponent {
 	 * @version 1.0.0
 	 */
 	openFilters(myEvent) {
-		let popover = this.popoverCtrl.create(FilterComponent, {showTrainings: this.showTrainings, showOperations: this.showOperations, showWaterTrails: this.showWaterTrails, showLandTrails: this.showLandTrails});
+		let popover = this.popoverCtrl.create(FilterComponent, {showTrainings: this.showTrainings, showOperations: this.showOperations, showWaterTrails: this.showWaterTrails, showLandTrails: this.showLandTrails, showSharedTrails: this.showSharedTrails});
 		popover.present({
 			ev: myEvent
 		});
@@ -110,12 +126,16 @@ export class TrailListComponent {
 					if(data.showOperations == false && trailSet.isTraining == false){
 						show = false;
 					}
+					if(data.showSharedTrails == false && trailSet.isSharedTrail == true){
+						show = false;
+					}
 					return show;
 				});
 				this.showOperations = data.showOperations;
 				this.showTrainings = data.showTrainings;
 				this.showLandTrails = data.showLandTrails;
 				this.showWaterTrails = data.showWaterTrails;
+				this.showSharedTrails = data.showSharedTrails;
 			}
 		});
 	}

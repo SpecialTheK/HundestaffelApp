@@ -118,6 +118,7 @@
 	"TRAIL_LAND_START"                      : "Start land trailing",
 	"TRAIL_MAP_TYPE"                        : "Map type",
 	"TRAIL_OPERATION"                       : "Operation",
+	"TRAIL_SHARED"                          : "Shared trailing",
 	"TRAIL_SITUATION"                       : "Situation",
 	"TRAIL_SITUATION_PRE"                   : "What happened before?",
 	"TRAIL_SITUATION_RISKS"                 : "Possible risks?",

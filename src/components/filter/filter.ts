@@ -28,6 +28,10 @@ import {NavParams, ViewController} from "ionic-angular";
 			<ion-checkbox [(ngModel)]="showWaterTrails"></ion-checkbox>
 		</ion-item>
 		<ion-item>
+			<ion-label>{{'FILTER_SHOW' |translate}} {{'TRAIL_SHARED' | translate}}</ion-label>
+			<ion-checkbox [(ngModel)]="showSharedTrails"></ion-checkbox>
+		</ion-item>
+		<ion-item>
 			<button ion-button (click)="close()">{{'FILTER_APPLY' | translate}}</button>
 		</ion-item>
 </ion-list>`
@@ -36,6 +40,7 @@ export class FilterComponent {
 	
 	/**
 	 * Filter parameter whether trainings should be displayed.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
@@ -43,6 +48,7 @@ export class FilterComponent {
 	
 	/**
 	 * Filter parameter whether operations should be displayed.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
@@ -50,23 +56,34 @@ export class FilterComponent {
 	
 	/**
 	 * Filter parameter whether water trailSets should be displayed.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
 	showWaterTrails:boolean;
 	
 	/**
-	 * Filter whether whether land trailSets should be displayed.
+	 * Filter parameter whether land trailSets should be displayed.
+	 *
 	 * @type {boolean}
 	 * @since 1.0.0
 	 */
 	showLandTrails:boolean;
+	
+	/**
+	 * Filter parameter whether shared trailSets should be displayed.
+	 *
+	 * @type {boolean}
+	 * @since 1.0.0
+	 */
+	showSharedTrails: boolean;
 	
 	constructor(public viewCtrl: ViewController, public navParams: NavParams) {
 		this.showTrainings = this.navParams.get('showTrainings');
 		this.showOperations = this.navParams.get('showOperations');
 		this.showWaterTrails = this.navParams.get('showWaterTrails');
 		this.showLandTrails = this.navParams.get('showLandTrails');
+		this.showSharedTrails = this.navParams.get('showSharedTrails');
 	}
 	
 	/**
@@ -76,6 +93,6 @@ export class FilterComponent {
 	 * @version 1.0.0
 	 */
 	close() {
-		this.viewCtrl.dismiss({showTrainings: this.showTrainings, showOperations: this.showOperations, showWaterTrails: this.showWaterTrails, showLandTrails: this.showLandTrails});
+		this.viewCtrl.dismiss({showTrainings: this.showTrainings, showOperations: this.showOperations, showWaterTrails: this.showWaterTrails, showLandTrails: this.showLandTrails, showSharedTrails: this.showSharedTrails});
 	}
 }

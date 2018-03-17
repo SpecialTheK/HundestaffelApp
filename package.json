@@ -52,7 +52,6 @@
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-flashlight": "^3.2.0",
     "cordova-plugin-geolocation": "^4.0.1",
-    "cordova-plugin-globalization": "^1.0.9",
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-request-location-accuracy": "^2.2.2",
     "cordova-plugin-splashscreen": "^4.1.0",
@@ -100,8 +99,7 @@
       "cordova-plugin-background-mode": {},
       "cordova-plugin-camera": {},
       "cordova.plugins.diagnostic": {},
-      "cordova-plugin-request-location-accuracy": {},
-      "cordova-plugin-globalization": {}
+      "cordova-plugin-request-location-accuracy": {}
     },
     "platforms": [
       "android",

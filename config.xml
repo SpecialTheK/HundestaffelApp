@@ -101,5 +101,4 @@
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
     <plugin name="cordova.plugins.diagnostic" spec="~3.9.2" />
     <plugin name="cordova-plugin-request-location-accuracy" spec="^2.2.2" />
-    <plugin name="cordova-plugin-globalization" spec="^1.0.9" />
 </widget>

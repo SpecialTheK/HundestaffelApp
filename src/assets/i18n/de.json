@@ -118,6 +118,7 @@
 	"TRAIL_LAND_START"                      : "Landsuche starten",
 	"TRAIL_MAP_TYPE"                        : "Kartentyp",
 	"TRAIL_OPERATION"                       : "Einsatz",
+	"TRAIL_SHARED"                          : "geteilte Suche",
 	"TRAIL_SITUATION"                       : "Situation",
 	"TRAIL_SITUATION_PRE"                   : "Was passierte vorher?",
 	"TRAIL_SITUATION_RISKS"                 : "Mögliche Risiken?",

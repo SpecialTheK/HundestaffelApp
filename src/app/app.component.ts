@@ -113,6 +113,8 @@ export class MyApp {
 						alert.present();
 					}
 				});
+			} else {
+				translate.setDefaultLang('en');
 			}
 			storage.getLatestTrailSets(5).subscribe((value:TrailSet) => {
 				this.trails.push(value);
