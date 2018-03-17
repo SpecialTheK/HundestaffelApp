@@ -15,6 +15,10 @@
 	"YES"                                   : "Oui",
 
 	"DISCOVER"                              : "Découvrir",
+	"DISCOVER_ALERT_GO"                     : "On y va",
+	"DISCOVER_ALERT_H1"                     : "Commence le tour",
+	"DISCOVER_ALERT_NO"                     : "Non merci",
+	"DISCOVER_ALERT_SUB"                    : "Commence un tour sur l'application",
 
 	"FILTER"                                : "Filtre",
 	"FILTER_APPLY"                          : "Utiliser",

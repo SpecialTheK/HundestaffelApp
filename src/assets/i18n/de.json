@@ -15,6 +15,10 @@
 	"YES"                                   : "Ja",
 
 	"DISCOVER"                              : "Entdecken",
+	"DISCOVER_ALERT_GO"                     : "Auf geht's",
+	"DISCOVER_ALERT_H1"                     : "Tour starten",
+	"DISCOVER_ALERT_NO"                     : "Nein Danke",
+	"DISCOVER_ALERT_SUB"                    : "Starte eine Erkundungstour durch die App",
 
 	"FILTER"                                : "Filter",
 	"FILTER_APPLY"                          : "Anwenden",

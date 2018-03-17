@@ -15,6 +15,10 @@
 	"YES"                                   : "Yes",
 
 	"DISCOVER"                              : "Discover",
+	"DISCOVER_ALERT_GO"                     : "Let's go",
+	"DISCOVER_ALERT_H1"                     : "Start tour",
+	"DISCOVER_ALERT_NO"                     : "No thanks",
+	"DISCOVER_ALERT_SUB"                    : "Start a tour to discover the app",
 
 	"FILTER"                                : "Filters",
 	"FILTER_APPLY"                          : "Apply filters",
