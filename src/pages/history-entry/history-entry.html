@@ -8,10 +8,98 @@
 	</ion-navbar>
 </ion-header>
 <ion-content padding>
-	<p>{{'TRAIL_TYPE' | translate}}: {{mapType}}, {{operationType}}</p>
+	<h2>{{'TRAIL_TYPE' | translate}}: {{mapType}}, <b>{{operationType}}</b></h2>
 	<div id="map" #map></div>
 	<p>{{trails}} {{'TRAIL_STAGES' | translate}} {{'WITH' | translate}}:</p>
 	<p *ngFor="let dog of dogs" class="dogList">{{dog.name}} {{'FOR' | translate}} {{dog.duration | date: 'HH:mm:ss' : '+0000'}}</p>
 	<p><button ion-button (click)="gotoMap()" class="submitButton">{{'TRAIL_USE' | translate}}</button></p>
 	<p><button ion-button (click)="shareAsPdf()" class="submitButton">{{'TRAIL_EXPORT_PDF' |translate }}</button></p>
+	<hr>
+	<h2 text-center>{{'PERSON_DESCRIPTION' | translate}}</h2>
+	<ion-grid>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_NAME' | translate}}:</ion-col>
+					<ion-col text-right>{{trailSet.person.name}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_AGE' | translate}}:</ion-col>
+					<ion-col text-right>{{trailSet.person.age}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_GLASSES' | translate}}:</ion-col>
+					<ion-col text-right *ngIf="trailSet.person.glasses === false">{{'NO' | translate}}</ion-col>
+					<ion-col text-right *ngIf="trailSet.person.glasses === true">{{'YES' | translate}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_HAIR' | translate}}:</ion-col>
+					<ion-col text-right>{{trailSet.person.hair_choice}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_HAIR_COLOR' | translate}}:</ion-col>
+					<ion-col text-right>{{trailSet.person.hairColor_choice}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_BODY_TYPE' | translate}}:</ion-col>
+					<ion-col text-right>{{trailSet.person.body_choice}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_ILLNESS' | translate}}:</ion-col>
+					<ion-col text-right>{{trailSet.person.illness}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_MEDICATION' | translate}}:</ion-col>
+					<ion-col text-right>{{trailSet.person.medication}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col text-left>{{'PERSON_ALLERGIES' | translate}}:</ion-col>
+					<ion-col text-right>{{trailSet.person.allergies}}</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-row>
+					<ion-col>
+						<div *ngIf="trailSet.person.image !== ''">
+							<button ion-button (click)="showImage()">{{'PERSON_IMAGE' | translate}}</button>
+						</div>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
 </ion-content>

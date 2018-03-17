@@ -93,8 +93,8 @@
 	                                <ion-col>
 		                                <ion-row>
 			                                <ion-col text-left>{{'PERSON_GLASSES' | translate}}:</ion-col>
-			                                <ion-col text-right *ngIf="trailSet.person.glasses === 0">{{'NO' | translate}}</ion-col>
-			                                <ion-col text-right *ngIf="trailSet.person.glasses === 1">{{'YES' | translate}}</ion-col>
+			                                <ion-col text-right *ngIf="trailSet.person.glasses === false">{{'NO' | translate}}</ion-col>
+			                                <ion-col text-right *ngIf="trailSet.person.glasses === true">{{'YES' | translate}}</ion-col>
 		                                </ion-row>
 	                                </ion-col>
                                 </ion-row>

@@ -142,7 +142,6 @@ export class ImportPage {
 		let counter = 0;
 		for(let trail of this.trailSet.trails) {
 			let result = await this.storage.getTrailSet(event.trailObject.creationID).then(async (_trailSet) => {
-				console.log("SIZE: " + _trailSet.trails.length);
 				let result = await this.storage.addTrailToSet(_trailSet.creationID, trail, true).then((answer) => {
 					++counter;
 					if (counter == this.trailSet.trails.length - 1) {
