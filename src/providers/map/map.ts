@@ -16,6 +16,8 @@ declare let google: any;
     NOTE (christian): Das hier ist immer noch work-in-progress und muss für das fertige Produkt nochmal
                 überarbeitet werden.
 
+    ionic cordova plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="AIzaSyA3B8eVpVxKg41IVfM8SSO5pmDF76WnLEo" --variable API_KEY_FOR_IOS="AIzaSyA3B8eVpVxKg41IVfM8SSO5pmDF76WnLEo"
+
 */
 
 /**
