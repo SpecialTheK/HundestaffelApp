@@ -64,7 +64,7 @@ export class MyApp {
 				console.log("Geklappt");
 			});*/
 			
-			translate.setDefaultLang('en');
+			translate.setDefaultLang('en-US');
 			if(platform.is('cordova')){
 				globalization.getPreferredLanguage().then((language) => {
 					translate.use(language.value);
