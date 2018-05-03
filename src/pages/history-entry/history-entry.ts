@@ -10,6 +10,7 @@ import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage"
 import {TrailSet} from "../../models/trailSet";
 import moment from "moment";
 import {Diagnostic} from "@ionic-native/diagnostic";
+import {Globalization} from "@ionic-native/globalization";
 
 /**
  * Page to display a single entry from the history.
@@ -77,6 +78,8 @@ export class HistoryEntryPage {
 	 * @since 1.0.0
 	 */
 	translatedTerms: Array<string> = [];
+	
+	dateFormat: string = "HH:mm:ss";
 
 	constructor(public platform: Platform,
 	            public navCtrl: NavController,
@@ -88,9 +91,13 @@ export class HistoryEntryPage {
 	            public social: SocialSharing,
 	            public share: ShareTrailProvider,
 	            public pdf: PdfUtilProvider,
-	            public diagnostic: Diagnostic) {
+	            public diagnostic: Diagnostic,
+	            globalization: Globalization) {
 		this.trailSet = navParams.get('trailObject');
 		this.translateVariables();
+		globalization.getDatePattern({formatLength:'short', selector:'date and time'}).then((pattern) => {
+			this.dateFormat = pattern.pattern;
+		});
 	}
 
 	/**

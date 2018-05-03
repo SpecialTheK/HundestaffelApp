@@ -10,6 +10,7 @@ import html2canvas from "html2canvas/dist/html2canvas"
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import moment from "moment";
+import {Globalization} from "@ionic-native/globalization";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 /**
@@ -51,7 +52,14 @@ export class PdfUtilProvider {
 	 */
 	translate: Array<string> = [];
 	
-	constructor(public platform: Platform, public fileSystem: File, public sharing: SocialSharing, public translateService: TranslateService, public loadingCtrl: LoadingController) {
+	activityDate = "NaN";
+	
+	constructor(public platform: Platform,
+	            public fileSystem: File,
+	            public sharing: SocialSharing,
+	            public translateService: TranslateService,
+	            public loadingCtrl: LoadingController,
+	            public globalization: Globalization) {
 		if(this.platform.is('ios')) {
 			this.pdfDirectory = this.fileSystem.documentsDirectory;
 		}
@@ -204,6 +212,9 @@ export class PdfUtilProvider {
 			content: this.translate["import_creating_pdf"]
 		});
 		loading.present();
+		this.globalization.dateToString(trailSet.trails[0].startTime, {formatLength:'long', selector:'date and time'}).then((date) => {
+			this.activityDate = date.value;
+		});
 		return new Promise((resolve, reject) => {
 			this.initDirectory().then((answer) => {
 				this.createPdf(trailSet, map).then((answer) => {

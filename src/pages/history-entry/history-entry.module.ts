@@ -7,6 +7,7 @@ import {PdfUtilProvider} from "../../providers/pdf-util/pdf-util";
 import {SocialSharing} from "@ionic-native/social-sharing";
 import {File} from "@ionic-native/file";
 import {Diagnostic} from "@ionic-native/diagnostic";
+import {Globalization} from "@ionic-native/globalization";
 
 @NgModule({
 	declarations: [
@@ -16,7 +17,7 @@ import {Diagnostic} from "@ionic-native/diagnostic";
 		IonicPageModule.forChild(HistoryEntryPage),
 		TranslateModule.forChild()
 	],
-	providers: [ShareTrailProvider, File, SocialSharing, PdfUtilProvider, Diagnostic]
+	providers: [ShareTrailProvider, File, SocialSharing, PdfUtilProvider, Diagnostic, Globalization]
 })
 export class HistoryEntryPageModule {
 }

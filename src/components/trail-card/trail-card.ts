@@ -3,6 +3,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {TrailSet} from "../../models/trailSet";
 import {Trail} from "../../models/trail";
 import moment from "moment";
+import {Globalization} from "@ionic-native/globalization";
 
 /**
  * Displays a trailSet in an ion-card.
@@ -82,7 +83,12 @@ export class TrailCardComponent {
 	 */
 	translatedTerms: Array<string> = [];
 	
-	constructor(public translate: TranslateService) {
+	dateFormat:string = "HH:mm:ss";
+	
+	constructor(public translate: TranslateService, globalization: Globalization) {
+		globalization.getDatePattern({formatLength:'short', selector:'date and time'}).then((pattern) => {
+			this.dateFormat = pattern.pattern;
+		});
 	}
 	
 	/**
