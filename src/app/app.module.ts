@@ -18,6 +18,7 @@ import {WebIntent} from "@ionic-native/web-intent";
 import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
 import {IonicStorageModule} from "@ionic/storage";
 import {ComponentsModule} from "../components/components.module";
+import {Globalization} from "@ionic-native/globalization";
 
 @NgModule({
 	declarations: [
@@ -51,7 +52,8 @@ import {ComponentsModule} from "../components/components.module";
         WebIntent,
 		TrailStorageProvider,
 		Vibration,
-		DeviceOrientation
+		DeviceOrientation,
+		Globalization
     ],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

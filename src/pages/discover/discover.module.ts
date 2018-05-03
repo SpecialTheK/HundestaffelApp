@@ -1,16 +1,16 @@
 import {NgModule} from '@angular/core';
 import {IonicPageModule} from 'ionic-angular';
-import {HelpPage} from './help';
+import {DiscoverPage} from './discover';
 import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
 	declarations: [
-		HelpPage,
+		DiscoverPage,
 	],
 	imports: [
-		IonicPageModule.forChild(HelpPage),
+		IonicPageModule.forChild(DiscoverPage),
 		TranslateModule.forChild()
 	],
 })
-export class HelpPageModule {
+export class DiscoverPageModule {
 }

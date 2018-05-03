@@ -1,6 +1,6 @@
 <ion-card>
 	<i class="type-icon" [ngClass]="iconClass"></i>
-	<ion-card-header>{{operationType}}: {{startTime | date : 'dd. LLL yyyy HH:mm'}}</ion-card-header>
+	<ion-card-header>{{operationType}}: {{startTime | date : dateFormat}}</ion-card-header>
 	<ion-card-content>
 		<p>{{'TRAIL_MAP_TYPE' | translate}}: {{mapType}}</p>
 		<p>{{trails}} {{'TRAIL_STAGES' | translate}} {{'WITH' | translate}}:</p>

@@ -1,6 +1,6 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>{{'TRAIL_FROM' | translate}} {{trailSet.creationID | date}}</ion-title>
+		<ion-title>{{'TRAIL_FROM' | translate}} {{trailSet.creationID | date: dateFormat}}</ion-title>
 		<ion-buttons right>
 			<button ion-button icon-only (click)="deleteTrailSet()"><ion-icon name="trash"></ion-icon></button>
 			<button ion-button icon-only (click)="shareAsJSON()"><ion-icon name="share"></ion-icon></button>

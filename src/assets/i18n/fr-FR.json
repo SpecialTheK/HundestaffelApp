@@ -14,7 +14,11 @@
 	"WITH"                                  : "avec",
 	"YES"                                   : "Oui",
 
-	"ABOUT"                                 : "Aide",
+	"DISCOVER"                              : "Découvrir",
+	"DISCOVER_ALERT_GO"                     : "On y va",
+	"DISCOVER_ALERT_H1"                     : "Commence le tour",
+	"DISCOVER_ALERT_NO"                     : "Non merci",
+	"DISCOVER_ALERT_SUB"                    : "Commence un tour sur l'application",
 
 	"FILTER"                                : "Filtre",
 	"FILTER_APPLY"                          : "Utiliser",
@@ -114,6 +118,9 @@
 	"TRAIL_LAND_START"                      : "Lance tracé sur le terrain",
 	"TRAIL_MAP_TYPE"                        : "type",
 	"TRAIL_OPERATION"                       : "Intervention",
+	"TRAIL_SAVE"                            : "Sauvegarde tracé",
+	"TRAIL_SAVE_MESSAGE"                    : "Tu es sûr?",
+	"TRAIL_SHARED"                          : "Trace partagé",
 	"TRAIL_STAGES"                          : "Etapes",
 	"TRAIL_SITUATION"                       : "Situation",
 	"TRAIL_SITUATION_PRE"                   : "Que s'est-il passé",

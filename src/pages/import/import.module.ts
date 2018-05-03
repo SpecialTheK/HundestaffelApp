@@ -5,6 +5,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {TranslateModule} from "@ngx-translate/core";
 import {TrailStorageProvider} from "../../providers/trail-storage/trail-storage";
 import {ComponentsModule} from "../../components/components.module";
+import {Globalization} from "@ionic-native/globalization";
 
 @NgModule({
 	declarations: [
@@ -17,7 +18,7 @@ import {ComponentsModule} from "../../components/components.module";
 		TranslateModule.forChild(),
 		ComponentsModule
 	],
-	providers: [TrailStorageProvider]
+	providers: [TrailStorageProvider, Globalization]
 })
 export class ImportPageModule {
 }

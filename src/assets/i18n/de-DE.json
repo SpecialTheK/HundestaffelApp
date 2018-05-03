@@ -14,7 +14,11 @@
 	"WITH"                                  : "mit",
 	"YES"                                   : "Ja",
 
-	"ABOUT"                                 : "Über diese App",
+	"DISCOVER"                              : "Entdecken",
+	"DISCOVER_ALERT_GO"                     : "Auf geht's",
+	"DISCOVER_ALERT_H1"                     : "Tour starten",
+	"DISCOVER_ALERT_NO"                     : "Nein Danke",
+	"DISCOVER_ALERT_SUB"                    : "Starte eine Erkundungstour durch die App",
 
 	"FILTER"                                : "Filter",
 	"FILTER_APPLY"                          : "Anwenden",
@@ -114,6 +118,9 @@
 	"TRAIL_LAND_START"                      : "Landsuche starten",
 	"TRAIL_MAP_TYPE"                        : "Kartentyp",
 	"TRAIL_OPERATION"                       : "Einsatz",
+	"TRAIL_SAVE"                            : "Suche speichern",
+	"TRAIL_SAVE_MESSAGE"                    : "Möchtest du die Suche wirklich speichern?",
+	"TRAIL_SHARED"                          : "geteilte Suche",
 	"TRAIL_SITUATION"                       : "Situation",
 	"TRAIL_SITUATION_PRE"                   : "Was passierte vorher?",
 	"TRAIL_SITUATION_RISKS"                 : "Mögliche Risiken?",

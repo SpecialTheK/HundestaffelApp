@@ -14,7 +14,11 @@
 	"WITH"                                  : "with",
 	"YES"                                   : "Yes",
 
-	"ABOUT"                                 : "About this app",
+	"DISCOVER"                              : "Discover",
+	"DISCOVER_ALERT_GO"                     : "Let's go",
+	"DISCOVER_ALERT_H1"                     : "Start tour",
+	"DISCOVER_ALERT_NO"                     : "No thanks",
+	"DISCOVER_ALERT_SUB"                    : "Start a tour to discover the app",
 
 	"FILTER"                                : "Filters",
 	"FILTER_APPLY"                          : "Apply filters",
@@ -23,17 +27,17 @@
 	"HISTORY"                               : "Past trails",
 	"HISTORY_NO_ENTRIES"                    : "No matching trails found",
 
-	"HOMEPAGE"                              : "Homepage",
+	"HOMEPAGE"                              : "Start",
 
-	"IMPORT"                                : "Import trail",
+	"IMPORT"                                : "Import search",
 	"IMPORT_CREATING_PDF"                   : "Generating PDF...",
 	"IMPORT_FAILED"                         : "Importing failed",
-	"IMPORT_FAILED_MESSAGE"                 : "The trail couldn't be imported: ",
-	"IMPORT_MERGE"                          : "Link to existing trail",
-	"IMPORT_NEW"                            : "Import as new trail",
-	"IMPORT_NO_TRAIL"                       : "The selected file doesn't contain a valid trail",
-	"IMPORT_OK"                             : "Trail imported",
-	"IMPORT_OK_MESSAGE"                     : "The trail was imported successfully",
+	"IMPORT_FAILED_MESSAGE"                 : "The search couldn't be imported: ",
+	"IMPORT_MERGE"                          : "Link to existing search",
+	"IMPORT_NEW"                            : "Import as new search",
+	"IMPORT_NO_TRAIL"                       : "The selected file doesn't contain a valid search",
+	"IMPORT_OK"                             : "Search imported",
+	"IMPORT_OK_MESSAGE"                     : "The search was imported successfully",
 
 	"MAP_CIRCLE"                            : "Circle",
 	"MAP_CIRCLE_ADD"                        : "Add circle",
@@ -58,8 +62,8 @@
 	"MAP_WIND_DIRECTION_MESSAGE"            : "Tip two times on the map to choose a heading!",
 
 	"MENU"                                  : "Menu",
-	"MENU_LAST_TRAILS"                      : "Last trails",
-	"MENU_TRAILING_ONLINE"                  : "Online trailing",
+	"MENU_LAST_TRAILS"                      : "Last searches",
+	"MENU_TRAILING_ONLINE"                  : "Online search",
 
 	"PERSON_AGE"                            : "Age",
 	"PERSON_ALLERGIES"                      : "Allergies",
@@ -110,10 +114,13 @@
 	"TRAIL_EXPORT_PDF"                      : "Export as PDF",
 	"TRAIL_FROM"                            : "Search from",
 	"TRAIL_INIT"                            : "Add search details",
-	"TRAIL_LAND"                            : "Land trailing",
+	"TRAIL_LAND"                            : "Land search",
 	"TRAIL_LAND_START"                      : "Start land trailing",
 	"TRAIL_MAP_TYPE"                        : "Map type",
 	"TRAIL_OPERATION"                       : "Operation",
+	"TRAIL_SAVE"                            : "Save search",
+	"TRAIL_SAVE_MESSAGE"                    : "Are you sure you want to save this search?",
+	"TRAIL_SHARED"                          : "Shared trailing",
 	"TRAIL_SITUATION"                       : "Situation",
 	"TRAIL_SITUATION_PRE"                   : "What happened before?",
 	"TRAIL_SITUATION_RISKS"                 : "Possible risks?",
@@ -123,6 +130,6 @@
 	"TRAIL_TRAINING"                        : "Training",
 	"TRAIL_USE"                             : "Use as base for new trail",
 	"TRAIL_TYPE"                            : "Operation type",
-	"TRAIL_WATER"                           : "Water trailing",
+	"TRAIL_WATER"                           : "Water search",
 	"TRAIL_WATER_START"                     : "Start water trailing"
 }

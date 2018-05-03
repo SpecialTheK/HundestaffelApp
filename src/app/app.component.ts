@@ -1,5 +1,5 @@
 import {Component, NgZone, ViewChild} from '@angular/core';
-import {NavController, Platform} from 'ionic-angular';
+import {AlertController, NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 
@@ -9,6 +9,7 @@ import {AppPreferences} from "@ionic-native/app-preferences";
 import {WebIntent} from "@ionic-native/web-intent";
 import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
 import {TrailSet} from "../models/trailSet";
+import {Globalization} from "@ionic-native/globalization";
 
 // Needed outside of class as this has to be executed before the app is loaded
 (window as any).handleOpenURL = (url: string) => {
@@ -30,10 +31,13 @@ export class MyApp {
 	            translate: TranslateService,
 	            webIntent: WebIntent,
 	            storage: TrailStorageProvider,
-	            ngZone: NgZone) {
+	            alertCtrl: AlertController,
+	            ngZone: NgZone,
+	            globalization: Globalization) {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
+			
 			if(platform.is('android')) {
 				webIntent.getIntent().then((answer) => {
 					if(answer != null && answer.data !== undefined){
@@ -60,12 +64,55 @@ export class MyApp {
 				console.log("Geklappt");
 			});*/
 			
-			translate.setDefaultLang('en');
-			preferences.fetch('language').then((answer) => {
-				translate.use(answer);
-			}).catch((error) =>{
-				console.log("No cordova platform: "+error);
-			});
+			translate.setDefaultLang('en-US');
+			if(platform.is('cordova')){
+				globalization.getPreferredLanguage().then((language) => {
+					translate.use(language.value);
+				});
+				
+				preferences.fetch('firstStart').then((answer) => {
+					if(answer == "" || answer != "false"){
+						preferences.store('firstStart', 'false');
+						let discover_alert_h1 = "";
+						let discover_alert_sub = "";
+						let discover_alert_go = "";
+						let discover_alert_no = "";
+						translate.get('DISCOVER_ALERT_H1').subscribe((answer) => {
+							discover_alert_h1 = answer;
+						});
+						translate.get('DISCOVER_ALERT_SUB').subscribe((answer) => {
+							discover_alert_sub = answer;
+						});
+						translate.get('DISCOVER_ALERT_GO').subscribe((answer) => {
+							discover_alert_go = answer;
+						});
+						translate.get('DISCOVER_ALERT_NO').subscribe((answer) => {
+							discover_alert_no = answer;
+						});
+						
+						let alert = alertCtrl.create({
+							title: discover_alert_h1,
+							subTitle: discover_alert_sub,
+							buttons: [
+								{
+									text: discover_alert_no,
+									role: 'cancel',
+									handler: () => {
+										console.log('Cancel clicked');
+									}
+								},
+								{
+									text: discover_alert_go,
+									handler: () => {
+										this.navCtrl.push('DiscoverPage');
+									}
+								}
+							]
+						});
+						alert.present();
+					}
+				});
+			}
 			storage.getLatestTrailSets(5).subscribe((value:TrailSet) => {
 				this.trails.push(value);
 			});
