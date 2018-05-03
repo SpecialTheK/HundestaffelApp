@@ -118,6 +118,8 @@
 	"TRAIL_LAND_START"                      : "Landsuche starten",
 	"TRAIL_MAP_TYPE"                        : "Kartentyp",
 	"TRAIL_OPERATION"                       : "Einsatz",
+	"TRAIL_SAVE"                            : "Suche speichern",
+	"TRAIL_SAVE_MESSAGE"                    : "Möchtest du die Suche wirklich speichern?",
 	"TRAIL_SHARED"                          : "geteilte Suche",
 	"TRAIL_SITUATION"                       : "Situation",
 	"TRAIL_SITUATION_PRE"                   : "Was passierte vorher?",

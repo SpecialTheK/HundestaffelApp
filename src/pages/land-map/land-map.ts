@@ -176,19 +176,38 @@ export class LandMapPage {
 	 * @version 1.0.0
 	 */
 	endTrail() {
-        this.map.currentTrail.setEndTime();
-        this.trailSet.addTrailToSet(this.map.currentTrail);
-
-        console.log(this.trailSet);
-
-        this.storage.addNewTrailSet(this.trailSet);
-
-        this.map.endSession();
-        this.endTimer();
-		this.backgroundMode.disable();
-		this.navCtrl.popToRoot().then((answer) => {
-			this.navCtrl.push('HistoryPage');
+		let alert = this.alertCtrl.create({
+			title: this.translatedTerms["trail_save"],
+			subTitle: this.translatedTerms["trail_save_message"],
+			buttons: [
+				{
+					text: this.translatedTerms["no"],
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				},
+				{
+					text: this.translatedTerms["yes"],
+					handler: () => {
+						this.map.currentTrail.setEndTime();
+						this.trailSet.addTrailToSet(this.map.currentTrail);
+						
+						console.log(this.trailSet);
+						
+						this.storage.addNewTrailSet(this.trailSet);
+						
+						this.map.endSession();
+						this.endTimer();
+						this.backgroundMode.disable();
+						this.navCtrl.popToRoot().then((answer) => {
+							this.navCtrl.push('HistoryPage');
+						});
+					}
+				}
+			]
 		});
+		alert.present();
     }
 
     /**

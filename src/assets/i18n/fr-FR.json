@@ -118,6 +118,8 @@
 	"TRAIL_LAND_START"                      : "Lance tracé sur le terrain",
 	"TRAIL_MAP_TYPE"                        : "type",
 	"TRAIL_OPERATION"                       : "Intervention",
+	"TRAIL_SAVE"                            : "Sauvegarde tracé",
+	"TRAIL_SAVE_MESSAGE"                    : "Tu es sûr?",
 	"TRAIL_SHARED"                          : "Trace partagé",
 	"TRAIL_STAGES"                          : "Etapes",
 	"TRAIL_SITUATION"                       : "Situation",

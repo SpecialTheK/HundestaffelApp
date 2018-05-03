@@ -118,6 +118,8 @@
 	"TRAIL_LAND_START"                      : "Start land trailing",
 	"TRAIL_MAP_TYPE"                        : "Map type",
 	"TRAIL_OPERATION"                       : "Operation",
+	"TRAIL_SAVE"                            : "Save search",
+	"TRAIL_SAVE_MESSAGE"                    : "Are you sure you want to save this search?",
 	"TRAIL_SHARED"                          : "Shared trailing",
 	"TRAIL_SITUATION"                       : "Situation",
 	"TRAIL_SITUATION_PRE"                   : "What happened before?",
