@@ -83,7 +83,7 @@ export class TrailCardComponent {
 	 */
 	translatedTerms: Array<string> = [];
 	
-	dateFormat:string = "HH:mm:ss";
+	dateFormat:string = "dd. LLL yyyy HH:mm";
 	
 	constructor(public translate: TranslateService, globalization: Globalization) {
 		globalization.getDatePattern({formatLength:'short', selector:'date and time'}).then((pattern) => {

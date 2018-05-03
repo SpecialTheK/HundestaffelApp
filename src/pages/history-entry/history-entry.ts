@@ -79,7 +79,7 @@ export class HistoryEntryPage {
 	 */
 	translatedTerms: Array<string> = [];
 	
-	dateFormat: string = "HH:mm:ss";
+	dateFormat: string = "dd. LLL yyyy HH:mm";
 
 	constructor(public platform: Platform,
 	            public navCtrl: NavController,
