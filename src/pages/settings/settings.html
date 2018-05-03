@@ -12,17 +12,6 @@
 <ion-content padding>
 	<ion-list>
 		<ion-item-group>
-			<ion-list-header>{{ 'SETTINGS_GENERAL' | translate }}</ion-list-header>
-			<ion-item>
-				<ion-label>{{ 'SETTINGS_LANGUAGE' | translate }}</ion-label>
-				<ion-select [(ngModel)]="language" (ionChange)="setLanguage()">
-					<ion-option value="en">English</ion-option>
-					<ion-option value="de">Deutsch</ion-option>
-					<ion-option value="fr">Français</ion-option>
-				</ion-select>
-			</ion-item>
-		</ion-item-group>
-		<ion-item-group>
 			<ion-list-header>{{ 'SETTINGS_ONLINE' | translate }}</ion-list-header>
 			<ion-item>
 				<ion-label>{{ 'SETTINGS_ONLINE_NAME' | translate }}</ion-label>

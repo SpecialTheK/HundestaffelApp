@@ -9,6 +9,7 @@ import {AppPreferences} from "@ionic-native/app-preferences";
 import {WebIntent} from "@ionic-native/web-intent";
 import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
 import {TrailSet} from "../models/trailSet";
+import {Globalization} from "@ionic-native/globalization";
 
 // Needed outside of class as this has to be executed before the app is loaded
 (window as any).handleOpenURL = (url: string) => {
@@ -31,10 +32,12 @@ export class MyApp {
 	            webIntent: WebIntent,
 	            storage: TrailStorageProvider,
 	            alertCtrl: AlertController,
-	            ngZone: NgZone) {
+	            ngZone: NgZone,
+	            globalization: Globalization) {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
+			
 			if(platform.is('android')) {
 				webIntent.getIntent().then((answer) => {
 					if(answer != null && answer.data !== undefined){
@@ -61,14 +64,10 @@ export class MyApp {
 				console.log("Geklappt");
 			});*/
 			
+			translate.setDefaultLang('en');
 			if(platform.is('cordova')){
-				translate.setDefaultLang('en');
-				preferences.fetch('language').then((answer) => {
-					if(answer != ""){
-						translate.use(answer);
-					}
-				}).catch((error) =>{
-					console.log("Error while fetching language preferences");
+				globalization.getPreferredLanguage().then((language) => {
+					translate.use(language.value);
 				});
 				
 				preferences.fetch('firstStart').then((answer) => {
@@ -113,8 +112,6 @@ export class MyApp {
 						alert.present();
 					}
 				});
-			} else {
-				translate.setDefaultLang('en');
 			}
 			storage.getLatestTrailSets(5).subscribe((value:TrailSet) => {
 				this.trails.push(value);

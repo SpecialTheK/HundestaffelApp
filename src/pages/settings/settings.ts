@@ -16,15 +16,6 @@ import {Storage} from '@ionic/storage';
 	templateUrl: 'settings.html',
 })
 export class SettingsPage {
-	
-	/**
-	 * Language to use in the app.
-	 *
-	 * @type {string}
-	 * @since 1.0.0
-	 */
-	public language: string = "en";
-	
 	/**
 	 * Username to use in online trailing.
 	 *
@@ -43,7 +34,6 @@ export class SettingsPage {
 	 * @version 1.0.0
 	 */
 	ionViewDidLoad() {
-		this.getLanguage();
 		this.getUsername();
 	}
 
@@ -60,18 +50,6 @@ export class SettingsPage {
 	}
 
 	/**
-	 * Get the preferred language from the app preferences.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	getLanguage(){
-		this.preferences.fetch('language').then((answer) => {
-			this.language = answer;
-		});
-	}
-
-	/**
 	 * Get the username from the app preferences.
 	 *
 	 * @since 1.0.0
@@ -80,21 +58,6 @@ export class SettingsPage {
 	getUsername(){
 		this.preferences.fetch('username').then((answer) => {
 			this.username = answer;
-		});
-	}
-
-	/**
-	 * Save the updated language in the preferences.
-	 *
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	setLanguage(){
-		this.preferences.store('language', this.language).then((answer) => {
-			this.translateService.use(this.language);
-		}).catch((reason) => {
-			console.log('language not changed');
-			this.getLanguage();
 		});
 	}
 

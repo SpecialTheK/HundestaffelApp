@@ -29,7 +29,7 @@
     "@ionic-native/file": "^4.5.3",
     "@ionic-native/flashlight": "^4.5.3",
     "@ionic-native/geolocation": "^4.5.3",
-    "@ionic-native/globalization": "^4.5.3",
+    "@ionic-native/globalization": "^4.7.0",
     "@ionic-native/location-accuracy": "^4.5.3",
     "@ionic-native/social-sharing": "^4.5.3",
     "@ionic-native/splash-screen": "4.5.3",
@@ -52,6 +52,7 @@
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-flashlight": "^3.2.0",
     "cordova-plugin-geolocation": "^4.0.1",
+    "cordova-plugin-globalization": "^1.11.0",
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-request-location-accuracy": "^2.2.2",
     "cordova-plugin-splashscreen": "^4.1.0",
@@ -99,7 +100,8 @@
       "cordova-plugin-background-mode": {},
       "cordova-plugin-camera": {},
       "cordova.plugins.diagnostic": {},
-      "cordova-plugin-request-location-accuracy": {}
+      "cordova-plugin-request-location-accuracy": {},
+      "cordova-plugin-globalization": {}
     },
     "platforms": [
       "android",
