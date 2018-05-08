@@ -108,7 +108,7 @@ export class WaterMapPage {
 	 * @version 1.0.0
 	 */
 	private translateVariables(){
-		let translateTerms = Array("YES","NO","TRAIL_ABORT","TRAIL_ABORT_MESSAGE");
+		let translateTerms = Array("YES","NO","TRAIL_ABORT","TRAIL_ABORT_MESSAGE","TRAIL_SAVE","TRAIL_SAVE_MESSAGE");
 		for(let term of translateTerms){
 			this.translateService.get(term).subscribe((answer) => {
 				this.translatedTerms[term.toLowerCase()] = answer;

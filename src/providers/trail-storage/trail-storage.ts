@@ -1,8 +1,16 @@
 import {Injectable} from '@angular/core';
-import {Storage} from '@ionic/storage';
 import {Trail} from "../../models/trail";
 import {Observable} from "rxjs/Observable";
 import {TrailSet} from "../../models/trailSet";
+import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
+import {Storage} from "@ionic/storage";
+import {Platform} from "ionic-angular";
+
+enum ObjectType{
+	CIRCLE = 0,
+	MARKER = 1,
+	TRIANGLE = 2,
+}
 
 /**
  * Provider to interact with the database in order to save new trails, add them to a trailSet, display trailSets or delete a trailSet.
@@ -10,7 +18,14 @@ import {TrailSet} from "../../models/trailSet";
 @Injectable()
 export class TrailStorageProvider {
 
-	constructor(public storage: Storage) {
+	public database = null;
+	
+	constructor(public storage: Storage, public platform: Platform, sqlite: SQLite) {
+		if(this.database == null && platform.is('cordova')){
+			this.initDatabase(sqlite);
+		} else {
+			console.log('Database instance already existing or no cordova available');
+		}
 	}
 
 	/**
@@ -24,6 +39,112 @@ export class TrailStorageProvider {
 	 * @version 1.0.0
 	 */
 	public addNewTrailSet(trailSet: TrailSet):Promise<string>{
+		if(this.platform.is('cordova')){
+			return this.addNewTrailSet_c(trailSet);
+		} else {
+			return this.addNewTrailSet_nc(trailSet);
+		}
+	}
+	
+	public addNewTrailSet_c(trailSet: TrailSet):Promise<string>{
+		return new Promise((resolve, reject) => {
+			this.getTrailSet(trailSet.creationID).then((answer) => {
+				trailSet.creationID = (parseInt(trailSet.creationID)+1)+"";
+				this.addNewTrailSet_c(trailSet).then((answer) => {
+					resolve(answer);
+				}).catch((error) => {
+					reject(error);
+				})
+			}).catch((error) => {
+				// Insert into search table
+				let insert_sql = "INSERT INTO `search` VALUES ('"+trailSet.creationID+"', "+trailSet.isLandTrail+", "
+					+Date.parse(trailSet.trails[0].startTime.toString())+", "+trailSet.isTraining+", "+trailSet.isSharedTrail+", '"
+					+trailSet.preSituation+"', '"+trailSet.situation+"', "+trailSet.temperature+", '"+trailSet.precipitation+"', '"+
+					trailSet.risks+"', '"+trailSet.person.name+"')";
+				console.error("Search query: "+insert_sql);
+				this.database.executeSql(insert_sql, {}).then((answer) => {
+					console.log("Search query executed: "+answer+" with "+insert_sql);
+				}).catch((error) => {
+					console.log("Search query not executed: "+JSON.stringify(error));
+				});
+				
+				// Insert into trail table
+				for(let trail of trailSet.trails){
+					insert_sql = "INSERT INTO `trails` VALUES ("+trail.id+", "+trailSet.creationID+", '"+trail.trainer+"', "
+						+Date.parse(trail.startTime.toString())+", "+Date.parse(trail.endTime.toString())+", "+trail.distance+")";
+					console.error("trail query "+insert_sql);
+					this.database.executeSql(insert_sql, {}).then((answer) => {
+						
+						// Insert into position table
+						for(let position of trail.path){
+							insert_sql = "INSERT INTO `positions` VALUES ("+trailSet.creationID+", "+trail.id+", "+position.lat+", "+position.lng+")";
+							this.database.executeSql(insert_sql, {}).then((answer) => {
+								console.log("position query executed: "+answer+" with "+insert_sql);
+							}).catch((error) => {
+								console.log("position query not executed: "+JSON.stringify(error));
+							});
+						}
+						
+						// Insert into map_objects table
+						for(let map_object of trail.circles){
+							let circle_sql = "INSERT INTO `map_objects` (search_id, trail_id, object_id, object_type, " +
+								"color, opacity, radius, pos_x1, pos_y1) VALUES ("+trailSet.creationID+", "+trail.id+", "
+								+map_object.id+", "+ObjectType.CIRCLE+", '"+map_object.color+"', "+map_object.opacity+", "
+								+map_object.radius+", "+map_object.position.lat+", "+map_object.position.lng+")";
+							this.database.executeSql(circle_sql, {}).then((answer) => {
+								console.log("circle query executed: "+answer+" with "+circle_sql);
+							}).catch((error) => {
+								console.log("circle query not executed: "+JSON.stringify(error));
+							});
+						}
+						
+						for(let map_object of trail.triangles){
+							let triangle_sql = "INSERT INTO `map_objects` (search_id, trail_id, object_id, object_type, " +
+								"pos_x1, pos_y1, pos_x2, pos_y2, pos_x3, pos_y3) VALUES ("+trailSet.creationID+", "+trail.id+", "
+								+map_object.id+", "+ObjectType.TRIANGLE+", "+map_object.usePos[0].lat+", "+map_object.usePos[0].lng+", "
+								+map_object.usePos[1].lat+", "+map_object.usePos[1].lng+", "+map_object.usePos[2].lat+", "+map_object.usePos[2].lng+")";
+							this.database.executeSql(triangle_sql, {}).then((answer) => {
+								console.log("triangle query executed: "+answer+" with "+triangle_sql);
+							}).catch((error) => {
+								console.log("triangle query not executed: "+JSON.stringify(error));
+							});
+						}
+						
+						for(let map_object of trail.marker){
+							let marker_sql = "INSERT INTO `map_objects` (search_id, trail_id, object_id, object_type, " +
+								"orientation, symbol_id, pos_x1, pos_y1) VALUES ("+trailSet.creationID+", "+trail.id+", "
+								+map_object.id+", "+ObjectType.MARKER+", "+map_object.orientation+", "
+								+map_object.symbolID+", "+map_object.position.lat+", "+map_object.position.lng+")";
+							this.database.executeSql(marker_sql, {}).then((answer) => {
+								console.log("marker query executed: "+answer+" with "+marker_sql);
+							}).catch((error) => {
+								console.log("marker query not executed: "+JSON.stringify(error));
+							});
+						}
+						
+						console.log("trail query executed: "+answer+" with "+insert_sql);
+					}).catch((error) => {
+						console.log("trail query not executed: "+JSON.stringify(error));
+					});
+				}
+				
+				// Insert into person table
+				let person_sql = "INSERT INTO `persons` VALUES ('"+trailSet.person.name+"', "+trailSet.person.age+", "
+					+trailSet.person.glasses+", '"+trailSet.person.hair_choice+"', '"+trailSet.person.hairColor_choice+"', '"
+					+trailSet.person.body_choice+"', '"+trailSet.person.allergies+"', '"+trailSet.person.illness+"', '"
+					+trailSet.person.medication+"', '"+trailSet.person.image+"')";
+				this.database.executeSql(person_sql, {}).then((answer) => {
+					console.log("person query executed: "+answer+" with "+person_sql);
+				}).catch((error) => {
+					console.log("person query not executed: "+JSON.stringify(error));
+				});
+				
+				resolve("Search inserted");
+			});
+		});
+	}
+	
+	public addNewTrailSet_nc(trailSet: TrailSet):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.getTrailSet(trailSet.creationID).then((answer) => {
 				reject("TrailSet already existing, aborting... "+answer);
@@ -53,6 +174,85 @@ export class TrailStorageProvider {
 	 * @version 1.0.0
 	 */
 	public addTrailToSet(key: string, trail:Trail, sharedActivity: boolean = false):Promise<string>{
+		if(this.platform.is('cordova')){
+			return this.addTrailToSet_c(key, trail, sharedActivity);
+		} else {
+			return this.addTrailToSet_nc(key, trail, sharedActivity);
+		}
+	}
+	
+	public addTrailToSet_c(key: string, trail:Trail, sharedActivity: boolean = false):Promise<string>{
+		return new Promise((resolve, reject) => {
+			
+			if(sharedActivity){
+				let search_statement = "UPDATE `search` SET is_shared = true WHERE search_id = '"+key+"'";
+				this.database.executeSql(search_statement, {}).then((answer) => {
+					console.log("Search now marked as shared");
+				}).catch((error) => {
+					console.log("Shared not updated: "+error);
+				});
+			}
+			
+			let insert_sql = "INSERT INTO `trails` VALUES ("+trail.id+", "+key+", '"+trail.trainer+"', "
+				+Date.parse(trail.startTime.toString())+", "+Date.parse(trail.endTime.toString())+", "+trail.distance+")";
+			console.error("trail query "+insert_sql);
+			this.database.executeSql(insert_sql, {}).then((answer) => {
+				
+				// Insert into position table
+				for(let position of trail.path){
+					insert_sql = "INSERT INTO `positions` VALUES ("+key+", "+trail.id+", "+position.lat+", "+position.lng+")";
+					this.database.executeSql(insert_sql, {}).then((answer) => {
+						console.log("position query executed: "+answer+" with "+insert_sql);
+					}).catch((error) => {
+						console.log("position query not executed: "+JSON.stringify(error));
+					});
+				}
+				
+				// Insert into map_objects table
+				for(let map_object of trail.circles){
+					let circle_sql = "INSERT INTO `map_objects` (search_id, trail_id, object_id, object_type, " +
+						"color, opacity, radius, pos_x1, pos_y1) VALUES ("+key+", "+trail.id+", "
+						+map_object.id+", "+ObjectType.CIRCLE+", '"+map_object.color+"', "+map_object.opacity+", "
+						+map_object.radius+", "+map_object.position.lat+", "+map_object.position.lng+")";
+					this.database.executeSql(circle_sql, {}).then((answer) => {
+						console.log("circle query executed: "+answer+" with "+circle_sql);
+					}).catch((error) => {
+						console.log("circle query not executed: "+JSON.stringify(error));
+					});
+				}
+				
+				for(let map_object of trail.triangles){
+					let triangle_sql = "INSERT INTO `map_objects` (search_id, trail_id, object_id, object_type, " +
+						"pos_x1, pos_y1, pos_x2, pos_y2, pos_x3, pos_y3) VALUES ("+key+", "+trail.id+", "
+						+map_object.id+", "+ObjectType.TRIANGLE+", "+map_object.usePos[0].lat+", "+map_object.usePos[0].lng+", "
+						+map_object.usePos[1].lat+", "+map_object.usePos[1].lng+", "+map_object.usePos[2].lat+", "+map_object.usePos[2].lng+")";
+					this.database.executeSql(triangle_sql, {}).then((answer) => {
+						console.log("triangle query executed: "+answer+" with "+triangle_sql);
+					}).catch((error) => {
+						console.log("triangle query not executed: "+JSON.stringify(error));
+					});
+				}
+				
+				for(let map_object of trail.marker){
+					let marker_sql = "INSERT INTO `map_objects` (search_id, trail_id, object_id, object_type, " +
+						"orientation, symbol_id, pos_x1, pos_y1) VALUES ("+key+", "+trail.id+", "
+						+map_object.id+", "+ObjectType.MARKER+", "+map_object.orientation+", "
+						+map_object.symbolID+", "+map_object.position.lat+", "+map_object.position.lng+")";
+					this.database.executeSql(marker_sql, {}).then((answer) => {
+						console.log("marker query executed: "+answer+" with "+marker_sql);
+					}).catch((error) => {
+						console.log("marker query not executed: "+JSON.stringify(error));
+					});
+				}
+				
+				console.log("trail query executed: "+answer+" with "+insert_sql);
+			}).catch((error) => {
+				console.log("trail query not executed: "+JSON.stringify(error));
+			});
+		});
+	}
+	
+	public addTrailToSet_nc(key: string, trail:Trail, sharedActivity: boolean = false):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.getTrailSet(key).then((answer) => {
 				let trailSet:TrailSet = TrailSet.fromData(answer);
@@ -86,6 +286,28 @@ export class TrailStorageProvider {
 	 * @version 1.0.0
 	 */
 	public removeTrailSet(key: string):Promise<string>{
+		if(this.platform.is('cordova')){
+			return this.removeTrailSet_c(key);
+		} else {
+			return this.removeTrailSet_nc(key);
+		}
+	}
+	
+	public removeTrailSet_c(key: string):Promise<string>{
+		return new Promise((resolve, reject) => {
+			this.database.executeSql("SELECT person FROM `search` WHERE search_id = "+key, {}).then((answer) => {
+				this.database.executeSql("DELETE FROM `persons` WHERE name = '"+answer.person+"'", {})
+					.then(answer => console.log("Person deleted"))
+					.catch((error) => console.log("Couldn't find search with key "+key));
+				
+				this.database.executeSql("SELECT  FROM `trails` WHERE name = '"+answer.person+"'", {})
+					.then(answer => console.log("Person deleted"))
+					.catch((error) => console.log("Couldn't find search with key "+key));
+			});
+		});
+	}
+	
+	public removeTrailSet_nc(key: string):Promise<string>{
 		return new Promise((resolve, reject) => {
 			this.getTrailSet(key).then((answer) => {
 				this.storage.ready().then((answer) => {
@@ -114,6 +336,31 @@ export class TrailStorageProvider {
 	 * @version 1.0.0
 	 */
 	public getTrailSet(key: string):Promise<TrailSet>{
+		if(this.platform.is('cordova')){
+			return this.getTrailSet_c(key);
+		} else {
+			return this.getTrailSet_nc(key);
+		}
+	}
+	
+	public getTrailSet_c(key: string):Promise<TrailSet>{
+		return new Promise<TrailSet>((resolve, reject) => {
+			this.storage.ready().then((answer) => {
+				this.storage.get(key).then((answer) => {
+					if(answer === null){
+						reject("trailSet not found");
+					}
+					resolve(TrailSet.fromData(JSON.parse(answer)));
+				}).catch((error) => {
+					reject("Couldn't get trailSet: "+error);
+				});
+			}).catch((error) => {
+				reject("Internal storage error: "+error);
+			});
+		});
+	}
+	
+	public getTrailSet_nc(key: string):Promise<TrailSet>{
 		return new Promise<TrailSet>((resolve, reject) => {
 			this.storage.ready().then((answer) => {
 				this.storage.get(key).then((answer) => {
@@ -131,39 +378,6 @@ export class TrailStorageProvider {
 	}
 
 	/**
-	 * Fetch multiple trailSets from the storage.
-	 *
-	 * @param {number} from Beginning of the selection. If left all trailSets from the beginning to limit are returned.
-	 * @param {number} limit Limit of the selection. If left 0, it returns all remaining trailSets.
-	 *
-	 * @returns {Observable<Trail[]>} Returns one trailSet in each push. Throws errors if the data couldn't be retrieved from the storage.
-	 * @since 1.0.0
-	 * @version 1.0.0
-	 */
-	public getTrailSets(from:number = 0, limit:number = 0):Observable<TrailSet>{
-		return new Observable<TrailSet>((observer) => {
-			// TODO: Performanter machen
-			this.storage.ready().then((answer) => {
-				this.storage.forEach((value, key, iterationNumber) => {
-					if(limit !== 0 && (<number>iterationNumber)-from > limit){
-						// TODO: BREAK
-						observer.complete();
-					}
-					if(iterationNumber >= from && ((<number>iterationNumber)-from < limit || limit === 0)){
-						observer.next(TrailSet.fromData(JSON.parse(value)));
-					}
-				}).then((answer) => {
-					observer.complete();
-				}).catch((error) => {
-					observer.error("Couldn't retrieve trailSets: "+error);
-				});
-			}).catch((error) => {
-				observer.error("Internal storage error: "+error);
-			});
-		});
-	}
-
-	/**
 	 * Get the last x trailSets from the storage. Not optimized for big amounts.
 	 *
 	 * @param {number} amount The amount of trailSets to fetch.
@@ -173,6 +387,14 @@ export class TrailStorageProvider {
 	 * @version 1.0.0
 	 */
 	public getLatestTrailSets(amount:number = 0):Observable<TrailSet>{
+		if(this.platform.is('cordova')){
+			return this.getLatestTrailSets_c(amount);
+		} else {
+			return this.getLatestTrailSets_nc(amount);
+		}
+	}
+	
+	public getLatestTrailSets_c(amount:number = 0):Observable<TrailSet>{
 		return new Observable<TrailSet>((observer) => {
 			this.storage.ready().then((answer) => {
 				this.storage.keys().then((keys) => {
@@ -196,19 +418,89 @@ export class TrailStorageProvider {
 			});
 		});
 	}
-
+	
+	public getLatestTrailSets_nc(amount:number = 0):Observable<TrailSet>{
+		return new Observable<TrailSet>((observer) => {
+			this.storage.ready().then((answer) => {
+				this.storage.keys().then((keys) => {
+					let reversedKeys = keys.reverse();
+					if(amount > reversedKeys.length || amount == 0){
+						amount = reversedKeys.length;
+					}
+					for(let i = 0; i < amount; i++){
+						this.getTrailSet(reversedKeys[i]).then((answer) => {
+							observer.next(answer);
+							if(i == amount-1){ // Doesn't work outside of for loop
+								observer.complete();
+							}
+						}).catch((error) => {
+							observer.error("Couldn't fetch trailSet: "+error);
+						});
+					}
+				}).catch((error) => {
+					observer.error("Couldn't fetch keys: "+error);
+				});
+			});
+		});
+	}
+	
 	/**
-	 * Update the schema of the existing entries in the storage. WARNING: INTESIVE OPERATION, CANNOT BE UNDONE!
+	 * Open the database and create all tables if they don't exist.
 	 *
-	 * @param schemeChanges[] Array containing the schema changes in the form of ["oldProperty=>newProperty",...]
+	 * @param {SQLite} sqlite
 	 *
-	 * @returns {Promise<string>} Resolves on successful update, rejects on error and creates a data dump of the existing entries.
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 * @version 1.0.0
 	 */
-	public updateSchema(schemeChanges: string[]):Promise<string>{
-		return new Promise((resolve, reject) => {
-			// TODO: Create method
+	private initDatabase(sqlite: SQLite){
+		sqlite.create({name: 'trailStorage.db', location: 'default'}).then((database: SQLiteObject) => {
+			this.database = database;
+			
+			// search table
+			let sql = 'CREATE TABLE IF NOT EXISTS `search` (search_id NUMERIC, search_type TEXT, search_date NUMERIC, is_training TEXT, ' +
+				'is_shared TEXT, pre_situation TEXT, situation TEXT, temperature TEXT, precipitation TEXT, risks TEXT, person_name TEXT)';
+			this.database.executeSql(sql, {}).then(() => {
+				console.log('Table "search" created');
+			}).catch((error) => {
+				console.log('Table "search" not created: ' + JSON.stringify(error));
+			});
+			
+			// trails table
+			sql = 'CREATE TABLE IF NOT EXISTS `trails` (trail_id INTEGER, search_id NUMERIC, trainer TEXT, start_time NUMERIC, end_time NUMERIC, ' +
+				'distance REAL)';
+			this.database.executeSql(sql, {}).then(() => {
+				console.log('Table "trails" created');
+			}).catch((error) => {
+				console.log('Table "trails" not created: ' + JSON.stringify(error));
+			});
+			
+			// positions table
+			sql = 'CREATE TABLE IF NOT EXISTS `positions` (search_id NUMERIC, trail_id INTEGER, pos_x REAL, pos_y REAL)';
+			this.database.executeSql(sql, {}).then(() => {
+				console.log('Table "positions" created');
+			}).catch((error) => {
+				console.log('Table "positions" not created: ' + JSON.stringify(error));
+			});
+			
+			// map_objects table
+			sql = 'CREATE TABLE IF NOT EXISTS `map_objects` (search_id NUMERIC, trail_id INTEGER, object_id INTEGER, object_type INTEGER, ' +
+				'color TEXT, opacity REAL, radius REAL, orientation REAL, symbol_id INTEGER, pos_x1 REAL, pos_y1 REAL, pos_x2 REAL, pos_y2 REAL, pos_x3 REAL, pos_y3 REAL)';
+			this.database.executeSql(sql, {}).then(() => {
+				console.log('Table "map_objects" created');
+			}).catch((error) => {
+				console.log('Table "map_objects" not created: ' + JSON.stringify(error));
+			});
+			
+			// persons table
+			sql = 'CREATE TABLE IF NOT EXISTS `persons` (name TEXT, age INTEGER, glasses BOOLEAN, hair_style TEXT, ' +
+				'hair_color TEXT, body_type TEXT, allergies TEXT, illness TEXT, medication TEXT, image TEXT)';
+			this.database.executeSql(sql, {}).then(() => {
+				console.log('Table "persons" created');
+			}).catch((error) => {
+				console.log('Table "persons" not created: ' + JSON.stringify(error));
+			});
+		}).catch((error) => {
+			console.log('Database not opened: '+JSON.stringify(error));
 		});
 	}
 }

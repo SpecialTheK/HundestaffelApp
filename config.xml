@@ -78,6 +78,7 @@
     </platform>
     <allow-navigation href="http://10.170.148.64:8101" />
     <allow-navigation href="https://maps.googleapis.com/maps/api/*" />
+    <allow-navigation href="http://131.173.50.24:8100" />
     <engine name="android" spec="~6.3.0" />
     <engine name="ios" spec="~4.5.4" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">

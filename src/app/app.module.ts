@@ -19,6 +19,7 @@ import {TrailStorageProvider} from "../providers/trail-storage/trail-storage";
 import {IonicStorageModule} from "@ionic/storage";
 import {ComponentsModule} from "../components/components.module";
 import {Globalization} from "@ionic-native/globalization";
+import {SQLite} from "@ionic-native/sqlite";
 
 @NgModule({
 	declarations: [
@@ -53,7 +54,8 @@ import {Globalization} from "@ionic-native/globalization";
 		TrailStorageProvider,
 		Vibration,
 		DeviceOrientation,
-		Globalization
+		Globalization,
+		SQLite
     ],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
