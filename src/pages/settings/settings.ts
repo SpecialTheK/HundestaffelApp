@@ -57,7 +57,7 @@ export class SettingsPage {
 	* @version 1.0.0
 	*/
 	gotoTestPage(){
-		this.navCtrl.push('DegbugTestPage');
+		this.navCtrl.push('DebugTestPage');
 	}
 
 	/**

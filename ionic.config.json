@@ -2,6 +2,20 @@
   "name": "HundestaffelApp",
   "app_id": "",
   "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/test",
+      "proxyUrl": "http://localhost:8080/test"
+    },
+    {
+      "path": "/createsession",
+      "proxyUrl": "http://localhost:8080/createsession"  
+    },
+    {
+      "path": "/joinsession",
+      "proxyUrl": "http://localhost:8080/joinsession"  
+    }
+  ],
   "integrations": {
     "cordova": {}
   }

@@ -1,43 +1,36 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class WebServiceProvider {
+
+
 
   constructor(public http: HttpClient) {
 
   }
 
-  createSession(ip_addr: string, username: string, pw?: string): string {
-    this.http.post((ip_addr + "/createsession"), {
-      username: username,
+  createSession(ip_addr: string, pw: string): Observable<Object> {
+    return this.http.post((ip_addr + "/createsession"), {
       pw: pw
-    }).subscribe((res) => {
-      console.log(res);
-    });
-
-    return "";
-  }
-
-  joinSession(ip_addr: string, session_id: string, username: string, pw?: string) {
-    this.http.post((ip_addr + "/joinsession"), {
-      session_id: session_id,
-      username: username,
-      pw: pw
-    }).subscribe((res) => {
-      console.log(res);
     });
   }
 
-  postTrailData(ip_addr: string, session_id: string, username: string, data: any) {
-    this.http.post((ip_addr + "/postdata"), {
+  joinSession(ip_addr: string, session_id: string, username: string, pw: string): Observable<Object>  {
+    return this.http.post((ip_addr + "/joinsession"), {
+      sid: session_id,
+      username: username,
+      pw: pw
+    });
+  }
+
+  postTrailData(ip_addr: string, session_id: string, username: string, data: any): Observable<Object> {
+    return this.http.post((ip_addr + "/postdata"), {
       session_id: session_id,
       username: username,
       data: data
-    }).subscribe((res) => {
-      console.log(res);
     });
   }
 
