@@ -20,12 +20,19 @@ export class TrailStorageProvider {
 
 	public database = null;
 	
-	constructor(public storage: Storage, public platform: Platform, sqlite: SQLite) {
+	constructor(public storage: Storage, public platform: Platform, public sqlite: SQLite) {
 		if(this.database == null && platform.is('cordova')){
 			this.initDatabase(sqlite);
 		} else {
 			console.log('Database instance already existing or no cordova available');
 		}
+		
+		// Foreign key support
+		this.database.executeSql("PRAGMA foreign_keys = ON;", {}).then(() => {
+			console.log("Foreign key support activated.");
+		}).catch((error) => {
+			console.log("Foreign key support not activated: "+error);
+		});
 	}
 
 	/**
@@ -300,7 +307,7 @@ export class TrailStorageProvider {
 					.then(answer => console.log("Person deleted"))
 					.catch((error) => console.log("Couldn't find search with key "+key));
 				
-				this.database.executeSql("SELECT  FROM `trails` WHERE name = '"+answer.person+"'", {})
+				this.database.executeSql("SELECT trail_id FROM `trails` WHERE name = '"+answer.person+"'", {})
 					.then(answer => console.log("Person deleted"))
 					.catch((error) => console.log("Couldn't find search with key "+key));
 			});
@@ -456,51 +463,51 @@ export class TrailStorageProvider {
 		sqlite.create({name: 'trailStorage.db', location: 'default'}).then((database: SQLiteObject) => {
 			this.database = database;
 			
-			// search table
-			let sql = 'CREATE TABLE IF NOT EXISTS `search` (search_id NUMERIC, search_type TEXT, search_date NUMERIC, is_training TEXT, ' +
-				'is_shared TEXT, pre_situation TEXT, situation TEXT, temperature TEXT, precipitation TEXT, risks TEXT, person_name TEXT)';
-			this.database.executeSql(sql, {}).then(() => {
-				console.log('Table "search" created');
+			// Search table
+			this.database.executeSql("CREATE TABLE IF NOT EXISTS `search` ( search_id NUMERIC, search_type TEXT, search_date NUMERIC, is_training TEXT, is_shared TEXT, pre_situation TEXT, situation TEXT, temperature TEXT, precipitation TEXT, risks TEXT, person_name TEXT, PRIMARY KEY (search_id) );", {}).then(() => {
+				console.log("Search table inserted");
 			}).catch((error) => {
-				console.log('Table "search" not created: ' + JSON.stringify(error));
+				console.log("Search table not inserted: "+error);
 			});
 			
-			// trails table
-			sql = 'CREATE TABLE IF NOT EXISTS `trails` (trail_id INTEGER, search_id NUMERIC, trainer TEXT, start_time NUMERIC, end_time NUMERIC, ' +
-				'distance REAL)';
-			this.database.executeSql(sql, {}).then(() => {
-				console.log('Table "trails" created');
+			// Trails table
+			this.database.executeSql("CREATE TABLE IF NOT EXISTS `trails` ( trail_id INTEGER, search_id NUMERIC, trainer TEXT, start_time NUMERIC, end_time NUMERIC, distance REAL, FOREIGN KEY (search_id) REFERENCES search (search_id) ON DELETE CASCADE, PRIMARY KEY (search_id, trail_id) );", {}).then(() => {
+				console.log("Trails table inserted");
 			}).catch((error) => {
-				console.log('Table "trails" not created: ' + JSON.stringify(error));
+				console.log("Trails table not inserted: "+error);
 			});
 			
-			// positions table
-			sql = 'CREATE TABLE IF NOT EXISTS `positions` (search_id NUMERIC, trail_id INTEGER, pos_x REAL, pos_y REAL)';
-			this.database.executeSql(sql, {}).then(() => {
-				console.log('Table "positions" created');
+			// Positions table
+			this.database.executeSql("CREATE TABLE IF NOT EXISTS `positions` ( search_id NUMERIC, trail_id INTEGER, pos_x REAL, pos_y REAL, FOREIGN KEY (search_id) REFERENCES search (search_id) ON DELETE CASCADE, FOREIGN KEY (trail_id) REFERENCES trails (trail_id) ON DELETE CASCADE );", {}).then(() => {
+				console.log("Positions table inserted");
 			}).catch((error) => {
-				console.log('Table "positions" not created: ' + JSON.stringify(error));
+				console.log("Positions table not inserted: "+error);
 			});
 			
-			// map_objects table
-			sql = 'CREATE TABLE IF NOT EXISTS `map_objects` (search_id NUMERIC, trail_id INTEGER, object_id INTEGER, object_type INTEGER, ' +
-				'color TEXT, opacity REAL, radius REAL, orientation REAL, symbol_id INTEGER, pos_x1 REAL, pos_y1 REAL, pos_x2 REAL, pos_y2 REAL, pos_x3 REAL, pos_y3 REAL)';
-			this.database.executeSql(sql, {}).then(() => {
-				console.log('Table "map_objects" created');
+			// Map objects table
+			this.database.executeSql("CREATE TABLE IF NOT EXISTS `map_objects` ( search_id NUMERIC, trail_id INTEGER, object_id INTEGER, object_type INTEGER, color TEXT, opacity REAL, radius REAL, orientation REAL, symbol_id INTEGER, pos_x1 REAL, pos_y1 REAL, pos_x2 REAL, pos_y2 REAL, pos_x3 REAL, pos_y3 REAL, FOREIGN KEY (search_id) REFERENCES search (search_id) ON DELETE CASCADE, FOREIGN KEY (trail_id) REFERENCES trail (trail_id) ON DELETE CASCADE, PRIMARY KEY (search_id, trail_id, object_id) );", {}).then(() => {
+				console.log("Map objects table inserted");
 			}).catch((error) => {
-				console.log('Table "map_objects" not created: ' + JSON.stringify(error));
+				console.log("Map objects table not inserted: "+error);
 			});
 			
-			// persons table
-			sql = 'CREATE TABLE IF NOT EXISTS `persons` (name TEXT, age INTEGER, glasses BOOLEAN, hair_style TEXT, ' +
-				'hair_color TEXT, body_type TEXT, allergies TEXT, illness TEXT, medication TEXT, image TEXT)';
-			this.database.executeSql(sql, {}).then(() => {
-				console.log('Table "persons" created');
+			// Persons table
+			this.database.executeSql("CREATE TABLE IF NOT EXISTS `persons` ( name TEXT, age INTEGER, glasses BOOLEAN, hair_style TEXT, hair_color TEXT, body_type TEXT, allergies TEXT, illness TEXT, medication TEXT, image TEXT );", {}).then(() => {
+				console.log("Persons table inserted");
 			}).catch((error) => {
-				console.log('Table "persons" not created: ' + JSON.stringify(error));
+				console.log("Persons table not inserted: "+error);
 			});
 		}).catch((error) => {
 			console.log('Database not opened: '+JSON.stringify(error));
 		});
+	}
+	
+	//TODO Debug -> Entfernen!!!!!
+	public deleteDatabase(){
+		this.sqlite.deleteDatabase({name: 'trailStorage.db', location: 'default'}).then( (answer) => {
+			console.log("Database deleted: "+answer);
+		}).catch((error) => {
+			console.log("Database not deleted: "+error);
+		})
 	}
 }
