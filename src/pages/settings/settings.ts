@@ -49,6 +49,17 @@ export class SettingsPage {
 		console.log("STORAGE: CLEARED");
 	}
 
+
+	/**
+	* This Method and coresponding page is of limits!
+	*
+	* @since 1.0.0
+	* @version 1.0.0
+	*/
+	gotoTestPage(){
+		this.navCtrl.push('DegbugTestPage');
+	}
+
 	/**
 	 * Get the username from the app preferences.
 	 *
