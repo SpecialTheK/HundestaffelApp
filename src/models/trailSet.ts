@@ -13,7 +13,7 @@ export class TrailSet {
 	 *
 	 * @since 1.0.0
 	 */
-	creationID: number;
+	creationID: string;
 
 	/**
 	 * Defines whether the landMap or waterMap shall be used.
@@ -95,7 +95,7 @@ export class TrailSet {
         this.risks = risks;
         this.person = person;
     	this.trails = [];
-    	this.creationID = new Date().getTime();
+    	this.creationID = new Date().getTime().toString();
     }
 
 	/**
