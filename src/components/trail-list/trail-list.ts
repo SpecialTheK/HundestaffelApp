@@ -150,8 +150,4 @@ export class TrailListComponent {
 	cardClicked(trail: Trail[]){
 		this.cardSelected.emit({trailObject: trail});
 	}
-	
-	deleteSql(){
-		this.storage.deleteDatabase();
-	}
 }
